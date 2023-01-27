@@ -39,8 +39,14 @@ class Product(BaseModel):
     short_description = models.TextField(verbose_name='توضیح مختصر')
     category = models.ForeignKey(
         ProductCategory, on_delete=models.CASCADE, verbose_name='دسته بندی')
+    brand = models.ForeignKey(
+        ProductBrand, on_delete=models.CASCADE, verbose_name='برند')
     description = RichTextUploadingField(verbose_name='محتوا')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name='کالای پدر')
+
+    def save(self, *args, **kwargs):
+        super().save()
+        RelatedProduct.objects.get_or_create(product=self)
 
     class Meta:
         verbose_name = 'محصول'
@@ -67,7 +73,7 @@ class ProductAttributeValue(models.Model):
         to=ProductAttribute, verbose_name='دسته بندی ویژگی', on_delete=models.CASCADE)
     value = models.CharField(max_length=200, verbose_name='مقدار')
     products = models.ManyToManyField(to=Product,
-                                      verbose_name='محصولات', on_delete=models.CASCADE)
+                                      verbose_name='محصولات')
 
     class Meta:
         verbose_name = 'مقدار ویژگی محصول'
@@ -77,13 +83,15 @@ class ProductAttributeValue(models.Model):
         return f'{self.product_attribute.title} {self.value}'
 
 
-class Comment(models.Model):
+class ProductComment(models.Model):
     RATE = [(int(x), str(x)) for x in range(1, 6)]
 
     email = models.EmailField(verbose_name='ایمیل')
     full_name = models.CharField(verbose_name='نام و نام خانوادگی', max_length=200)
     content = models.TextField(verbose_name='متن')
     rate = models.IntegerField(verbose_name='امتیاز', choices=RATE, default=1)
+    product = models.ForeignKey(to=Product,
+                                verbose_name='محصولات', on_delete=models.CASCADE)
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, blank=True, null=True, verbose_name='کامنت والد', related_name='child')
     created_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
@@ -98,21 +106,27 @@ class Comment(models.Model):
         ordering = ('created_date',)
 
 
-class ProductComment(BaseModel):
-    comment = models.ManyToManyField(to=Comment, verbose_name='کامنت')
-    product = models.OneToOneField(to=Product, verbose_name='محصول', on_delete=models.CASCADE)
+class ProductCatalog(BaseModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
+    catalog = models.FileField(upload_to='product-catalogs', verbose_name='کاتالوگ')
 
     class Meta:
-        verbose_name = 'کامنت محصول'
-        verbose_name_plural = 'کامنت های محصولات'
+        verbose_name = 'کاتالوگ محصول'
+        verbose_name_plural = 'کاتالوگ های محصول'
 
-    def __str__(self) -> str:
-        return self.product.name
+
+class ProductImage(BaseModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
+    image = models.FileField(verbose_name='عکس')
+
+    class Meta:
+        verbose_name = 'عکس محصول'
+        verbose_name_plural = 'عکس های محصول'
 
 
 class RelatedProduct(BaseModel):
     product = models.OneToOneField(to=Product, verbose_name='محصول', on_delete=models.CASCADE)
-    related_product = models.ManyToManyField(to=Product, verbose_name='محصولات', related_name='related_products')
+    related_products = models.ManyToManyField(to=Product, verbose_name='محصولات مرتبط', related_name='related_products')
 
     def __str__(self):
         return f'{self.product.name}'
@@ -133,87 +147,29 @@ class Seller(BaseModel):
         verbose_name_plural = 'فروشنده ها'
 
 
-class Storage(BaseModel):
-    qty = models.PositiveIntegerField(verbose_name='موجودی')
-    price = models.PositiveIntegerField(verbose_name='قیمت')
+class ProductQuantity(BaseModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
+    seller = models.ForeignKey(to=Seller, verbose_name='فروشنده', on_delete=models.CASCADE)
+    price = models.PositiveIntegerField(default=0, verbose_name='مبلغ')
+    quantity = models.PositiveIntegerField(default=0, verbose_name='تعداد')
 
     def __str__(self):
-        return f'{self.qty} - {self.price}'
+        return f'{self.product} - ' + "{:,}".format(self.price)
 
     class Meta:
-        verbose_name = 'انبار'
-        verbose_name_plural = 'انبار ها'
-
-
-class ProductStorage(BaseModel):
-    storage = models.OneToOneField(to=Storage,  verbose_name='انبار', on_delete=models.CASCADE)
-    product = models.ForeignKey(to=Product, verbose_name='محصول', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'{self.product.name}: {self.storage.price} - {self.storage.price}'
-
-    class Meta:
-        verbose_name = 'انبار محصولات'
-        verbose_name_plural = 'انبار های محصولات'
-
-
-class SellerStorage(BaseModel):
-    storage = models.ForeignKey(to=Storage,  verbose_name='انبار', on_delete=models.CASCADE)
-    seller = models.OneToOneField(to=Seller, verbose_name='فروشنده', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'{self.seller.user.username}'
-
-    class Meta:
-        verbose_name = 'انبار فروشنده'
-        verbose_name_plural = 'انبار های فروشنده'
-
-# class ProductComponent(BaseModel):
-#     product = models.OneToOneField(to=product, verbose_name='محصول', on_delete=models.CASCADE)
-#     component_attribute_value =
-
-# class ProductCatalog(BaseModel):
-#     related_product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالای مربوطه')
-#     catalog = models.FileField(upload_to='product-catalogs', verbose_name='کاتالوگ')
-
-#     class Meta:
-#         verbose_name = 'کاتالوگ محصول'
-#         verbose_name_plural = 'کاتالوگ های محصول'
-
-
-# class ProductQuantity(BaseModel):
-#     price = models.PositiveIntegerField(default=0, verbose_name='مبلغ')
-#     related_product_attribute = models.ForeignKey(
-#         ProductAttribute, on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name='ویژگی مربوطه')
-#     related_product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, verbose_name='کالای مربوطه')
-#     quantity = models.PositiveIntegerField(default=0, verbose_name='تعداد')
-
-#     def __str__(self):
-#         return f'{self.related_product} - ' + "{:,}".format(self.price)
-
-#     class Meta:
-#         verbose_name = 'موجودی کالا'
-#         verbose_name_plural = 'موجودی های کالا'
-
-
-# class ProductImage(BaseModel):
-#     related_product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالای مربوطه')
-#     image = models.FileField(verbose_name='عکس')
-
-#     class Meta:
-#         verbose_name = 'عکس محصول'
-#         verbose_name_plural = 'عکس های محصول'
+        verbose_name = 'موجودی کالا'
+        verbose_name_plural = 'موجودی های کالا'
 
 
 class Coupon(BaseModel):
-    related_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='کاربر مربوطه')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='کاربر مربوطه')
     discount_percent = models.PositiveIntegerField(verbose_name='درصد تخفیف (%):', default=0)
     discount_amount = models.PositiveIntegerField(verbose_name='مبلغ تخفیف (ریال):', default=0)
     discount_code = models.CharField(max_length=200, verbose_name='کد تخفیف')
     expired_date = models.DateField(null=True, verbose_name='تاریخ انقضا')
 
     def check_user(self, user) -> bool:
-        if user != self.related_user:
+        if user != self.user:
             return False
         return True
 

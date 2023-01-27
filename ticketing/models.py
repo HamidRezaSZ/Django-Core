@@ -3,31 +3,8 @@ from base.models import BaseModel
 from accounts.models import User
 
 
-class Ticket(models.Model):
-    subject = models.CharField(max_length=200, verbose_name='موضوع')
-    client = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
-    created_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
-    modified_date = models.DateTimeField(auto_now=True, verbose_name='زمان بروز رسانی')
-    is_archive = models.BooleanField(default=False, verbose_name='آرشیو شده')
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        TicketMessage.objects.get_or_create(ticket=self)
-
-    def __str__(self):
-        return f'@{self.client}: {self.subject}'
-
-    class Meta:
-        verbose_name = 'تیکت'
-        verbose_name_plural = 'تیکت'
-
-
-class Department(BaseModel):
+class TicketDepartment(BaseModel):
     name = models.CharField(max_length=200, verbose_name='نام')
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        TicketDepartment.objects.get_or_create(department=self)
 
     def __str__(self):
         return f'{self.name}'
@@ -37,51 +14,19 @@ class Department(BaseModel):
         verbose_name_plural = 'دپارتمان'
 
 
-class TicketDepartment(BaseModel):
-    ticket = models.ManyToManyField(to=Ticket, verbose_name='تیکت')
-    department = models.OneToOneField(to=Department, on_delete=models.CASCADE, verbose_name='دپارتمان')
-
-    def __str__(self):
-        return f'{self.department.name}'
-
-    class Meta:
-        verbose_name = 'دپارتمان تیکت'
-        verbose_name_plural = 'دپارتمان های تیکت'
-
-
-class Priority(BaseModel):
+class TicketPriority(BaseModel):
     title = models.CharField(max_length=200, verbose_name='تایتل')
 
     def __str__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        TicketPriority.objects.get_or_create(priority=self)
 
     class Meta:
         verbose_name = 'اولویت'
         verbose_name_plural = 'اولویت ها'
 
 
-class TicketPriority(BaseModel):
-    ticket = models.ManyToManyField(to=Ticket, verbose_name='تیکت')
-    priority = models.OneToOneField(to=Priority, verbose_name='اولویت', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'{self.priority.title}'
-
-    class Meta:
-        verbose_name = 'اولویت تیکت'
-        verbose_name_plural = 'اولویت های تیکت'
-
-
-class Status(BaseModel):
+class TicketStatus(BaseModel):
     title = models.CharField(max_length=200, verbose_name='تایتل')
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        TicketStatus.objects.get_or_create(status=self)
 
     def __str__(self):
         return self.title
@@ -91,25 +36,28 @@ class Status(BaseModel):
         verbose_name_plural = 'وضعیت ها'
 
 
-class TicketStatus(BaseModel):
-    ticket = models.ManyToManyField(to=Ticket, verbose_name='تیکت')
-    status = models.OneToOneField(to=Status, verbose_name='وضعیت', on_delete=models.CASCADE)
+class Ticket(models.Model):
+    subject = models.CharField(max_length=200, verbose_name='موضوع')
+    client = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    department = models.ForeignKey(to=TicketDepartment, verbose_name='دپارتمان', on_delete=models.PROTECT)
+    priority = models.ForeignKey(to=TicketPriority, on_delete=models.PROTECT, verbose_name='اولویت')
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
+    modified_date = models.DateTimeField(auto_now=True, verbose_name='زمان بروز رسانی')
+    is_archive = models.BooleanField(default=False, verbose_name='آرشیو شده')
+    status = models.ForeignKey(to=TicketStatus, verbose_name='وضعیت', on_delete=models.PROTECT)
 
     def __str__(self):
-        return f'{self.status.title}'
+        return f'@{self.client}: {self.subject}'
 
     class Meta:
-        verbose_name = 'وضعیت تیکت'
-        verbose_name_plural = 'وضعیت های تیکت'
+        verbose_name = 'تیکت'
+        verbose_name_plural = 'تیکت'
 
 
-class Message(models.Model):
+class TicketMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    ticket = models.OneToOneField(to=Ticket, verbose_name='تیکت', on_delete=models.CASCADE)
     content = models.TextField(verbose_name='پیام')
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        MessageFile.objects.get_or_create(message=self)
 
     def __str__(self):
         return f'@{self.user} {self.content}'
@@ -119,19 +67,8 @@ class Message(models.Model):
         verbose_name_plural = 'پیام ها'
 
 
-class TicketMessage(BaseModel):
-    ticket = models.OneToOneField(to=Ticket, verbose_name='تیکت', on_delete=models.CASCADE)
-    message = models.ManyToManyField(to=Message, verbose_name='پیام')
-
-    def __str__(self):
-        return f'{self.ticket.subject}'
-
-    class Meta:
-        verbose_name = 'پیام تیکت'
-        verbose_name_plural = 'پیام های تیکت'
-
-
-class File(models.Model):
+class MessageFile(models.Model):
+    message = models.OneToOneField(to=TicketMessage, verbose_name='پیام', on_delete=models.CASCADE)
     file = models.FileField(verbose_name='فایل')
 
     def __str__(self):
@@ -140,15 +77,3 @@ class File(models.Model):
     class Meta:
         verbose_name = 'فایل'
         verbose_name_plural = 'فایل ها'
-
-
-class MessageFile(models.Model):
-    message = models.OneToOneField(to=Message, verbose_name='پیام', on_delete=models.CASCADE)
-    file = models.ManyToManyField(to=File, verbose_name='فایل')
-
-    def __str__(self):
-        return f'{self.message}'
-
-    class Meta:
-        verbose_name = 'فایل پیام'
-        verbose_name_plural = 'فایل های پیام'

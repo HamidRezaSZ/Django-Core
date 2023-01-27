@@ -2,85 +2,82 @@ from rest_framework import serializers
 from .models import *
 
 
+class TicketDepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketDepartment
+        fields = '__all__'
+
+
+class TicketPrioritySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketPriority
+        fields = '__all__'
+
+
+class TicketStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketStatus
+        fields = '__all__'
+
+
 class TicketSerializer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField()
-    department = serializers.SerializerMethodField()
-    priority = serializers.SerializerMethodField()
+    status = TicketStatusSerializer()
+    department = TicketDepartmentSerializer()
+    priority = TicketPrioritySerializer()
 
     class Meta:
         model = Ticket
         fields = '__all__'
-        read_only_fields = ('is_archive',)
+        read_only_fields = ('is_archive', 'status')
 
     def create(self, validated_data):
         user = self.context.get('user')
         validated_data['client'] = user
         return super().create(validated_data)
 
-    def get_status(self, obj):
-        return StatusSerializer(TicketStatus.objects.get(ticket=obj).status).data
-
-    def get_department(self, obj):
-        return DepartmentSerializer(TicketDepartment.objects.get(ticket=obj).department).data
-
-    def get_priority(self, obj):
-        return PrioritySerializer(TicketPriority.objects.get(ticket=obj).priority).data
-
 
 class TicketItemSerializer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField()
-    department = serializers.SerializerMethodField()
-    priority = serializers.SerializerMethodField()
+    status = TicketStatusSerializer()
+    department = TicketDepartmentSerializer()
+    priority = TicketPrioritySerializer()
     messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Ticket
         fields = '__all__'
-        read_only_fields = ('is_archive',)
-
-    def get_status(self, obj):
-        return StatusSerializer(TicketStatus.objects.get(ticket=obj).status).data
-
-    def get_department(self, obj):
-        return DepartmentSerializer(TicketDepartment.objects.get(ticket=obj).department).data
-
-    def get_priority(self, obj):
-        return PrioritySerializer(TicketPriority.objects.get(ticket=obj).priority).data
+        read_only_fields = ('is_archive', 'status')
 
     def get_messages(self, obj):
-        return MessageSerializer(TicketMessage.objects.get(ticket=obj).message, many=True).data
+        return TicketMessageSerializer(TicketMessage.objects.get(ticket=obj).message, many=True).data
 
 
-class DepartmentSerializer(serializers.ModelSerializer):
+class MessageFileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Department
+        model = MessageFile
         fields = '__all__'
 
 
-class PrioritySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Priority
-        fields = '__all__'
-
-
-class StatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Status
-        fields = '__all__'
-
-
-class FileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = File
-        fields = '__all__'
-
-
-class MessageSerializer(serializers.ModelSerializer):
+class TicketMessageSerializer(serializers.ModelSerializer):
     files = serializers.SerializerMethodField()
 
     class Meta:
-        model = Message
+        model = TicketMessage
         fields = '__all__'
 
     def get_files(self, obj):
-        return FileSerializer(MessageFile.objects.get(message=obj).file, many=True).data
+        return MessageFileSerializer(MessageFile.objects.get(message=obj).file, many=True).data
+
+
+class CreateTicketMessageSerializer(serializers.ModelSerializer):
+    files = MessageFileSerializer(many=True)
+
+    class Meta:
+        model = TicketMessage
+        fields = '__all__'
+
+    def create(self, validated_data):
+        obj = super().create(validated_data)
+        for file in validated_data['files']:
+            MessageFile.objects.create(message=obj, file=file)
+
+        return obj

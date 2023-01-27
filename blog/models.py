@@ -59,7 +59,7 @@ class Post(BaseModel):
         ordering = ('-created_date',)
 
 
-class Gallary(BaseModel):
+class Gallery(BaseModel):
     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, verbose_name='پست')
     image = models.FileField(verbose_name='عکس')
     image_alt = models.CharField(verbose_name='alt', max_length=200)

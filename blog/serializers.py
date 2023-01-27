@@ -19,9 +19,9 @@ class PostCategorySerializer(serializers.ModelSerializer):
         return SubCategorySerializer(obj.children.all(), many=True).data
 
 
-class GallarySerializer(serializers.ModelSerializer):
+class GallerySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Gallary
+        model = Gallery
         fields = '__all__'
 
 
@@ -45,6 +45,9 @@ class SubCommentSerializer(serializers.ModelSerializer):
 
 class PostCommentSerializer(serializers.ModelSerializer):
     sub_comments = serializers.SerializerMethodField()
+    authors = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
+    galleries = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
@@ -56,6 +59,15 @@ class PostCommentSerializer(serializers.ModelSerializer):
 
     def get_sub_comments(self, obj):
         return SubCommentSerializer(obj.child.all(), many=True).data
+
+    def get_authors(self, obj):
+        return AuthorSerializer(obj.author_set.all(), many=True).data
+
+    def get_tags(self, obj):
+        return TagSerializer(obj.gallery_set.all(), many=True).data
+
+    def get_galleries(self, obj):
+        return GallerySerializer(obj.gallery_set.all(), many=True).data
 
 
 class PostSerializer(serializers.ModelSerializer):

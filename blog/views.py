@@ -40,34 +40,6 @@ class CategoryView(ModelViewSet):
     search_fields = ['title']
 
 
-class GallaryView(ModelViewSet):
-    permission_classes_by_action = {
-        "list": [AllowAny],
-        "retrieve": [AllowAny],
-        "create": [IsAdminUser],
-        "update": [IsAdminUser],
-        "partial_update": [IsAdminUser],
-        "destroy": [IsAdminUser],
-    }
-    queryset = Gallary.objects.filter(is_active=True)
-    serializer_class = GallarySerializer
-    filterset_fields = ['post']
-
-
-class TagView(ModelViewSet):
-    permission_classes_by_action = {
-        "list": [AllowAny],
-        "retrieve": [AllowAny],
-        "create": [IsAdminUser],
-        "update": [IsAdminUser],
-        "partial_update": [IsAdminUser],
-        "destroy": [IsAdminUser],
-    }
-    queryset = Tag.objects.filter(is_active=True)
-    serializer_class = TagSerializer
-    filterset_fields = ['post']
-
-
 class CommentView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],

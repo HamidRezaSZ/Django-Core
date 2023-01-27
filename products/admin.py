@@ -3,18 +3,6 @@ from .models import *
 from import_export.admin import ImportExportMixin
 
 
-class ProductCategoryInline(admin.TabularInline):
-    model = ProductCategory.product.through
-    extra = 1
-    max_num = 1
-
-
-class ProductBrandInline(admin.StackedInline):
-    model = ProductBrand.product.through
-    extra = 1
-    max_num = 1
-
-
 class ProductAttributeValueInline(admin.TabularInline):
     model = ProductAttributeValue
     extra = 0
@@ -32,60 +20,59 @@ class RelatedProductInline(admin.TabularInline):
     max_num = 1
 
 
-class ProductStorageinline(admin.TabularInline):
-    model = ProductStorage
-    extra = 1
-    max_num = 1
-
-
-class SellerStorageInline(admin.TabularInline):
-    model = SellerStorage
-    extra = 1
-    max_num = 1
-
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+@admin.register(ProductCategory)
+class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'parent', 'is_active')
     list_editable = ('is_active',)
 
 
-@admin.register(Brand)
-class BrandAdmin(admin.ModelAdmin):
+@admin.register(ProductBrand)
+class ProductBrandAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'parent', 'is_active')
     list_editable = ('is_active',)
 
 
 @admin.register(ProductAttribute)
 class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'product_type')
+    list_display = ('id', 'title', 'category')
 
 
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'email', 'full_name', 'rate', 'created_date', 'is_accepted')
-    list_editable = ('is_accepted',)
+@admin.register(ProductAttributeValue)
+class ProductAttributeValueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'product_attribute', 'value')
 
 
 @admin.register(Seller)
 class SellerAdmin(admin.ModelAdmin):
     list_display = ('id', 'user')
-    inlines = (SellerStorageInline,)
 
 
-@admin.register(Storage)
-class StorageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'qty', 'price')
+class ProductCatalogInline(admin.TabularInline):
+    model = ProductCatalog
+    extra = 0
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 0
+
+
+class ProductQuantityInline(admin.TabularInline):
+    model = ProductQuantity
+    extra = 0
 
 
 @admin.register(Product)
 class ProductAdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display = ('id', 'name', 'upc', 'product_type')
-    inlines = (ProductCategoryInline, ProductBrandInline,
-               ProductAttributeValueInline, ProductCommentInline, RelatedProductInline, ProductStorageinline)
+    list_display = ('id', 'category', 'brand', 'name', 'upc', 'parent', 'is_active')
+    list_editable = ('is_active',)
+    search_fields = ('id', 'description', 'short_description', 'name', 'upc')
+    inlines = (ProductAttributeValueInline, ProductCommentInline,
+               RelatedProductInline, ProductCatalogInline, ProductImageInline, ProductQuantityInline)
 
 
-# @admin.register(Coupon)
-# class CouponAdmin(admin.ModelAdmin):
-#     list_display = ('id', 'discount_percent', 'discount_amount', 'discount_code', 'expired_date')
-#     search_fields = ('id', 'discount_code')
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'discount_percent', 'discount_amount', 'discount_code', 'expired_date', 'is_active')
+    list_editable = ('is_active',)
+    search_fields = ('id', 'discount_code')

@@ -2,8 +2,8 @@ from django.contrib import admin
 from .models import *
 
 
-class GallaryInline(admin.TabularInline):
-    model = Gallary
+class GalleryInline(admin.TabularInline):
+    model = Gallery
     extra = 0
 
 
@@ -28,7 +28,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('category',)
     filter_horizontal = ('authors',)
     list_editable = ('show_in_home_page', 'is_active')
-    inlines = (GallaryInline, TagInline, RelatedPostInline, CommentInline)
+    inlines = (GalleryInline, TagInline, RelatedPostInline, CommentInline)
     search_fields = ('title', 'description', 'content')
 
 

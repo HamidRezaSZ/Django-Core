@@ -1,7 +1,6 @@
 from base.viewsets import ModelViewSet
 from .serializers import *
 from .models import *
-from .filters import ProductFilter
 from rest_framework.permissions import IsAdminUser, AllowAny
 
 
@@ -15,7 +14,7 @@ class ProductsView(ModelViewSet):
         "destroy": [IsAdminUser],
     }
     queryset = Product.objects.filter(is_active=True, parent=None)
-    filterset_class = ProductFilter
+    filterset_fields = ['category', 'brand', 'parent']
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -24,7 +23,7 @@ class ProductsView(ModelViewSet):
         return ProductSerializer
 
 
-class CategoryView(ModelViewSet):
+class ProductCategoryView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
@@ -33,11 +32,12 @@ class CategoryView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Category.objects.filter(is_active=True, parent=None)
-    serializer_class = CategorySerializer
+    queryset = ProductCategory.objects.filter(is_active=True, parent=None)
+    serializer_class = ProductCategorySerializer
+    filterset_fields = ['category', 'brand', 'parent']
 
 
-class BrandView(ModelViewSet):
+class ProductBrandView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
@@ -46,21 +46,8 @@ class BrandView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Brand.objects.filter(is_active=True, parent=None)
-    serializer_class = BrandSerializer
-
-
-class ProductTypeView(ModelViewSet):
-    permission_classes_by_action = {
-        "list": [AllowAny],
-        "retrieve": [AllowAny],
-        "post": [IsAdminUser],
-        "update": [IsAdminUser],
-        "partial_update": [IsAdminUser],
-        "destroy": [IsAdminUser],
-    }
-    queryset = ProductType.objects.filter(is_active=True)
-    serializer_class = ProductTypeSerializer
+    queryset = ProductBrand.objects.filter(is_active=True, parent=None)
+    serializer_class = ProductBrandSerializer
 
 
 class ProductCommentView(ModelViewSet):
@@ -72,14 +59,8 @@ class ProductCommentView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = ProductComment.objects.filter(is_active=True)
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return CreateProductCommentSerializer
-
-        return ProductCommentSerializer
-
+    queryset = ProductComment.objects.filter(is_active=True, parent=None)
+    serializer_class = ProductCommentSerializer
     filterset_fields = ['comment', 'product']
 
 

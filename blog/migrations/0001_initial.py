@@ -100,7 +100,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Gallary',
+            name='Gallery',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_date', models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')),

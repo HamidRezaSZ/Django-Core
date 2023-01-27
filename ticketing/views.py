@@ -9,12 +9,12 @@ class TicketView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAuthenticated],
+        "create": [IsAuthenticated],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    filterset_fields = ['created_date', 'modified_date', 'is_archive']
+    filterset_fields = ['created_date', 'modified_date', 'is_archive', 'status', 'department', 'priority']
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -39,23 +39,54 @@ class DepartmentView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Department.objects.filter(is_active=True)
-    serializer_class = DepartmentSerializer
+    queryset = TicketDepartment.objects.filter(is_active=True)
+    serializer_class = TicketDepartmentSerializer
 
 
 class PriorityView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Priority.objects.filter(is_active=True)
-    serializer_class = PrioritySerializer
+    queryset = TicketPriority.objects.filter(is_active=True)
+    serializer_class = TicketPrioritySerializer
+
+
+class StatusView(ModelViewSet):
+    permission_classes_by_action = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "create": [IsAdminUser],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }
+    queryset = TicketStatus.objects.filter(is_active=True)
+    serializer_class = TicketStatusSerializer
+
+
+class TicketMessageView(ModelViewSet):
+    permission_classes_by_action = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "create": [IsAuthenticated],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }
+    queryset = TicketMessage.objects.filter(is_active=True)
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateTicketMessageSerializer
+
+        return TicketMessageSerializer
