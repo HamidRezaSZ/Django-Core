@@ -43,7 +43,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'upc', 'image', 'short_description', 'category', 'brand')
+        fields = ('id', 'name', 'upc', 'image', 'short_description', 'category', 'brand', 'score')
 
     def get_score(self, obj):
         return ProductComment.objects.get(product=obj).comment.aggregate(Avg('rate'))['rate__avg']

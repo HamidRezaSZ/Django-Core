@@ -16,25 +16,25 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(ChoiceOfMultipleChoiceQuestion)
 class ChoiceOfMultipleChoiceQuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'related_question', 'choice')
+    list_display = ('id', 'question', 'choice')
 
 
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
     list_display = ('id',)
-    filter_horizontal = ('related_questions',)
+    filter_horizontal = ('questions',)
 
 
 @admin.register(FileAnswer)
 class FileAnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'related_question', 'answer')
+    list_display = ('id', 'question', 'answer')
 
 
 @admin.register(DescriptiveAnswer)
 class DescriptiveAnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'related_question', 'answer')
+    list_display = ('id', 'question', 'answer')
 
 
 @admin.register(MultipleChoiceAnswer)
 class MultipleChoiceAnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'related_question', 'answer')
+    list_display = ('id', 'question', 'answer')

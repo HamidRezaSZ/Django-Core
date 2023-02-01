@@ -18,7 +18,7 @@ class Question(BaseModel):
 
 
 class ChoiceOfMultipleChoiceQuestion(BaseModel):
-    related_question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
     icon = models.FileField(null=True, blank=True, verbose_name='آیکون')
     choice = models.CharField(max_length=200, verbose_name='مقدار')
 
@@ -28,7 +28,7 @@ class ChoiceOfMultipleChoiceQuestion(BaseModel):
 
 
 class DescriptiveAnswer(models.Model):
-    related_question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
     answer = models.TextField(verbose_name='پاسخ')
 
     class Meta:
@@ -37,7 +37,7 @@ class DescriptiveAnswer(models.Model):
 
 
 class MultipleChoiceAnswer(models.Model):
-    related_question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
     answer = models.ForeignKey(ChoiceOfMultipleChoiceQuestion, on_delete=models.PROTECT, verbose_name='پاسخ')
 
     class Meta:
@@ -46,7 +46,7 @@ class MultipleChoiceAnswer(models.Model):
 
 
 class FileAnswer(models.Model):
-    related_question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
     answer = models.FileField(verbose_name='فایل پاسخ')
 
     class Meta:
@@ -55,7 +55,7 @@ class FileAnswer(models.Model):
 
 
 class Exam(BaseModel):
-    related_questions = models.ManyToManyField(Question, verbose_name='سوالات')
+    questions = models.ManyToManyField(Question, verbose_name='سوالات')
 
     class Meta:
         verbose_name = 'آزمون'

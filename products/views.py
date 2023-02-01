@@ -34,7 +34,7 @@ class ProductCategoryView(ModelViewSet):
     }
     queryset = ProductCategory.objects.filter(is_active=True, parent=None)
     serializer_class = ProductCategorySerializer
-    filterset_fields = ['category', 'brand', 'parent']
+    filterset_fields = ['parent']
 
 
 class ProductBrandView(ModelViewSet):
@@ -61,7 +61,7 @@ class ProductCommentView(ModelViewSet):
     }
     queryset = ProductComment.objects.filter(is_accepted=True, parent=None)
     serializer_class = ProductCommentSerializer
-    filterset_fields = ['comment', 'product']
+    filterset_fields = ['parent', 'is_accepted', 'rate']
 
 
 class RelatedProductView(ModelViewSet):
@@ -75,4 +75,4 @@ class RelatedProductView(ModelViewSet):
     }
     queryset = RelatedProduct.objects.filter(is_active=True)
     serializer_class = RelatedProductSerializer
-    filterset_fields = ['related_product', 'product']
+    filterset_fields = ['related_products', 'product']
