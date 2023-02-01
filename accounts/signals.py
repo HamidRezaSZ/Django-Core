@@ -19,5 +19,5 @@ def application_signal(sender, instance, *args, **kwargs):
     if not created:
         return
 
-    Profile.objects.create(related_user=instance)
-    Cart.objects.create(related_user=instance)
+    Profile.objects.create(user=instance)
+    Cart.objects.create(user=instance)

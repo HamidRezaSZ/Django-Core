@@ -4,17 +4,19 @@ from .models import *
 
 class TicketMessageInline(admin.TabularInline):
     model = TicketMessage
+    extra = 0
 
 
 class MessageFileInline(admin.TabularInline):
     model = MessageFile
+    extra = 0
 
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ('id', 'department', 'priority', 'subject', 'created_date', 'status', 'is_archive')
     list_editable = ('is_archive',)
-    inlines = (TicketMessageInline, MessageFileInline)
+    inlines = (TicketMessageInline,)
 
 
 @admin.register(TicketDepartment)

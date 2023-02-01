@@ -100,7 +100,7 @@ class CitySerializer(serializers.ModelSerializer):
 
 
 class CityGetSerializer(serializers.ModelSerializer):
-    related_state = StateSerializer()
+    state = StateSerializer()
 
     class Meta:
         model = City

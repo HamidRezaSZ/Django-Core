@@ -146,7 +146,7 @@ class State(BaseModel):
 
 
 class City(BaseModel):
-    related_state = models.ForeignKey(State, on_delete=models.CASCADE, verbose_name='استان مربوطه')
+    state = models.ForeignKey(State, on_delete=models.CASCADE, verbose_name='استان مربوطه')
     name = models.CharField(max_length=256, verbose_name='نام')
 
     def __str__(self):

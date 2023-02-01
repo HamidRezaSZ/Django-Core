@@ -70,10 +70,10 @@ class ProfileView(ModelViewSet):
         return ProfileSerializer
 
     def get_queryset(self):
-        return Profile.objects.filter(related_user=self.request.user)
+        return Profile.objects.filter(user=self.request.user)
 
     def get_object(self):
-        return get_object_or_404(Profile, related_user=self.request.user)
+        return get_object_or_404(Profile, user=self.request.user)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -91,11 +91,11 @@ class AddressesView(ModelViewSet):
         return AddressSerializer
 
     def get_queryset(self):
-        return Address.objects.filter(related_user=self.request.user)
+        return Address.objects.filter(user=self.request.user)
 
     def get_object(self):
         pk = self.kwargs['pk']
-        return get_object_or_404(Address, related_user=self.request.user, pk=pk)
+        return get_object_or_404(Address, user=self.request.user, pk=pk)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

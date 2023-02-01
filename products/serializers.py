@@ -157,6 +157,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductQuantitiesSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ProductQuantity
         fields = '__all__'

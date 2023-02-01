@@ -70,31 +70,31 @@ class PhoneNumberSerializer(serializers.Serializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        exclude = ('related_user',)
+        exclude = ('user',)
 
     def update(self, instance, validated_data):
         user = self.context.get('user')
-        validated_data['related_user'] = user
+        validated_data['user'] = user
 
         return super().update(instance, validated_data)
 
 
 class ProfileGetSerializer(serializers.ModelSerializer):
-    related_city = CityGetSerializer()
+    city = CityGetSerializer()
 
     class Meta:
         model = Profile
-        exclude = ('related_user',)
+        exclude = ('user',)
 
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        exclude = ('related_user',)
+        exclude = ('user',)
 
     def create(self, validated_data):
         user = self.context.get('user')
-        validated_data['related_user'] = user
+        validated_data['user'] = user
         return super().create(validated_data)
 
 
@@ -103,4 +103,4 @@ class AddressGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        exclude = ('related_user',)
+        exclude = ('user',)

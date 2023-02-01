@@ -83,7 +83,7 @@ class TicketMessageView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = TicketMessage.objects.filter(is_active=True)
+    queryset = TicketMessage.objects.all()
 
     def get_serializer_class(self):
         if self.action == 'create':

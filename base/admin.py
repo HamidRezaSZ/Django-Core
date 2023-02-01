@@ -99,7 +99,7 @@ class StateAdmin(ImportExportMixin, admin.ModelAdmin):
 
 @admin.register(City)
 class CityAdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display = ('id', 'name', 'related_state')
+    list_display = ('id', 'name', 'state')
 
 
 @admin.register(TermsAndConditions)

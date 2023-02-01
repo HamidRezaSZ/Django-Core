@@ -13,7 +13,7 @@ class Payment(models.Model):
         CANCELED = 'C', 'لغو شده'
         AWAITONG_PAYMENT = 'A', 'در انتظار پرداخت'
 
-    related_user = models.ForeignKey(verbose_name='کاربر', to=User, on_delete=models.CASCADE)
+    user = models.ForeignKey(verbose_name='کاربر', to=User, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField('مبلغ')
     ref_id = models.CharField('شماره تراکنش', max_length=512, blank=True, null=True)
     status = models.CharField('وضعیت', choices=Status.choices, max_length=20, default='در انتظار پرداخت')
@@ -22,7 +22,7 @@ class Payment(models.Model):
     created_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
 
     def __str__(self):
-        return f'{self.related_user} - {self.amount} : {self.status}'
+        return f'{self.user} - {self.amount} : {self.status}'
 
     class Meta:
         verbose_name = 'پرداخت'

@@ -1,4 +1,4 @@
-from .serializers import CartSerializer, CartGetSerializer
+from .serializers import CartSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from base.viewsets import ModelViewSet
 from .models import Cart
@@ -9,23 +9,19 @@ class CartView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
+    serializer_class = CartSerializer
 
     def get_queryset(self):
-        return Cart.objects.filter(related_user=self.request.user)
+        return Cart.objects.filter(user=self.request.user)
 
     def get_object(self):
         pk = self.kwargs['pk']
-        return get_object_or_404(Cart, pk=pk, related_user=self.request.user)
-
-    def get_serializer_class(self):
-        if self.action == 'list' or self.action == 'retrieve':
-            return CartGetSerializer
-        return CartSerializer
+        return get_object_or_404(Cart, pk=pk, user=self.request.user)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

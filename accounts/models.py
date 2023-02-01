@@ -33,7 +33,7 @@ class User(AbstractUser):
 
 
 class Address(models.Model):
-    related_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر مربوطه')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر مربوطه')
     first_name = models.CharField(max_length=200, verbose_name='نام')
     last_name = models.CharField(max_length=200, verbose_name='نام خانوادگی')
     phone_number = models.CharField(max_length=20, verbose_name='تلفن ثابت')
@@ -41,11 +41,11 @@ class Address(models.Model):
     email = models.EmailField(verbose_name='ایمیل')
     address = models.TextField(verbose_name='آدرس')
     zip_code = models.CharField(max_length=30, verbose_name='کد پستی')
-    related_city = models.ForeignKey(to='base.City', on_delete=models.PROTECT, verbose_name='شهر')
+    city = models.ForeignKey(to='base.City', on_delete=models.PROTECT, verbose_name='شهر')
     description = models.TextField(verbose_name='توضیحات')
 
     def __str__(self) -> str:
-        return self.related_user.username
+        return self.user.username
 
     class Meta:
         verbose_name = 'آدرس'
@@ -57,15 +57,15 @@ class Profile(models.Model):
         MALE = 'Single', 'مجرد'
         MARRIED = 'Married', 'متاهل'
 
-    related_user = models.ForeignKey(verbose_name=('کاربر'), to=User, on_delete=models.CASCADE)
+    user = models.ForeignKey(verbose_name=('کاربر'), to=User, on_delete=models.CASCADE)
     day_of_birth = models.DateField(_('تاریخ تولد'), null=True, blank=True)
     marital_status = models.CharField(_('وضعیت تاهل'), max_length=10,
                                       choices=MaritalStatus.choices, null=True, blank=True)
-    related_city = models.ForeignKey(to='base.City', on_delete=models.SET_NULL,
+    city = models.ForeignKey(to='base.City', on_delete=models.SET_NULL,
                                      blank=True, null=True, verbose_name='شهر مربوطه')
 
     def __str__(self) -> str:
-        return self.related_user.cell_phone
+        return self.user.cell_phone
 
     class Meta:
         verbose_name = 'پروفایل'

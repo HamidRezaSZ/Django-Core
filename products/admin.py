@@ -4,20 +4,18 @@ from import_export.admin import ImportExportMixin
 
 
 class ProductAttributeValueInline(admin.TabularInline):
-    model = ProductAttributeValue
+    model = ProductAttributeValue.products.through
     extra = 0
 
 
 class ProductCommentInline(admin.TabularInline):
     model = ProductComment
-    extra = 1
-    max_num = 1
+    extra = 0
 
 
 class RelatedProductInline(admin.TabularInline):
     model = RelatedProduct
-    extra = 1
-    max_num = 1
+    extra = 0
 
 
 @admin.register(ProductCategory)

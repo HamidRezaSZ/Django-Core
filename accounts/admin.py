@@ -14,7 +14,7 @@ class UserAdmin(DefaultUserAdmin):
         ('Personal info',
          {
              'fields':
-             ('email', 'cell_phone', 'avatar', 'gender', 'national_id', 'related_city')}),
+             ('email', 'cell_phone', 'avatar', 'gender', 'national_id', 'city')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'), }),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),)
 
@@ -26,11 +26,11 @@ class UserAdmin(DefaultUserAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'related_user')
+    list_display = ('id', 'user')
 
 
 
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('id', 'related_user')
+    list_display = ('id', 'user')

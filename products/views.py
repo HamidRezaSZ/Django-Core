@@ -59,7 +59,7 @@ class ProductCommentView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = ProductComment.objects.filter(is_active=True, parent=None)
+    queryset = ProductComment.objects.filter(is_accepted=True, parent=None)
     serializer_class = ProductCommentSerializer
     filterset_fields = ['comment', 'product']
 
