@@ -38,3 +38,8 @@ class DescriptiveAnswerAdmin(admin.ModelAdmin):
 @admin.register(MultipleChoiceAnswer)
 class MultipleChoiceAnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'question', 'answer')
+
+
+@admin.register(UserExam)
+class UserExamAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'exam')

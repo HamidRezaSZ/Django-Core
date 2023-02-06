@@ -54,3 +54,16 @@ class ExamView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
+
+
+class UserExamView(ModelViewSet):
+    serializer_class = UserExamSerializer
+    queryset = UserExam.objects.all()
+    permission_classes_by_action = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "post": [IsAuthenticated],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }

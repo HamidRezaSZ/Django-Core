@@ -1,5 +1,6 @@
 from django.db import models
 from base.models import BaseModel
+from accounts.models import User
 
 
 class Question(BaseModel):
@@ -23,8 +24,8 @@ class ChoiceOfMultipleChoiceQuestion(BaseModel):
     choice = models.CharField(max_length=200, verbose_name='مقدار')
 
     class Meta:
-        verbose_name = 'مقدار سوال چند گزینه ای'
-        verbose_name_plural = 'مقدار های سوال چند گزینه ای'
+        verbose_name = 'گزینه سوال چند گزینه ای'
+        verbose_name_plural = 'گزینه های سوال چند گزینه ای'
 
 
 class DescriptiveAnswer(models.Model):
@@ -60,3 +61,12 @@ class Exam(BaseModel):
     class Meta:
         verbose_name = 'آزمون'
         verbose_name_plural = 'آزمون ها'
+
+
+class UserExam(models.Model):
+    user = models.ForeignKey(to=User, verbose_name='کاربر', on_delete=models.CASCADE)
+    exam = models.ForeignKey(to=Exam, verbose_name='آزمون', on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name = 'آزمون کاربر'
+        verbose_name_plural = 'آزمون های کاربر'

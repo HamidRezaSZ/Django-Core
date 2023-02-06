@@ -45,3 +45,11 @@ class ExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = '__all__'
+
+
+class UserExamSerializer(serializers.ModelSerializer):
+    exam = ExamSerializer()
+
+    class Meta:
+        model = Exam
+        fields = '__all__'
