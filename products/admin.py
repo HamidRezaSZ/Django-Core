@@ -22,6 +22,7 @@ class RelatedProductInline(admin.TabularInline):
 class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'parent', 'is_active')
     list_editable = ('is_active',)
+    search_fields = ('title',)
 
 
 @admin.register(ProductBrand)
@@ -33,11 +34,13 @@ class ProductBrandAdmin(admin.ModelAdmin):
 @admin.register(ProductAttribute)
 class ProductAttributeAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'category')
+    search_fields = ('title',)
 
 
 @admin.register(ProductAttributeValue)
 class ProductAttributeValueAdmin(admin.ModelAdmin):
     list_display = ('id', 'product_attribute', 'value')
+    search_fields = ('value',)
 
 
 @admin.register(Seller)

@@ -9,11 +9,13 @@ admin.site.site_title = "پنل مدیریتی  core"
 @admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
     list_display = ('id', 'question')
+    search_fields = ('question', 'answer')
 
 
 @admin.register(AboutUs)
 class AboutUsAdmin(admin.ModelAdmin):
     list_display = ('id',)
+    search_fields = ('text',)
 
     def has_add_permission(self, request):
         if self.model.objects.exists():
@@ -25,12 +27,14 @@ class AboutUsAdmin(admin.ModelAdmin):
 @admin.register(ContactUsForm)
 class ContactUsFormAdmin(admin.ModelAdmin):
     list_display = ('id', 'full_name', 'cell_phone_number')
+    search_fields = ('message',)
     readonly_fields = ('full_name', 'cell_phone_number', 'message')
 
 
 @admin.register(SocialAccount)
 class SocialAccountsAdmin(admin.ModelAdmin):
     list_display = ('id',)
+    search_fields = ('link',)
 
 
 @admin.register(ContactUsDetail)
@@ -68,6 +72,7 @@ class PageAdmin(admin.ModelAdmin):
     '''
 
     list_display = ('title',)
+    search_fields = ('title', 'link')
 
 
 @admin.register(Slider)
@@ -78,12 +83,14 @@ class SliderAdmin(admin.ModelAdmin):
 
     list_display = ('title', 'order')
     list_editable = ('order',)
+    search_fields = ('title', 'text', 'link')
 
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
     list_display = ('title', 'parent', 'order')
     list_editable = ('order',)
+    search_fields = ('title', 'link')
 
 
 class CityInline(admin.TabularInline):
@@ -95,11 +102,13 @@ class CityInline(admin.TabularInline):
 class StateAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('id', 'name')
     inlines = (CityInline,)
+    search_fields = ('name',)
 
 
 @admin.register(City)
 class CityAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('id', 'name', 'state')
+    search_fields = ('name',)
 
 
 @admin.register(TermsAndConditions)

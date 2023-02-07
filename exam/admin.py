@@ -11,6 +11,7 @@ class ChoiceOfMultipleChoiceQuestionInline(admin.TabularInline):
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('id', 'question', 'type')
+    search_fields = ('question',)
     inlines = (ChoiceOfMultipleChoiceQuestionInline,)
 
 

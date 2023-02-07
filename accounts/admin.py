@@ -21,6 +21,7 @@ class UserAdmin(DefaultUserAdmin):
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     list_display = ('id', 'username', 'email', 'cell_phone', 'is_staff', 'is_active')
     list_editable = ('is_staff', 'is_active')
+    search_fields = ('national_id', 'username', 'first_name', 'last_name', 'email')
     ordering = ('username',)
 
 
@@ -29,8 +30,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user')
 
 
-
-
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('id', 'user')
+    search_fields = ('address', 'zip_code', 'description')

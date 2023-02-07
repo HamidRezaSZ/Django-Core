@@ -16,6 +16,7 @@ class MessageFileInline(admin.TabularInline):
 class TicketAdmin(admin.ModelAdmin):
     list_display = ('id', 'department', 'priority', 'subject', 'created_date', 'status', 'is_archive')
     list_editable = ('is_archive',)
+    search_fields = ('subject',)
     inlines = (TicketMessageInline,)
 
 
@@ -23,18 +24,21 @@ class TicketAdmin(admin.ModelAdmin):
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'is_active')
     list_editable = ('is_active',)
+    search_fields = ('name',)
 
 
 @admin.register(TicketPriority)
 class PriorityAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'is_active')
     list_editable = ('is_active',)
+    search_fields = ('title',)
 
 
 @admin.register(TicketStatus)
 class StatusAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'is_active')
     list_editable = ('is_active',)
+    search_fields = ('title',)
 
 
 @admin.register(MessageFile)
@@ -50,3 +54,4 @@ class MessageFileInline(admin.TabularInline):
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('id', 'user')
     inlines = (MessageFileInline,)
+    search_fields = ('content',)
