@@ -2,6 +2,7 @@ from django.db import models
 from base.models import BaseModel
 from ckeditor_uploader.fields import RichTextUploadingField
 from accounts.models import User
+from django.core.exceptions import ValidationError
 
 
 class ProductCategory(BaseModel):
@@ -9,6 +10,11 @@ class ProductCategory(BaseModel):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children',
                                null=True, blank=True, verbose_name='دسته بندی والد')
     icon = models.FileField(upload_to='product-category-icon', verbose_name='آیکون', null=True, blank=True)
+
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('والد باید متفاوت باشد')
+        return super().clean()
 
     class Meta:
         verbose_name = 'دسته بندی'
@@ -23,6 +29,11 @@ class ProductBrand(BaseModel):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children',
                                null=True, blank=True, verbose_name='برند والد')
     icon = models.FileField(upload_to='product-brand-icon', verbose_name='آیکون', null=True, blank=True)
+
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('والد باید متفاوت باشد')
+        return super().clean()
 
     class Meta:
         verbose_name = 'برند'

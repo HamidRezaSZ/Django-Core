@@ -1,7 +1,8 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import RegexValidator
+from accounts.validators import cell_phone_validator
+from django.core.exceptions import ValidationError
 
 
 class BaseModel(models.Model):
@@ -35,9 +36,6 @@ class AboutUs(BaseModel):
 
 class ContactUsForm(models.Model):
     full_name = models.CharField(verbose_name='نام و نام خانوادگی', max_length=200)
-    cell_phone_validator = RegexValidator(
-        regex=r'^(09|9)\d{9}$',
-        message='Start with 09/9 and it must 9 digits after that. For example: 0912000000 or 912000000000')
     cell_phone_number = models.CharField(
         _('شماره موبایل'),
         max_length=11, validators=[cell_phone_validator])
@@ -78,6 +76,11 @@ class Menu(BaseModel):
                                blank=True, null=True, related_name='children', verbose_name='والد')
     link = models.CharField(max_length=500, verbose_name='لینک')
     order = models.IntegerField(default=1, verbose_name='ترتیب نمایش')
+
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('والد باید متفاوت باشد')
+        return super().clean()
 
     def __str__(self):
         full_path = [self.title]

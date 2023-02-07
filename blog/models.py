@@ -1,12 +1,18 @@
 from django.db import models
 from base.models import BaseModel
 from accounts.models import User
+from django.core.exceptions import ValidationError
 
 
 class Category(BaseModel):
     title = models.CharField(max_length=200, verbose_name='عنوان')
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, blank=True, null=True, verbose_name='دسته بندی والد', related_name='children')
+
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('والد باید متفاوت باشد')
+        return super().clean()
 
     def __str__(self):
         full_path = [self.title]

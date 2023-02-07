@@ -1,6 +1,11 @@
 import re
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import RegexValidator
+
+cell_phone_validator = RegexValidator(
+    regex=r'^(09|9)\d{9}$',
+    message='Start with 09/9 and it must 9 digits after that. For example: 09120000000 or 9120000000')
 
 
 def validate_national_code(code):
