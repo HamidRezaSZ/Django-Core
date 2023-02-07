@@ -49,7 +49,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         Extracts permissions of view class.
         """
         myfunc, myargs, mykwargs = resolve(f"{request.META['PATH_INFO']}")
-        mymodule = myfunc.view_class
+        mymodule = myfunc.cls
         return mymodule.permission_classes
 
     def authenticate_header(self, request):
