@@ -31,7 +31,7 @@ class Payment(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            description = 'D-Pay'
+            description = 'Core'
             req_data = {
                 "merchant_id": settings.MERCHANT,
                 "amount": self.amount,
