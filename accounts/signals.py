@@ -5,7 +5,7 @@ from cart.models import Cart
 
 
 @receiver(post_save, sender=User)
-def application_signal(sender, instance, *args, **kwargs):
+def initial_acccount_signal(sender, instance, *args, **kwargs):
     """
         Create profile object after user created
     """
