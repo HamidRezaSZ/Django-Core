@@ -22,14 +22,19 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 ```
+**4. Collect static files**
 
-**4. Start Server**
+```sh
+python manage.py collectstatic
+```
+
+**5. Start Server**
 
 ```sh
 python manage.py runserver
 ```
 
-5. Visit http://127.0.0.1:8000/ in a web browser. You will see the webpage.
+6. Visit http://127.0.0.1:8000/ in a web browser. You will see the webpage.
 
 ## How to use admin panel to manage contents
 
