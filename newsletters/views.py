@@ -14,7 +14,7 @@ class NewsLettersView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAdminUser],
         "retrieve": [IsAdminUser],
-        "post": [IsAuthenticated],
+        "create": [IsAuthenticated],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],

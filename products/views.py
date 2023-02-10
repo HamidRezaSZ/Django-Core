@@ -8,7 +8,7 @@ class ProductsView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -27,7 +27,7 @@ class ProductCategoryView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -41,7 +41,7 @@ class ProductBrandView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -54,7 +54,7 @@ class ProductCommentView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -68,7 +68,7 @@ class RelatedProductView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],

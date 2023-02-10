@@ -15,5 +15,6 @@ router.register(r'footer', FooterView)
 router.register(r'states', StateView)
 router.register(r'cities', CityView)
 router.register(r'terms-and-conditions', TermsAndConditionsView)
+router.register(r'components', ComponentView)
 
 urlpatterns = router.urls

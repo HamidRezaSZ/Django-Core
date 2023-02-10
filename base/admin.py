@@ -88,9 +88,9 @@ class SliderAdmin(admin.ModelAdmin):
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('title', 'parent', 'order')
+    list_display = ('page', 'parent', 'order')
     list_editable = ('order',)
-    search_fields = ('title', 'link')
+    search_fields = ('page',)
 
 
 class CityInline(admin.TabularInline):
@@ -120,3 +120,16 @@ class TermsAndConditionsAdmin(admin.ModelAdmin):
             return False
 
         return super().has_add_permission(request)
+
+
+class ComponentItemInline(admin.TabularInline):
+    model = ComponentItem
+    extra = 0
+
+
+@ admin.register(Component)
+class ComponentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'parent', 'order')
+    list_editable = ('order',)
+    search_fields = ('name', 'page', 'parent')
+    inlines = (ComponentItemInline,)

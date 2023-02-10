@@ -5,14 +5,10 @@ from rest_framework.permissions import IsAdminUser, AllowAny
 
 
 class FAQView(ModelViewSet):
-    """
-    Get list of FAQs
-    """
-
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -23,14 +19,10 @@ class FAQView(ModelViewSet):
 
 
 class AboutUsView(ModelViewSet):
-    """
-    Get about us page
-    """
-
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -40,14 +32,10 @@ class AboutUsView(ModelViewSet):
 
 
 class ContactUsFormView(ModelViewSet):
-    """
-    Create contact us form
-    """
-
     permission_classes_by_action = {
         "list": [IsAdminUser],
         "retrieve": [IsAdminUser],
-        "post": [AllowAny],
+        "create": [AllowAny],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -57,58 +45,36 @@ class ContactUsFormView(ModelViewSet):
 
 
 class ContactUsDetailView(ModelViewSet):
-    """
-    Get contact us page
-    """
-
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
     queryset = ContactUsDetail.objects.filter(is_active=True)
-
-    def get_serializer_class(self):
-        if self.action == 'retrieve' or self.action == 'list':
-            return ContactUsGetDetailSerializer
-
-        return ContactUsDetailSerializer
+    serializer_class = ContactUsDetailSerializer
 
 
 class MenuView(ModelViewSet):
-    """
-    Get menu list
-    """
-
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
     queryset = Menu.objects.filter(is_active=True, parent=None)
-
-    def get_serializer_class(self):
-        if self.action == 'retrieve' or self.action == 'list':
-            return MenuGetSerializer
-
-        return MenuSerializer
+    serializer_class = MenuGetSerializer
 
 
 class SliderView(ModelViewSet):
-    """
-    Get slider list
-    """
-
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -118,25 +84,16 @@ class SliderView(ModelViewSet):
 
 
 class FooterView(ModelViewSet):
-    """
-    Get footer
-    """
-
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
     queryset = Footer.objects.filter(is_active=True)
-
-    def get_serializer_class(self):
-        if self.action == 'retrieve' or self.action == 'list':
-            return FooterGetSerializer
-
-        return FooterSerializer
+    serializer_class = FooterSerializer
 
 
 class CityView(ModelViewSet):
@@ -149,12 +106,7 @@ class CityView(ModelViewSet):
         "destroy": [IsAdminUser],
     }
     queryset = City.objects.filter(is_active=True)
-
-    def get_serializer_class(self):
-        if self.action == 'retrieve' or self.action == 'list':
-            return CityGetSerializer
-
-        return CitySerializer
+    serializer_class = CitySerializer
 
 
 class StateView(ModelViewSet):
@@ -176,17 +128,27 @@ class StateView(ModelViewSet):
 
 
 class TermsAndConditionsView(ModelViewSet):
-    """
-    Get terms and conditions page
-    """
-
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
     serializer_class = TermsAndConditionsSerializer
     queryset = TermsAndConditions.objects.filter(is_active=True)
+
+
+class ComponentView(ModelViewSet):
+    permission_classes_by_action = {
+        "list": [AllowAny],
+        "retrieve": [AllowAny],
+        "create": [IsAdminUser],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }
+    serializer_class = ComponentGetSerializer
+    queryset = Component.objects.filter(is_active=True, parent=None)
+    filterset_fields = ['page', 'order', 'parent']

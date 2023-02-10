@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth.password_validation import validate_password
 from disposable_email_domains import blocklist
 from django.core.validators import RegexValidator
-from base.serializers import CityGetSerializer
+from base.serializers import CitySerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -80,7 +80,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ProfileGetSerializer(serializers.ModelSerializer):
-    city = CityGetSerializer()
+    city = CitySerializer()
 
     class Meta:
         model = Profile
@@ -99,7 +99,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class AddressGetSerializer(serializers.ModelSerializer):
-    city = CityGetSerializer()
+    city = CitySerializer()
 
     class Meta:
         model = Address

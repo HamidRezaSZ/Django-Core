@@ -26,7 +26,7 @@ class SocialAccountSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ContactUsGetDetailSerializer(serializers.ModelSerializer):
+class ContactUsDetailSerializer(serializers.ModelSerializer):
     social_accounts = SocialAccountSerializer()
 
     class Meta:
@@ -34,20 +34,22 @@ class ContactUsGetDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ContactUsDetailSerializer(serializers.ModelSerializer):
-
+class PageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ContactUsDetail
+        model = Page
         fields = '__all__'
 
 
 class MenuSerializer(serializers.ModelSerializer):
+    page = PageSerializer()
+
     class Meta:
         model = Menu
         fields = '__all__'
 
 
 class MenuGetSerializer(serializers.ModelSerializer):
+    page = PageSerializer()
     sub_menus = serializers.SerializerMethodField()
 
     class Meta:
@@ -65,23 +67,11 @@ class SliderSerializer(serializers.ModelSerializer):
         exclude = ('order',)
 
 
-class PageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Page
-        fields = '__all__'
-
-
-class FooterGetSerializer(serializers.ModelSerializer):
+class FooterSerializer(serializers.ModelSerializer):
     useful_link = PageSerializer(many=True)
     social_accounts = SocialAccountSerializer(many=True)
     contact_us = ContactUsDetailSerializer()
 
-    class Meta:
-        model = Footer
-        fields = '__all__'
-
-
-class FooterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Footer
         fields = '__all__'
@@ -94,12 +84,6 @@ class StateSerializer(serializers.ModelSerializer):
 
 
 class CitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = City
-        fields = '__all__'
-
-
-class CityGetSerializer(serializers.ModelSerializer):
     state = StateSerializer()
 
     class Meta:
@@ -122,3 +106,37 @@ class TermsAndConditionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = TermsAndConditions
         fields = '__all__'
+
+
+class ComponentItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComponentItem
+        fields = '__all__'
+
+
+class ComponentSerializer(serializers.ModelSerializer):
+    page = PageSerializer(many=True)
+    items = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Component
+        exclude = ('parent',)
+
+    def get_items(self, obj):
+        return ComponentItemSerializer(obj.componentitem_set.filter(is_active=True), many=True).data
+
+
+class ComponentGetSerializer(serializers.ModelSerializer):
+    page = PageSerializer(many=True)
+    sub_component = serializers.SerializerMethodField()
+    items = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Component
+        exclude = ('parent',)
+
+    def get_sub_component(self, obj):
+        return ComponentSerializer(obj.children.all(), many=True, read_only=True).data
+
+    def get_items(self, obj):
+        return ComponentItemSerializer(obj.componentitem_set.filter(is_active=True), many=True).data

@@ -10,7 +10,7 @@ class MultipleChoiceAnswerView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAdminUser],
         "retrieve": [IsAdminUser],
-        "post": [IsAuthenticated],
+        "create": [IsAuthenticated],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -23,7 +23,7 @@ class DescriptiveAnswerView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAdminUser],
         "retrieve": [IsAdminUser],
-        "post": [IsAuthenticated],
+        "create": [IsAuthenticated],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -36,7 +36,7 @@ class FileAnswerView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAdminUser],
         "retrieve": [IsAdminUser],
-        "post": [IsAuthenticated],
+        "create": [IsAuthenticated],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -49,7 +49,7 @@ class ExamView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
@@ -62,7 +62,7 @@ class UserExamView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAuthenticated],
+        "create": [IsAuthenticated],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],

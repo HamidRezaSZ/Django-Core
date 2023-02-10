@@ -9,18 +9,10 @@ from django.shortcuts import get_object_or_404
 
 
 class Register(CreateAPIView):
-    """
-    SignUp users
-    """
-
     serializer_class = UserSerializer
 
 
 class ChangePasswordView(UpdateAPIView):
-    """
-    Users can change there password
-    """
-
     permission_classes = (IsAuthenticated, )
     serializer_class = ChangePasswordSerializer
 
@@ -29,10 +21,6 @@ class ChangePasswordView(UpdateAPIView):
 
 
 class GetPhoneNumberRegistered(GenericAPIView):
-    '''
-        Post to create a call for OTP
-    '''
-
     serializer_class = PhoneNumberSerializer
 
     def post(self, request) -> Response:
@@ -50,14 +38,10 @@ class GetPhoneNumberRegistered(GenericAPIView):
 
 
 class ProfileView(ModelViewSet):
-    '''
-        Get or update user profile
-    '''
-
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAuthenticated],
         "partial_update": [IsAuthenticated],
         "destroy": [IsAdminUser],

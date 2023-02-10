@@ -69,12 +69,23 @@ class ContactUsDetail(BaseModel):
         verbose_name_plural = 'صفحه تماس با ما'
 
 
-class Menu(BaseModel):
+class Page(BaseModel):
     title = models.CharField(max_length=200, verbose_name='تایتل')
+    link = models.CharField(max_length=500, verbose_name='لینک')
+
+    class Meta:
+        verbose_name = 'صفحه'
+        verbose_name_plural = 'صفحه ها'
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Menu(BaseModel):
+    page = models.ForeignKey(to=Page, on_delete=models.CASCADE, verbose_name='صفحه')
     icon = models.FileField(null=True, blank=True, upload_to='menus', verbose_name='آیکون')
     parent = models.ForeignKey('self', on_delete=models.CASCADE,
                                blank=True, null=True, related_name='children', verbose_name='والد')
-    link = models.CharField(max_length=500, verbose_name='لینک')
     order = models.IntegerField(default=1, verbose_name='ترتیب نمایش')
 
     def clean(self) -> None:
@@ -83,10 +94,10 @@ class Menu(BaseModel):
         return super().clean()
 
     def __str__(self):
-        full_path = [self.title]
+        full_path = [self.page.title]
         k = self.parent
         while k is not None:
-            full_path.append(k.title)
+            full_path.append(k.page.title)
             k = k.parent
         return ' -> '.join(full_path[::-1])
 
@@ -107,18 +118,6 @@ class Slider(BaseModel):
         verbose_name = 'اسلایدر'
         verbose_name_plural = 'اسلایدر ها'
         ordering = ('order',)
-
-    def __str__(self) -> str:
-        return self.title
-
-
-class Page(BaseModel):
-    title = models.CharField(max_length=200, verbose_name='تایتل')
-    link = models.CharField(max_length=500, verbose_name='لینک')
-
-    class Meta:
-        verbose_name = 'صفحه'
-        verbose_name_plural = 'صفحه ها'
 
     def __str__(self) -> str:
         return self.title
@@ -167,3 +166,46 @@ class TermsAndConditions(BaseModel):
     class Meta:
         verbose_name = 'قوانین و مقررات'
         verbose_name_plural = 'قوانین و مقررات'
+
+
+class Component(BaseModel):
+    name = models.CharField(verbose_name='نام', max_length=200)
+    page = models.ManyToManyField(to=Page, verbose_name='صفحه')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE,
+                               blank=True, null=True, related_name='children', verbose_name='والد')
+    order = models.IntegerField(default=1, verbose_name='اولویت نمایش')
+
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('والد باید متفاوت باشد')
+        return super().clean()
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = 'کامپوننت'
+        verbose_name_plural = 'کامپوننت ها'
+        ordering = ['order']
+
+
+class ComponentItem(BaseModel):
+    class Type(models.TextChoices):
+        FILE = 'File', 'File'
+        TEXT = 'Text', 'Text'
+
+    component = models.ForeignKey(to=Component, on_delete=models.CASCADE, verbose_name='کامپوننت')
+    type = models.CharField(verbose_name='نوع', max_length=20, choices=Type.choices)
+    file = models.FileField(verbose_name='فایل', upload_to='component', null=True, blank=True)
+    content = RichTextUploadingField(verbose_name='محتوا', null=True, blank=True)
+
+    def clean(self) -> None:
+        if self.type == 'File' and (not self.file or self.content):
+            raise ValidationError('نوع کامپوننت فایل است!')
+        elif self.type == 'Text' and (self.file or not self.content):
+            raise ValidationError('نوع کامپوننت متن است!')
+        return super().clean()
+
+    class Meta:
+        verbose_name = 'بخش کامپوننت'
+        verbose_name_plural = 'بخش های کامپوننت'

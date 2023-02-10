@@ -35,5 +35,5 @@ class CartItem(models.Model):
         return super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'سبد خرید'
-        verbose_name_plural = 'سبد های خرید'
+        verbose_name = 'کالای سبد خرید'
+        verbose_name_plural = 'کالا های سبد خرید'

@@ -14,7 +14,7 @@ class PaymentView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],
-        "post": [IsAdminUser],
+        "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
