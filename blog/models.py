@@ -2,6 +2,7 @@ from django.db import models
 from base.models import BaseModel
 from accounts.models import User
 from django.core.exceptions import ValidationError
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Category(BaseModel):
@@ -46,7 +47,7 @@ class Post(BaseModel):
     category = models.ForeignKey(to=Category, on_delete=models.CASCADE, verbose_name='دسته بندی')
     thumbnail = models.ImageField(upload_to='post-images', verbose_name='تصویر شاخص')
     description = models.TextField(verbose_name='توضیحات مختصر')
-    content = models.TextField(verbose_name='محتوای پست')
+    content = RichTextUploadingField(verbose_name='محتوای پست')
     authors = models.ManyToManyField(to=Author, verbose_name='نویسنده ها')
     show_in_home_page = models.BooleanField(default=False, verbose_name='نمایش در صفحه اصلی')
     meta_title = models.CharField(max_length=128, verbose_name='عنوان سئو', null=True, blank=True)
@@ -112,7 +113,7 @@ class Comment(models.Model):
         ordering = ('created_date',)
 
 
-class RelatedPost(BaseModel):
+class RelatedPost(models.Model):
     post = models.OneToOneField(to=Post, verbose_name='پست', on_delete=models.CASCADE, related_name='related_post_post')
     related_posts = models.ManyToManyField(to=Post, verbose_name='پست')
 

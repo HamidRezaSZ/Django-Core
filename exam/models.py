@@ -22,6 +22,7 @@ class ChoiceOfMultipleChoiceQuestion(BaseModel):
     question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
     icon = models.FileField(null=True, blank=True, verbose_name='آیکون')
     choice = models.CharField(max_length=200, verbose_name='مقدار')
+    is_true = models.BooleanField(default=False, verbose_name='جواب درست')
 
     class Meta:
         verbose_name = 'گزینه سوال چند گزینه ای'

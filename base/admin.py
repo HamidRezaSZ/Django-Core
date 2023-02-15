@@ -71,7 +71,7 @@ class PageAdmin(admin.ModelAdmin):
         Admin panel for pages
     '''
 
-    list_display = ('title',)
+    list_display = ('id', 'title',)
     search_fields = ('title', 'link')
 
 
@@ -81,14 +81,14 @@ class SliderAdmin(admin.ModelAdmin):
         Admin panel for home page slider
     '''
 
-    list_display = ('title', 'order')
+    list_display = ('id', 'title', 'order')
     list_editable = ('order',)
     search_fields = ('title', 'text', 'link')
 
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('page', 'parent', 'order')
+    list_display = ('id', 'page', 'parent', 'order')
     list_editable = ('order',)
     search_fields = ('page',)
 
@@ -127,7 +127,7 @@ class ComponentItemInline(admin.TabularInline):
     extra = 0
 
 
-@ admin.register(Component)
+@admin.register(Component)
 class ComponentAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'parent', 'order')
     list_editable = ('order',)

@@ -12,7 +12,7 @@ class TagInline(admin.TabularInline):
     extra = 0
 
 
-class CommentInline(admin.TabularInline):
+class CommentInline(admin.StackedInline):
     model = Comment
     extra = 0
 
