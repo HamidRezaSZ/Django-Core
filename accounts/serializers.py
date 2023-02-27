@@ -1,9 +1,11 @@
-from rest_framework import serializers
-from .models import *
-from django.contrib.auth.password_validation import validate_password
 from disposable_email_domains import blocklist
+from django.contrib.auth.password_validation import validate_password
 from django.core.validators import RegexValidator
+from rest_framework import serializers
+
 from base.serializers import CitySerializer
+
+from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,12 +20,15 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         exclude = ('user_permissions', 'groups', 'date_joined', 'is_active', 'is_superuser', 'last_login', 'is_staff')
 
-    def create(self, validated_data):
-        if validated_data['password'] != validated_data['password2']:
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
-        elif validated_data['email'].split('@')[1] in blocklist:
+        elif attrs['email'].split('@')[1] in blocklist:
             raise serializers.ValidationError({"email": "The email domain is blocked."})
 
+        return super().validate(attrs)
+
+    def create(self, validated_data):
         validated_data.pop('password2')
         user = User.objects.create_user(**validated_data)
 
@@ -37,16 +42,19 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
-    old_password = serializers.CharField(write_only=True, required=True, allow_null=True)
+    old_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
         fields = ('old_password', 'password', 'password2')
 
-    def update(self, instance, validated_data):
-        if validated_data['password'] != validated_data['password2']:
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
 
+        return super().validate(attrs)
+
+    def update(self, instance, validated_data):
         if not instance.check_password(validated_data['old_password']):
             raise serializers.ValidationError({"old_password": "Old password is not correct"})
 
