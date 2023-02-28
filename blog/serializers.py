@@ -1,14 +1,16 @@
 from rest_framework import serializers
+
+from base.base_serializers import ModelSerializer
 from blog.models import *
 
 
-class SubCategorySerializer(serializers.ModelSerializer):
+class SubCategorySerializer(ModelSerializer):
     class Meta:
         model = Category
         exclude = ('is_active', 'created_date', 'modified_date', 'parent')
 
 
-class PostCategorySerializer(serializers.ModelSerializer):
+class PostCategorySerializer(ModelSerializer):
     sub_categories = serializers.SerializerMethodField()
 
     class Meta:
@@ -19,19 +21,19 @@ class PostCategorySerializer(serializers.ModelSerializer):
         return SubCategorySerializer(obj.children.all(), many=True).data
 
 
-class GallerySerializer(serializers.ModelSerializer):
+class GallerySerializer(ModelSerializer):
     class Meta:
         model = Gallery
         fields = '__all__'
 
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer(ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
 
 
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorSerializer(ModelSerializer):
     full_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -42,13 +44,13 @@ class AuthorSerializer(serializers.ModelSerializer):
         return f'{obj.user.first_name} {obj.user.last_name}'
 
 
-class SubCommentSerializer(serializers.ModelSerializer):
+class SubCommentSerializer(ModelSerializer):
     class Meta:
         model = Comment
         exclude = ('parent', 'user')
 
 
-class PostCommentSerializer(serializers.ModelSerializer):
+class PostCommentSerializer(ModelSerializer):
     sub_comments = serializers.SerializerMethodField()
 
     class Meta:
@@ -63,7 +65,7 @@ class PostCommentSerializer(serializers.ModelSerializer):
         return SubCommentSerializer(obj.child.all(), many=True).data
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(ModelSerializer):
     category = PostCategorySerializer()
 
     class Meta:
@@ -71,7 +73,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'category', 'description', 'show_in_home_page', 'thumbnail', 'created_date')
 
 
-class PostItemSerializer(serializers.ModelSerializer):
+class PostItemSerializer(ModelSerializer):
     category = PostCategorySerializer()
     authors = AuthorSerializer(many=True)
 
@@ -80,7 +82,7 @@ class PostItemSerializer(serializers.ModelSerializer):
         exclude = ('is_active',)
 
 
-class RelatedPostSerializer(serializers.ModelSerializer):
+class RelatedPostSerializer(ModelSerializer):
     related_posts = PostSerializer(many=True)
 
     class Meta:

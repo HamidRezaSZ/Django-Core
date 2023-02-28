@@ -1,9 +1,12 @@
 from rest_framework import serializers
-from .models import *
+
+from base.base_serializers import ModelSerializer
 from products.serializers import ProductQuantitiesSerializer
 
+from .models import *
 
-class CartItemSerializer(serializers.ModelSerializer):
+
+class CartItemSerializer(ModelSerializer):
     product_quantity = ProductQuantitiesSerializer()
 
     class Meta:
@@ -11,7 +14,7 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CartSerializer(serializers.ModelSerializer):
+class CartSerializer(ModelSerializer):
     items = serializers.SerializerMethodField()
 
     class Meta:

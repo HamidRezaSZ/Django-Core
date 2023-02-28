@@ -2,13 +2,15 @@ from disposable_email_domains import blocklist
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import RegexValidator
 from rest_framework import serializers
+from rest_framework.serializers import Serializer
 
+from base.base_serializers import ModelSerializer
 from base.serializers import CitySerializer
 
 from .models import *
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(ModelSerializer):
     """
     User serializers for register
     """
@@ -35,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class ChangePasswordSerializer(serializers.ModelSerializer):
+class ChangePasswordSerializer(ModelSerializer):
     """
     User change password serializers
     """
@@ -64,7 +66,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return instance
 
 
-class PhoneNumberSerializer(serializers.Serializer):
+class PhoneNumberSerializer(Serializer):
     """
     Serializer for phone number
     """
@@ -75,7 +77,7 @@ class PhoneNumberSerializer(serializers.Serializer):
     phone_number = serializers.CharField(validators=[phone_validator])
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(ModelSerializer):
     class Meta:
         model = Profile
         exclude = ('user',)
@@ -87,7 +89,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class ProfileGetSerializer(serializers.ModelSerializer):
+class ProfileGetSerializer(ModelSerializer):
     city = CitySerializer()
 
     class Meta:
@@ -95,7 +97,7 @@ class ProfileGetSerializer(serializers.ModelSerializer):
         exclude = ('user',)
 
 
-class AddressSerializer(serializers.ModelSerializer):
+class AddressSerializer(ModelSerializer):
     class Meta:
         model = Address
         exclude = ('user',)
@@ -106,7 +108,7 @@ class AddressSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class AddressGetSerializer(serializers.ModelSerializer):
+class AddressGetSerializer(ModelSerializer):
     city = CitySerializer()
 
     class Meta:

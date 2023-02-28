@@ -1,18 +1,21 @@
 from rest_framework import serializers
-from .models import *
-from products.serializers import ProductQuantitiesSerializer
+
 from accounts.serializers import AddressSerializer
+from base.base_serializers import ModelSerializer
 from payments.serializers import PaymentSerializer
 from products.models import Coupon
+from products.serializers import ProductQuantitiesSerializer
+
+from .models import *
 
 
-class DeliveryTypeSerializer(serializers.ModelSerializer):
+class DeliveryTypeSerializer(ModelSerializer):
     class Meta:
         model = DeliveryType
         fields = '__all__'
 
 
-class OrderItemSerializer(serializers.ModelSerializer):
+class OrderItemSerializer(ModelSerializer):
     product_quantity = ProductQuantitiesSerializer()
 
     class Meta:
@@ -20,7 +23,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OrderGetSerializer(serializers.ModelSerializer):
+class OrderGetSerializer(ModelSerializer):
     address = AddressSerializer()
     payment = PaymentSerializer()
     delivery_type = DeliveryTypeSerializer()
@@ -35,7 +38,7 @@ class OrderGetSerializer(serializers.ModelSerializer):
         return OrderItemSerializer(obj.orderitem_set.all(), many=True).data
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class OrderSerializer(ModelSerializer):
 
     class Meta:
         model = Order

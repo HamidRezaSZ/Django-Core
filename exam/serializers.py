@@ -1,14 +1,17 @@
 from rest_framework import serializers
+
+from base.base_serializers import ModelSerializer
+
 from .models import *
 
 
-class ChoiceOfMultipleChoiceQuestionSerializer(serializers.ModelSerializer):
+class ChoiceOfMultipleChoiceQuestionSerializer(ModelSerializer):
     class Meta:
         model = ChoiceOfMultipleChoiceQuestion
         fields = '__all__'
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(ModelSerializer):
     multiple_choice_questions = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,25 +24,25 @@ class QuestionSerializer(serializers.ModelSerializer):
             many=True).data
 
 
-class MultipleChoiceAnswerSerializer(serializers.ModelSerializer):
+class MultipleChoiceAnswerSerializer(ModelSerializer):
     class Meta:
         model = MultipleChoiceAnswer
         fields = '__all__'
 
 
-class DescriptiveAnswerSerializer(serializers.ModelSerializer):
+class DescriptiveAnswerSerializer(ModelSerializer):
     class Meta:
         model = DescriptiveAnswer
         fields = '__all__'
 
 
-class FileAnswerSerializer(serializers.ModelSerializer):
+class FileAnswerSerializer(ModelSerializer):
     class Meta:
         model = FileAnswer
         fields = '__all__'
 
 
-class ExamSerializer(serializers.ModelSerializer):
+class ExamSerializer(ModelSerializer):
     related_questions = QuestionSerializer(many=True)
 
     class Meta:
@@ -47,7 +50,7 @@ class ExamSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserExamSerializer(serializers.ModelSerializer):
+class UserExamSerializer(ModelSerializer):
     exam = ExamSerializer()
 
     class Meta:

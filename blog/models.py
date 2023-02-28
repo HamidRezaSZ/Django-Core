@@ -1,8 +1,9 @@
-from django.db import models
-from base.models import BaseModel
-from accounts.models import User
-from django.core.exceptions import ValidationError
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.core.exceptions import ValidationError
+from django.db import models
+
+from accounts.models import User
+from base.models import BaseModel
 
 
 class Category(BaseModel):
@@ -115,7 +116,7 @@ class Comment(models.Model):
 
 class RelatedPost(models.Model):
     post = models.OneToOneField(to=Post, verbose_name='پست', on_delete=models.CASCADE, related_name='related_post_post')
-    related_posts = models.ManyToManyField(to=Post, verbose_name='پست')
+    related_posts = models.ManyToManyField(to=Post, verbose_name='پست', null=True)
 
     def __str__(self):
         return f'{self.post.title}'

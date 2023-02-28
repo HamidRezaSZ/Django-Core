@@ -1,26 +1,29 @@
 from rest_framework import serializers
+
+from base.base_serializers import ModelSerializer
+
 from .models import *
 
 
-class TicketDepartmentSerializer(serializers.ModelSerializer):
+class TicketDepartmentSerializer(ModelSerializer):
     class Meta:
         model = TicketDepartment
         fields = '__all__'
 
 
-class TicketPrioritySerializer(serializers.ModelSerializer):
+class TicketPrioritySerializer(ModelSerializer):
     class Meta:
         model = TicketPriority
         fields = '__all__'
 
 
-class TicketStatusSerializer(serializers.ModelSerializer):
+class TicketStatusSerializer(ModelSerializer):
     class Meta:
         model = TicketStatus
         fields = '__all__'
 
 
-class TicketSerializer(serializers.ModelSerializer):
+class TicketSerializer(ModelSerializer):
     status = TicketStatusSerializer()
     department = TicketDepartmentSerializer()
     priority = TicketPrioritySerializer()
@@ -36,7 +39,7 @@ class TicketSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class TicketItemSerializer(serializers.ModelSerializer):
+class TicketItemSerializer(ModelSerializer):
     status = TicketStatusSerializer()
     department = TicketDepartmentSerializer()
     priority = TicketPrioritySerializer()
@@ -51,13 +54,13 @@ class TicketItemSerializer(serializers.ModelSerializer):
         return TicketMessageSerializer(TicketMessage.objects.get(ticket=obj).message, many=True).data
 
 
-class MessageFileSerializer(serializers.ModelSerializer):
+class MessageFileSerializer(ModelSerializer):
     class Meta:
         model = MessageFile
         fields = '__all__'
 
 
-class TicketMessageSerializer(serializers.ModelSerializer):
+class TicketMessageSerializer(ModelSerializer):
     files = serializers.SerializerMethodField()
 
     class Meta:
@@ -68,7 +71,7 @@ class TicketMessageSerializer(serializers.ModelSerializer):
         return MessageFileSerializer(MessageFile.objects.get(message=obj).file, many=True).data
 
 
-class CreateTicketMessageSerializer(serializers.ModelSerializer):
+class CreateTicketMessageSerializer(ModelSerializer):
     files = MessageFileSerializer(many=True)
 
     class Meta:

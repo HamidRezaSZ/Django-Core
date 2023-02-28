@@ -1,16 +1,19 @@
-from rest_framework import serializers
-from .models import *
 from django.db.models import Avg
+from rest_framework import serializers
+
+from base.base_serializers import ModelSerializer
+
+from .models import *
 
 
-class SubProductBrandSerializer(serializers.ModelSerializer):
+class SubProductBrandSerializer(ModelSerializer):
 
     class Meta:
         model = ProductBrand
         fields = '__all__'
 
 
-class ProductBrandSerializer(serializers.ModelSerializer):
+class ProductBrandSerializer(ModelSerializer):
     sub_brands = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,13 +24,13 @@ class ProductBrandSerializer(serializers.ModelSerializer):
         return SubProductBrandSerializer(obj.children.filter(is_active=True), many=True).data
 
 
-class SubProductCategorySerializer(serializers.ModelSerializer):
+class SubProductCategorySerializer(ModelSerializer):
     class Meta:
         model = ProductCategory
         fields = '__all__'
 
 
-class ProductCategorySerializer(serializers.ModelSerializer):
+class ProductCategorySerializer(ModelSerializer):
     sub_categories = serializers.SerializerMethodField()
 
     class Meta:
@@ -38,7 +41,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         return SubProductCategorySerializer(obj.children.filter(is_active=True), many=True).data
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(ModelSerializer):
     score = serializers.SerializerMethodField()
 
     class Meta:
@@ -49,7 +52,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return ProductComment.objects.get(product=obj).comment.aggregate(Avg('rate'))['rate__avg']
 
 
-class SubProductSerializer(serializers.ModelSerializer):
+class SubProductSerializer(ModelSerializer):
     category = ProductCategorySerializer()
     brand = ProductBrandSerializer()
     score = serializers.SerializerMethodField()
@@ -78,7 +81,7 @@ class SubProductSerializer(serializers.ModelSerializer):
         return ProductQuantitiesSerializer(obj.productquantity_set.all(), many=True).data
 
 
-class ProductItemSerializer(serializers.ModelSerializer):
+class ProductItemSerializer(ModelSerializer):
     category = ProductCategorySerializer()
     brand = ProductBrandSerializer()
     score = serializers.SerializerMethodField()
@@ -111,13 +114,13 @@ class ProductItemSerializer(serializers.ModelSerializer):
         return SubProductSerializer(obj.child.all(), many=True).data
 
 
-class ProductAttributeSerializer(serializers.ModelSerializer):
+class ProductAttributeSerializer(ModelSerializer):
     class Meta:
         model = ProductAttribute
         fields = '__all__'
 
 
-class ProductAttributeValueSerializer(serializers.ModelSerializer):
+class ProductAttributeValueSerializer(ModelSerializer):
     product_attribute = ProductAttributeSerializer()
 
     class Meta:
@@ -125,7 +128,7 @@ class ProductAttributeValueSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RelatedProductSerializer(serializers.ModelSerializer):
+class RelatedProductSerializer(ModelSerializer):
     related_products = ProductSerializer(many=True)
 
     class Meta:
@@ -133,7 +136,7 @@ class RelatedProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SellerSerializer(serializers.ModelSerializer):
+class SellerSerializer(ModelSerializer):
     user = serializers.SerializerMethodField()
 
     class Meta:
@@ -144,26 +147,26 @@ class SellerSerializer(serializers.ModelSerializer):
         return obj.user.username
 
 
-class ProductCatalogSerializer(serializers.ModelSerializer):
+class ProductCatalogSerializer(ModelSerializer):
     class Meta:
         model = ProductCatalog
         exclude = ('product',)
 
 
-class ProductImageSerializer(serializers.ModelSerializer):
+class ProductImageSerializer(ModelSerializer):
     class Meta:
         model = ProductImage
         exclude = ('product',)
 
 
-class ProductQuantitiesSerializer(serializers.ModelSerializer):
+class ProductQuantitiesSerializer(ModelSerializer):
 
     class Meta:
         model = ProductQuantity
         fields = '__all__'
 
 
-class SubProductCommentSerializer(serializers.ModelSerializer):
+class SubProductCommentSerializer(ModelSerializer):
 
     class Meta:
         model = ProductComment
@@ -173,7 +176,7 @@ class SubProductCommentSerializer(serializers.ModelSerializer):
         }
 
 
-class ProductCommentSerializer(serializers.ModelSerializer):
+class ProductCommentSerializer(ModelSerializer):
     sub_comments = serializers.SerializerMethodField()
 
     class Meta:

@@ -1,33 +1,35 @@
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from .base_serializers import ModelSerializer
 from .models import *
 
 
-class FAQSerializer(serializers.ModelSerializer):
+class FAQSerializer(ModelSerializer):
     class Meta:
         model = FAQ
         fields = '__all__'
 
 
-class AboutUsSerializer(serializers.ModelSerializer):
+class AboutUsSerializer(ModelSerializer):
     class Meta:
         model = AboutUs
         fields = '__all__'
 
 
-class ContactUsFormSerializer(serializers.ModelSerializer):
+class ContactUsFormSerializer(ModelSerializer):
     class Meta:
         model = ContactUsForm
         fields = '__all__'
 
 
-class SocialAccountSerializer(serializers.ModelSerializer):
+class SocialAccountSerializer(ModelSerializer):
     class Meta:
         model = SocialAccount
         fields = '__all__'
 
 
-class ContactUsDetailSerializer(serializers.ModelSerializer):
+class ContactUsDetailSerializer(ModelSerializer):
     social_accounts = SocialAccountSerializer()
 
     class Meta:
@@ -35,13 +37,13 @@ class ContactUsDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PageSerializer(serializers.ModelSerializer):
+class PageSerializer(ModelSerializer):
     class Meta:
         model = Page
         fields = '__all__'
 
 
-class MenuSerializer(serializers.ModelSerializer):
+class MenuSerializer(ModelSerializer):
     page = PageSerializer()
 
     class Meta:
@@ -49,7 +51,7 @@ class MenuSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MenuGetSerializer(serializers.ModelSerializer):
+class MenuGetSerializer(ModelSerializer):
     page = PageSerializer()
     sub_menus = serializers.SerializerMethodField()
 
@@ -61,14 +63,14 @@ class MenuGetSerializer(serializers.ModelSerializer):
         return MenuSerializer(obj.children.all(), many=True, read_only=True).data
 
 
-class SliderSerializer(serializers.ModelSerializer):
+class SliderSerializer(ModelSerializer):
 
     class Meta:
         model = Slider
         exclude = ('order',)
 
 
-class FooterSerializer(serializers.ModelSerializer):
+class FooterSerializer(ModelSerializer):
     useful_link = PageSerializer(many=True)
     social_accounts = SocialAccountSerializer(many=True)
     contact_us = ContactUsDetailSerializer()
@@ -78,13 +80,13 @@ class FooterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class StateSerializer(serializers.ModelSerializer):
+class StateSerializer(ModelSerializer):
     class Meta:
         model = State
         fields = '__all__'
 
 
-class CitySerializer(serializers.ModelSerializer):
+class CitySerializer(ModelSerializer):
     state = StateSerializer()
 
     class Meta:
@@ -92,7 +94,7 @@ class CitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class StateItemSerializer(serializers.ModelSerializer):
+class StateItemSerializer(ModelSerializer):
     cities = serializers.SerializerMethodField()
 
     class Meta:
@@ -103,19 +105,19 @@ class StateItemSerializer(serializers.ModelSerializer):
         return CitySerializer(obj.city_set.all(), many=True).data
 
 
-class TermsAndConditionsSerializer(serializers.ModelSerializer):
+class TermsAndConditionsSerializer(ModelSerializer):
     class Meta:
         model = TermsAndConditions
         fields = '__all__'
 
 
-class ComponentItemSerializer(serializers.ModelSerializer):
+class ComponentItemSerializer(ModelSerializer):
     class Meta:
         model = ComponentItem
         fields = '__all__'
 
 
-class ComponentSerializer(serializers.ModelSerializer):
+class ComponentSerializer(ModelSerializer):
     page = PageSerializer(many=True)
     items = serializers.SerializerMethodField()
 
@@ -127,7 +129,7 @@ class ComponentSerializer(serializers.ModelSerializer):
         return ComponentItemSerializer(obj.componentitem_set.filter(is_active=True), many=True).data
 
 
-class ComponentGetSerializer(serializers.ModelSerializer):
+class ComponentGetSerializer(ModelSerializer):
     page = PageSerializer(many=True)
     sub_component = serializers.SerializerMethodField()
     items = serializers.SerializerMethodField()

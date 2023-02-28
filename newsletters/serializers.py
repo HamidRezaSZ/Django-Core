@@ -1,8 +1,9 @@
-from rest_framework import serializers
+from base.base_serializers import ModelSerializer
+
 from .models import NewsLetters
 
 
-class NewsLettersSerializer(serializers.ModelSerializer):
+class NewsLettersSerializer(ModelSerializer):
     class Meta:
         model = NewsLetters
         fields = '__all__'

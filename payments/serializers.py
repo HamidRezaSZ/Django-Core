@@ -1,8 +1,9 @@
-from rest_framework import serializers
+from base.base_serializers import ModelSerializer
+
 from .models import Payment
 
 
-class PaymentSerializer(serializers.ModelSerializer):
+class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         exclude = ('user',)
