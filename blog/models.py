@@ -32,8 +32,8 @@ class Category(BaseModel):
 class Author(BaseModel):
     user = models.OneToOneField(to=User, verbose_name='کاربر', on_delete=models.CASCADE)
     about = models.CharField(verbose_name='درباره من', max_length=200)
-    avater = models.FileField(verbose_name='آواتار')
-    avater_alt = models.CharField(max_length=200)
+    avatar = models.FileField(verbose_name='آواتار')
+    avatar_alt = models.CharField(max_length=200)
 
     def __str__(self):
         return f'{self.user.username}'
