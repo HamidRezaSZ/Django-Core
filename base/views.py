@@ -1,7 +1,13 @@
-from .serializers import *
+from django.apps import apps
+from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.views import Response
+
 from .models import FAQ, AboutUs, ContactUsDetail, ContactUsForm
+from .serializers import *
 from .viewsets import ModelViewSet
-from rest_framework.permissions import IsAdminUser, AllowAny
 
 
 class FAQView(ModelViewSet):
@@ -152,3 +158,26 @@ class ComponentView(ModelViewSet):
     serializer_class = ComponentGetSerializer
     queryset = Component.objects.filter(is_active=True, parent=None)
     filterset_fields = ['page', 'order', 'parent']
+
+
+class ObjectInstanceView(CreateAPIView):
+    serializer_class = ObjectInstanceSerializer
+    permission_classes = (IsAdminUser,)
+
+    def post(self, request, *args, **kwargs):
+        serializer = ObjectInstanceSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        app_name = serializer.data['app_name']
+        model_name = serializer.data['model_name']
+        object_id = serializer.data['object_id']
+        quantity = serializer.data['quantity']
+        try:
+            model = apps.get_model(app_name, model_name)
+        except LookupError:
+            return Response({"message": f"No installed app with label '{app_name}'."}, status=404)
+        obj = get_object_or_404(model, id=object_id)
+        for _ in range(quantity):
+            obj.pk = None
+            obj.save()
+
+        return Response({"message": "Objects created"}, status=200)

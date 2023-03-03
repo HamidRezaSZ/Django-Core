@@ -143,3 +143,10 @@ class ComponentGetSerializer(ModelSerializer):
 
     def get_items(self, obj):
         return ComponentItemSerializer(obj.componentitem_set.filter(is_active=True), many=True).data
+
+
+class ObjectInstanceSerializer(serializers.Serializer):
+    app_name = serializers.CharField()
+    model_name = serializers.CharField()
+    quantity = serializers.IntegerField(min_value=1)
+    object_id = serializers.IntegerField(min_value=1)

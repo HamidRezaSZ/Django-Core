@@ -1,5 +1,7 @@
-from .views import *
+from django.urls import path
 from rest_framework.routers import DefaultRouter
+
+from .views import *
 
 app_name = 'base'
 
@@ -17,4 +19,6 @@ router.register(r'cities', CityView)
 router.register(r'terms-and-conditions', TermsAndConditionsView)
 router.register(r'components', ComponentView)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('object-instance/', ObjectInstanceView.as_view()),
+] + router.urls
