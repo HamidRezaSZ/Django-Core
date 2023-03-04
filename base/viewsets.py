@@ -1,12 +1,7 @@
-from rest_framework import mixins, viewsets
+from rest_framework.viewsets import ModelViewSet as BaseModelViewSet
 
 
-class ModelViewSet(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin,
-                   viewsets.GenericViewSet):
+class ModelViewSet(BaseModelViewSet):
     """
     A viewset that provides default `create()`, `retrieve()`, `update()`,
     `partial_update()`, `destroy()` and `list()` actions.
