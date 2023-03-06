@@ -11,7 +11,7 @@ class Payment(models.Model):
         SUCCESSFUL = 'S', 'موفق'
         UNSUCCESSFUL = 'U', 'ناموفق'
         CANCELED = 'C', 'لغو شده'
-        AWAITONG_PAYMENT = 'A', 'در انتظار پرداخت'
+        AWAITING_PAYMENT = 'A', 'در انتظار پرداخت'
 
     user = models.ForeignKey(verbose_name='کاربر', to=User, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField('مبلغ')
