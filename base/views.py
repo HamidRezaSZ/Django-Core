@@ -157,7 +157,7 @@ class ComponentView(ModelViewSet):
     }
     serializer_class = ComponentGetSerializer
     queryset = Component.objects.filter(is_active=True, parent=None)
-    filterset_fields = ['page', 'order', 'parent']
+    filterset_fields = ['page__link', 'order', 'parent']
 
 
 class ObjectInstanceView(CreateAPIView):
