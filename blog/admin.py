@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import *
 
 
@@ -44,11 +45,6 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'about', 'is_active')
     search_fields = ('about', 'image', 'image_alt')
     list_editable = ('is_active',)
-
-
-class CommentInline(admin.TabularInline):
-    model = Comment
-    extra = 0
 
 
 @admin.register(Comment)

@@ -26,6 +26,7 @@ class Category(BaseModel):
 
     class Meta:
         verbose_name = 'دسته بندی'
+
         verbose_name_plural = 'دسته بندی ها'
 
 
@@ -53,10 +54,6 @@ class Post(BaseModel):
     show_in_home_page = models.BooleanField(default=False, verbose_name='نمایش در صفحه اصلی')
     meta_title = models.CharField(max_length=128, verbose_name='عنوان سئو', null=True, blank=True)
     meta_description = models.TextField(verbose_name='توضیحات سئو', null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        super().save()
-        RelatedPost.objects.get_or_create(post=self)
 
     def __str__(self):
         return self.title

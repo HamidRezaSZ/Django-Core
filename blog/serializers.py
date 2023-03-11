@@ -76,10 +76,14 @@ class PostSerializer(ModelSerializer):
 class PostItemSerializer(ModelSerializer):
     category = PostCategorySerializer()
     authors = AuthorSerializer(many=True)
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         exclude = ('is_active',)
+
+    def get_tags(self, obj):
+        return TagSerializer(obj.tag_set.filter(is_active=True), many=True).data
 
 
 class RelatedPostSerializer(ModelSerializer):
