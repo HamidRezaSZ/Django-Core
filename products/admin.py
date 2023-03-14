@@ -24,6 +24,7 @@ class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'parent', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('title',)
+    prepopulated_fields = {"slug": ("title",)}
 
 
 @admin.register(ProductBrand)

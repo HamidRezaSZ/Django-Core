@@ -8,9 +8,14 @@ from base.models import BaseModel
 
 class ProductCategory(BaseModel):
     title = models.CharField(max_length=200, verbose_name='تایتل')
+    slug = models.SlugField(unique=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children',
                                null=True, blank=True, verbose_name='دسته بندی والد')
     icon = models.FileField(upload_to='product-category-icon', verbose_name='آیکون', null=True, blank=True)
+    image_alt = models.CharField(max_length=200)
+    description = RichTextUploadingField(verbose_name='توضیحات', null=True, blank=True)
+    meta_title = models.CharField(max_length=128, verbose_name='عنوان سئو', null=True, blank=True)
+    meta_description = models.TextField(verbose_name='توضیحات سئو', null=True, blank=True)
 
     def clean(self) -> None:
         if self.parent == self:
