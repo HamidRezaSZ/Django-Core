@@ -60,6 +60,7 @@ class SubProductSerializer(ModelSerializer):
     catelogs = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     quantity = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -80,6 +81,9 @@ class SubProductSerializer(ModelSerializer):
     def get_quantities(self, obj):
         return ProductQuantitiesSerializer(obj.productquantity_set.all(), many=True).data
 
+    def get_tags(self, obj):
+        return ProductTagSerializer(obj.producttag_set.all(), many=True).data
+
 
 class ProductItemSerializer(ModelSerializer):
     category = ProductCategorySerializer()
@@ -90,6 +94,7 @@ class ProductItemSerializer(ModelSerializer):
     images = serializers.SerializerMethodField()
     quantities = serializers.SerializerMethodField()
     sub_products = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -112,6 +117,9 @@ class ProductItemSerializer(ModelSerializer):
 
     def get_sub_products(self, obj):
         return SubProductSerializer(obj.child.all(), many=True).data
+
+    def get_tags(self, obj):
+        return ProductTagSerializer(obj.producttag_set.all(), many=True).data
 
 
 class ProductAttributeSerializer(ModelSerializer):
@@ -156,6 +164,12 @@ class ProductCatalogSerializer(ModelSerializer):
 class ProductImageSerializer(ModelSerializer):
     class Meta:
         model = ProductImage
+        exclude = ('product',)
+
+
+class ProductTagSerializer(ModelSerializer):
+    class Meta:
+        model = ProductTag
         exclude = ('product',)
 
 

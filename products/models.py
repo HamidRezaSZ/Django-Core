@@ -1,8 +1,9 @@
-from django.db import models
-from base.models import BaseModel
 from ckeditor_uploader.fields import RichTextUploadingField
-from accounts.models import User
 from django.core.exceptions import ValidationError
+from django.db import models
+
+from accounts.models import User
+from base.models import BaseModel
 
 
 class ProductCategory(BaseModel):
@@ -45,8 +46,10 @@ class ProductBrand(BaseModel):
 
 class Product(BaseModel):
     name = models.CharField(max_length=200, verbose_name='نام')
+    slug = models.SlugField(unique=True)
     upc = models.CharField(max_length=200, verbose_name='شناسه محصول')
     image = models.FileField(upload_to='products', verbose_name='عکس شاخص')
+    image_alt = models.CharField(max_length=200)
     short_description = models.TextField(verbose_name='توضیح مختصر')
     category = models.ForeignKey(
         ProductCategory, on_delete=models.CASCADE, verbose_name='دسته بندی')
@@ -54,10 +57,8 @@ class Product(BaseModel):
         ProductBrand, on_delete=models.CASCADE, verbose_name='برند')
     description = RichTextUploadingField(verbose_name='محتوا')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name='کالای پدر')
-
-    def save(self, *args, **kwargs):
-        super().save()
-        RelatedProduct.objects.get_or_create(product=self)
+    meta_title = models.CharField(max_length=128, verbose_name='عنوان سئو', null=True, blank=True)
+    meta_description = models.TextField(verbose_name='توضیحات سئو', null=True, blank=True)
 
     class Meta:
         verbose_name = 'محصول'
@@ -133,6 +134,15 @@ class ProductImage(BaseModel):
     class Meta:
         verbose_name = 'عکس محصول'
         verbose_name_plural = 'عکس های محصول'
+
+
+class ProductTag(BaseModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
+    tag = models.CharField(max_length=50, verbose_name='تگ')
+
+    class Meta:
+        verbose_name = 'تگ محصول'
+        verbose_name_plural = 'تگ های محصول'
 
 
 class RelatedProduct(BaseModel):

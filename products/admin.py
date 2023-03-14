@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import *
 from import_export.admin import ImportExportMixin
+
+from .models import *
 
 
 class ProductAttributeValueInline(admin.TabularInline):
@@ -58,6 +59,11 @@ class ProductImageInline(admin.TabularInline):
     extra = 0
 
 
+class ProductTagnline(admin.TabularInline):
+    model = ProductTag
+    extra = 0
+
+
 class ProductQuantityInline(admin.TabularInline):
     model = ProductQuantity
     extra = 0
@@ -68,8 +74,9 @@ class ProductAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('id', 'category', 'brand', 'name', 'upc', 'parent', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('id', 'description', 'short_description', 'name', 'upc')
+    prepopulated_fields = {"slug": ("name",)}
     inlines = (ProductAttributeValueInline, ProductCommentInline,
-               RelatedProductInline, ProductCatalogInline, ProductImageInline, ProductQuantityInline)
+               RelatedProductInline, ProductCatalogInline, ProductImageInline, ProductQuantityInline, ProductTagnline)
 
 
 @admin.register(Coupon)
