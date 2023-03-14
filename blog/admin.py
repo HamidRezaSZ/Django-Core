@@ -31,6 +31,7 @@ class PostAdmin(admin.ModelAdmin):
     list_editable = ('show_in_home_page', 'is_active')
     inlines = (GalleryInline, TagInline, RelatedPostInline, CommentInline)
     search_fields = ('title', 'description', 'content')
+    prepopulated_fields = {"slug": ("title",)}
 
 
 @admin.register(Category)

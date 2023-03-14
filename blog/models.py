@@ -46,8 +46,10 @@ class Author(BaseModel):
 
 class Post(BaseModel):
     title = models.CharField(max_length=256, verbose_name='عنوان')
+    slug = models.SlugField(unique=True)
     category = models.ForeignKey(to=Category, on_delete=models.CASCADE, verbose_name='دسته بندی')
     thumbnail = models.ImageField(upload_to='post-images', verbose_name='تصویر شاخص')
+    image_alt = models.CharField(max_length=200)
     description = models.TextField(verbose_name='توضیحات مختصر')
     content = RichTextUploadingField(verbose_name='محتوای پست')
     authors = models.ManyToManyField(to=Author, verbose_name='نویسنده ها')
