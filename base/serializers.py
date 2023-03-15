@@ -64,6 +64,7 @@ class MenuGetSerializer(ModelSerializer):
 
 
 class SliderSerializer(ModelSerializer):
+    page = PageSerializer()
 
     class Meta:
         model = Slider

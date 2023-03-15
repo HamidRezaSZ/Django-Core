@@ -1,8 +1,9 @@
-from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.utils.translation import gettext_lazy as _
-from accounts.validators import cell_phone_validator
 from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from accounts.validators import cell_phone_validator
 
 
 class BaseModel(models.Model):
@@ -108,6 +109,7 @@ class Menu(BaseModel):
 
 
 class Slider(BaseModel):
+    page = models.ForeignKey(to=Page, on_delete=models.CASCADE, verbose_name='صفحه')
     title = models.CharField(max_length=200, verbose_name='تایتل')
     text = models.TextField(verbose_name='متن')
     link = models.CharField(max_length=500, null=True, blank=True, verbose_name='لینک')

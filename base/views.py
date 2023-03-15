@@ -87,6 +87,7 @@ class SliderView(ModelViewSet):
     }
     queryset = Slider.objects.filter(is_active=True)
     serializer_class = SliderSerializer
+    filterset_fields = ['page__link', 'page']
 
 
 class FooterView(ModelViewSet):
