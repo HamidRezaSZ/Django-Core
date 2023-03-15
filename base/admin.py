@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import *
 from import_export.admin import ImportExportMixin
+
+from .models import *
 
 admin.site.site_header = "پنل مدیریتی  core"
 admin.site.site_title = "پنل مدیریتی  core"
@@ -81,7 +82,7 @@ class SliderAdmin(admin.ModelAdmin):
         Admin panel for home page slider
     '''
 
-    list_display = ('id', 'title', 'order')
+    list_display = ('id', 'title', 'page', 'order')
     list_editable = ('order',)
     search_fields = ('title', 'text', 'link')
 
