@@ -207,3 +207,9 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    },
+}

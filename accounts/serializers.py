@@ -73,7 +73,7 @@ class PhoneNumberSerializer(Serializer):
 
     phone_validator = RegexValidator(
         regex=r'^(09|9)\d{9}$',
-        message='Start with 09/9 and it must 9 digits after that. For example: 0912000000 or 912000000000')
+        message='Start with 09/9 and it must 9 digits after that. For example: 0912000000 or 9120000000')
     phone_number = serializers.CharField(validators=[phone_validator])
 
 
