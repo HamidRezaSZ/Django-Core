@@ -211,5 +211,14 @@ SWAGGER_SETTINGS = {
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-    },
+        'mathJaxClass': 'mathjax-latex',
+        'mathJaxLib': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG',
+        'extraPlugins': ','.join([
+            'mathjax',
+            'codesnippet',
+            'image2',
+            'embed',
+            'tableresize',
+        ]),
+    }
 }
