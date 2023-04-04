@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path, re_path
 from drf_yasg import openapi
@@ -32,7 +33,7 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
 )
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path('api/blog/', include('blog.urls')),  # blog app
     path('api/accounts/', include('accounts.urls')),  # accounts app
     path('api/base/', include('base.urls')),  # base app
@@ -43,6 +44,8 @@ urlpatterns = [
     path('api/newsletters/', include('newsletters.urls')),  # newsletters app
     path('api/orders/', include('orders.urls')),  # orders app
     path('api/ticketing/', include('ticketing.urls')),  # ticketing app
+
+    re_path(r'^rosetta/', include('rosetta.urls')),
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),  # Text editor
 
     # swgger
@@ -51,4 +54,4 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     path('', admin.site.urls),  # admin panel
-]
+)

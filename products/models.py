@@ -1,85 +1,86 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import User
 from base.models import BaseModel
 
 
 class ProductCategory(BaseModel):
-    title = models.CharField(max_length=200, verbose_name='تایتل')
-    slug = models.SlugField(unique=True)
+    title = models.CharField(max_length=200, verbose_name=_('title'))
+    slug = models.SlugField(unique=True, verbose_name=_('title'))
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children',
-                               null=True, blank=True, verbose_name='دسته بندی والد')
-    icon = models.FileField(upload_to='product-category-icon', verbose_name='آیکون', null=True, blank=True)
-    image_alt = models.CharField(max_length=200)
-    description = RichTextUploadingField(verbose_name='توضیحات', null=True, blank=True)
-    meta_title = models.CharField(max_length=128, verbose_name='عنوان سئو', null=True, blank=True)
-    meta_description = models.TextField(verbose_name='توضیحات سئو', null=True, blank=True)
+                               null=True, blank=True, verbose_name=_('parent'))
+    icon = models.FileField(upload_to='product-category-icon', verbose_name=_('icon'), null=True, blank=True)
+    image_alt = models.CharField(max_length=200, verbose_name=_('image_alt'))
+    description = RichTextUploadingField(verbose_name=_('description'), null=True, blank=True)
+    meta_title = models.CharField(max_length=128, verbose_name=_('meta_title'), null=True, blank=True)
+    meta_description = models.TextField(verbose_name=_('meta_description'), null=True, blank=True)
 
     def clean(self) -> None:
         if self.parent == self:
-            raise ValidationError('والد باید متفاوت باشد')
+            raise ValidationError('parent must be different')
         return super().clean()
 
     class Meta:
-        verbose_name = 'دسته بندی'
-        verbose_name_plural = 'دسته بندی ها'
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def __str__(self) -> str:
         return self.title
 
 
 class ProductBrand(BaseModel):
-    title = models.CharField(max_length=200, verbose_name='تایتل')
+    title = models.CharField(max_length=200, verbose_name=_('title'))
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children',
-                               null=True, blank=True, verbose_name='برند والد')
-    icon = models.FileField(upload_to='product-brand-icon', verbose_name='آیکون', null=True, blank=True)
+                               null=True, blank=True, verbose_name=_('parent'))
+    icon = models.FileField(upload_to='product-brand-icon', verbose_name=_('icon'), null=True, blank=True)
 
     def clean(self) -> None:
         if self.parent == self:
-            raise ValidationError('والد باید متفاوت باشد')
+            raise ValidationError('parent must be different')
         return super().clean()
 
     class Meta:
-        verbose_name = 'برند'
-        verbose_name_plural = 'برند ها'
+        verbose_name = _('Brand')
+        verbose_name_plural = _('Brands')
 
     def __str__(self) -> str:
         return self.title
 
 
 class Product(BaseModel):
-    name = models.CharField(max_length=200, verbose_name='نام')
-    slug = models.SlugField(unique=True)
-    upc = models.CharField(max_length=200, verbose_name='شناسه محصول')
-    image = models.FileField(upload_to='products', verbose_name='عکس شاخص')
-    image_alt = models.CharField(max_length=200)
-    short_description = models.TextField(verbose_name='توضیح مختصر')
+    name = models.CharField(max_length=200, verbose_name=_('name'))
+    slug = models.SlugField(unique=True, verbose_name=_('slug'))
+    upc = models.CharField(max_length=200, verbose_name=_('upc'))
+    image = models.FileField(upload_to='products', verbose_name=_('image'))
+    image_alt = models.CharField(max_length=200, verbose_name=_('image_alt'))
+    short_description = models.TextField(verbose_name=_('short_description'))
     category = models.ForeignKey(
-        ProductCategory, on_delete=models.CASCADE, verbose_name='دسته بندی')
+        ProductCategory, on_delete=models.CASCADE, verbose_name=_('category'))
     brand = models.ForeignKey(
-        ProductBrand, on_delete=models.CASCADE, verbose_name='برند')
-    description = RichTextUploadingField(verbose_name='محتوا')
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name='کالای پدر')
-    meta_title = models.CharField(max_length=128, verbose_name='عنوان سئو', null=True, blank=True)
-    meta_description = models.TextField(verbose_name='توضیحات سئو', null=True, blank=True)
+        ProductBrand, on_delete=models.CASCADE, verbose_name=_('brand'))
+    description = RichTextUploadingField(verbose_name=_('description'))
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name=_('parent'))
+    meta_title = models.CharField(max_length=128, verbose_name=_('meta_title'), null=True, blank=True)
+    meta_description = models.TextField(verbose_name=_('meta_description'), null=True, blank=True)
 
     class Meta:
-        verbose_name = 'محصول'
-        verbose_name_plural = 'محصولات'
+        verbose_name = _('Product')
+        verbose_name_plural = _('Products')
 
     def __str__(self) -> str:
         return self.name
 
 
 class ProductAttribute(models.Model):
-    title = models.CharField(max_length=200)
-    category = models.ForeignKey(to=ProductCategory, verbose_name='دسته بندی', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200, verbose_name=_('title'))
+    category = models.ForeignKey(to=ProductCategory, verbose_name=_('category'), on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = 'ویژگی محصول'
-        verbose_name_plural = 'ویژگی های محصول'
+        verbose_name = _('Attribute')
+        verbose_name_plural = _('Attributes')
 
     def __str__(self) -> str:
         return self.title
@@ -87,14 +88,14 @@ class ProductAttribute(models.Model):
 
 class ProductAttributeValue(models.Model):
     product_attribute = models.ForeignKey(
-        to=ProductAttribute, verbose_name='دسته بندی ویژگی', on_delete=models.CASCADE)
-    value = models.CharField(max_length=200, verbose_name='مقدار')
+        to=ProductAttribute, verbose_name=_('product_attribute'), on_delete=models.CASCADE)
+    value = models.CharField(max_length=200, verbose_name=_('value'))
     products = models.ManyToManyField(to=Product,
-                                      verbose_name='محصولات')
+                                      verbose_name=_('products'))
 
     class Meta:
-        verbose_name = 'مقدار ویژگی محصول'
-        verbose_name_plural = 'مقادیر ویژگی محصول'
+        verbose_name = _('Attribute Value')
+        verbose_name_plural = _('Attribute Values')
 
     def __str__(self) -> str:
         return f'{self.product_attribute.title} {self.value}'
@@ -103,96 +104,98 @@ class ProductAttributeValue(models.Model):
 class ProductComment(models.Model):
     RATE = [(int(x), str(x)) for x in range(1, 6)]
 
-    email = models.EmailField(verbose_name='ایمیل')
-    full_name = models.CharField(verbose_name='نام و نام خانوادگی', max_length=200)
-    content = models.TextField(verbose_name='متن')
-    rate = models.IntegerField(verbose_name='امتیاز', choices=RATE, default=1)
+    email = models.EmailField(verbose_name=_('email'))
+    full_name = models.CharField(verbose_name=_('full_name'), max_length=200)
+    content = models.TextField(verbose_name=_('content'))
+    rate = models.IntegerField(verbose_name=_('rate'), choices=RATE, default=1)
     product = models.ForeignKey(to=Product,
-                                verbose_name='محصولات', on_delete=models.CASCADE)
+                                verbose_name=_('product'), on_delete=models.CASCADE)
     parent = models.ForeignKey(
-        'self', on_delete=models.CASCADE, blank=True, null=True, verbose_name='کامنت والد', related_name='child')
-    created_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
-    is_accepted = models.BooleanField(default=False, verbose_name='تایید شده')
+        'self', on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('parent'), related_name='child')
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('created_date'))
+    is_accepted = models.BooleanField(default=False, verbose_name=_('is_accepted'))
 
     def __str__(self):
         return self.email
 
     class Meta:
-        verbose_name = 'کامنت پست'
-        verbose_name_plural = 'کامنت های پست'
+        verbose_name = _('Comment')
+        verbose_name_plural = _('Comments')
         ordering = ('created_date',)
 
 
 class ProductCatalog(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
-    catalog = models.FileField(upload_to='product-catalogs', verbose_name='کاتالوگ')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('product'))
+    catalog = models.FileField(upload_to='product-catalogs', verbose_name=_('catalog'))
 
     class Meta:
-        verbose_name = 'کاتالوگ محصول'
-        verbose_name_plural = 'کاتالوگ های محصول'
+        verbose_name = _('Catalog')
+        verbose_name_plural = _('Catalogs')
 
 
 class ProductImage(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
-    image = models.FileField(verbose_name='عکس')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('product'))
+    image = models.FileField(verbose_name=_('image'))
 
     class Meta:
-        verbose_name = 'عکس محصول'
-        verbose_name_plural = 'عکس های محصول'
+        verbose_name = _('Image')
+        verbose_name_plural = _('Images')
 
 
 class ProductTag(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
-    tag = models.CharField(max_length=50, verbose_name='تگ')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('product'))
+    tag = models.CharField(max_length=50, verbose_name=_('tag'))
 
     class Meta:
-        verbose_name = 'تگ محصول'
-        verbose_name_plural = 'تگ های محصول'
+        verbose_name = _('Tag')
+        verbose_name_plural = _('Tags')
 
 
 class RelatedProduct(BaseModel):
-    product = models.OneToOneField(to=Product, verbose_name='محصول', on_delete=models.CASCADE)
-    related_products = models.ManyToManyField(to=Product, verbose_name='محصولات مرتبط', related_name='related_products')
+    product = models.OneToOneField(to=Product, verbose_name=_('product'), on_delete=models.CASCADE)
+    related_products = models.ManyToManyField(
+        to=Product, verbose_name=_('related_products'),
+        related_name='related_products')
 
     def __str__(self):
         return f'{self.product.name}'
 
     class Meta:
-        verbose_name = 'محصول مرتبط'
-        verbose_name_plural = 'محصول های مرتبط'
+        verbose_name = _('Related Product')
+        verbose_name_plural = _('Related Products')
 
 
 class Seller(BaseModel):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, verbose_name='کاربر')
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, verbose_name=_('user'))
 
     def __str__(self):
         return f'{self.user.username}'
 
     class Meta:
-        verbose_name = 'فروشنده'
-        verbose_name_plural = 'فروشنده ها'
+        verbose_name = _('Seller')
+        verbose_name_plural = _('Sellers')
 
 
 class ProductQuantity(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')
-    seller = models.ForeignKey(to=Seller, verbose_name='فروشنده', on_delete=models.CASCADE)
-    price = models.PositiveIntegerField(default=0, verbose_name='مبلغ')
-    quantity = models.PositiveIntegerField(default=0, verbose_name='تعداد')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('product'))
+    seller = models.ForeignKey(to=Seller, verbose_name=_('seller'), on_delete=models.CASCADE)
+    price = models.PositiveIntegerField(default=0, verbose_name=_('price'))
+    quantity = models.PositiveIntegerField(default=0, verbose_name=_('quantity'))
 
     def __str__(self):
         return f'{self.product} - ' + "{:,}".format(self.price)
 
     class Meta:
-        verbose_name = 'موجودی کالا'
-        verbose_name_plural = 'موجودی های کالا'
+        verbose_name = _('Product Quantity')
+        verbose_name_plural = _('Product Quantities')
 
 
 class Coupon(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='کاربر مربوطه')
-    discount_percent = models.PositiveIntegerField(verbose_name='درصد تخفیف (%):', default=0)
-    discount_amount = models.PositiveIntegerField(verbose_name='مبلغ تخفیف (ریال):', default=0)
-    discount_code = models.CharField(max_length=200, verbose_name='کد تخفیف')
-    expired_date = models.DateField(null=True, verbose_name='تاریخ انقضا')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name=_('user'))
+    discount_percent = models.PositiveIntegerField(verbose_name=_('discount_percent'), default=0)
+    discount_amount = models.PositiveIntegerField(verbose_name=_('discount_amount'), default=0)
+    discount_code = models.CharField(max_length=200, verbose_name=_('discount_code'))
+    expired_date = models.DateField(null=True, verbose_name=_('expired_date'))
 
     def check_user(self, user) -> bool:
         if user != self.user:
@@ -200,5 +203,5 @@ class Coupon(BaseModel):
         return True
 
     class Meta:
-        verbose_name = 'کد تخفیف'
-        verbose_name_plural = 'کد های تخفیف'
+        verbose_name = _('Coupon')
+        verbose_name_plural = _('Coupons')

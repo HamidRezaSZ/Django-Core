@@ -1,73 +1,76 @@
 from django.db import models
-from base.models import BaseModel
+from django.utils.translation import gettext_lazy as _
+
 from accounts.models import User
+from base.models import BaseModel
 
 
 class Question(BaseModel):
-    class Type(models.TextChoices):
-        MULTIPLECHOICE = 'MultipleChoice', 'چند گزینه ای'
-        DROPDOWN = 'Drop Down', 'کشویی'
-        FILE = 'File', 'فایل'
-        DESCRIPTIVE = 'Descriptive', 'تشریحی'
+    TYPE = (
+        ('MultipleChoice', 'MultipleChoice'),
+        ('Drop Down', 'Drop Down'),
+        ('File', 'File'),
+        ('Descriptive', 'Descriptive'),
+    )
 
-    question = models.TextField(verbose_name='سوال')
-    type = models.CharField(max_length=20, choices=Type.choices, default='Descriptive', verbose_name='نوع سوال')
+    question = models.TextField(verbose_name=_('question'))
+    type = models.CharField(max_length=20, choices=TYPE, default='Descriptive', verbose_name=_('type'))
 
     class Meta:
-        verbose_name = 'سوال'
-        verbose_name_plural = 'سوال ها'
+        verbose_name = _('Question')
+        verbose_name_plural = _('Questions')
 
 
 class ChoiceOfMultipleChoiceQuestion(BaseModel):
-    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
-    icon = models.FileField(null=True, blank=True, verbose_name='آیکون')
-    choice = models.CharField(max_length=200, verbose_name='مقدار')
-    is_true = models.BooleanField(default=False, verbose_name='جواب درست')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name=_('question'))
+    icon = models.FileField(null=True, blank=True, verbose_name=_('icon'))
+    choice = models.CharField(max_length=200, verbose_name=_('choice'))
+    is_true = models.BooleanField(default=False, verbose_name=_('is_true'))
 
     class Meta:
-        verbose_name = 'گزینه سوال چند گزینه ای'
-        verbose_name_plural = 'گزینه های سوال چند گزینه ای'
+        verbose_name = _('Choice Of MultipleChoice Question')
+        verbose_name_plural = _('Choices Of MultipleChoice Question')
 
 
 class DescriptiveAnswer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
-    answer = models.TextField(verbose_name='پاسخ')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name=_('question'))
+    answer = models.TextField(verbose_name=_('answer'))
 
     class Meta:
-        verbose_name = 'جواب تشریحی'
-        verbose_name_plural = 'جواب های تشریحی'
+        verbose_name = _('Descriptive Answer')
+        verbose_name_plural = _('Descriptive Answers')
 
 
 class MultipleChoiceAnswer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
-    answer = models.ForeignKey(ChoiceOfMultipleChoiceQuestion, on_delete=models.PROTECT, verbose_name='پاسخ')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name=_('question'))
+    answer = models.ForeignKey(ChoiceOfMultipleChoiceQuestion, on_delete=models.PROTECT, verbose_name=_('answer'))
 
     class Meta:
-        verbose_name = 'جواب چند گزینه ای'
-        verbose_name_plural = 'جواب های چند گزینه ای'
+        verbose_name = _('Multiple Choice Answer')
+        verbose_name_plural = _('Multiple Choice Answers')
 
 
 class FileAnswer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='سوال مربوطه')
-    answer = models.FileField(verbose_name='فایل پاسخ')
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name=_('question'))
+    answer = models.FileField(verbose_name=_('answer'))
 
     class Meta:
-        verbose_name = 'فایل جواب'
-        verbose_name_plural = 'فایل های جواب'
+        verbose_name = _('File Answer')
+        verbose_name_plural = _('File Answers')
 
 
 class Exam(BaseModel):
-    questions = models.ManyToManyField(Question, verbose_name='سوالات')
+    questions = models.ManyToManyField(Question, verbose_name=_('questions'))
 
     class Meta:
-        verbose_name = 'آزمون'
-        verbose_name_plural = 'آزمون ها'
+        verbose_name = _('Exam')
+        verbose_name_plural = _('Exams')
 
 
 class UserExam(models.Model):
-    user = models.ForeignKey(to=User, verbose_name='کاربر', on_delete=models.CASCADE)
-    exam = models.ForeignKey(to=Exam, verbose_name='آزمون', on_delete=models.PROTECT)
+    user = models.ForeignKey(to=User, verbose_name=_('user'), on_delete=models.CASCADE)
+    exam = models.ForeignKey(to=Exam, verbose_name=_('exam'), on_delete=models.PROTECT)
 
     class Meta:
-        verbose_name = 'آزمون کاربر'
-        verbose_name_plural = 'آزمون های کاربر'
+        verbose_name = _('User Exam')
+        verbose_name_plural = _('User Exams')

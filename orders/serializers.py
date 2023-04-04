@@ -23,11 +23,18 @@ class OrderItemSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class OrderStatusSerializer(ModelSerializer):
+    class Meta:
+        model = OrderStatus
+        fields = '__all__'
+
+
 class OrderGetSerializer(ModelSerializer):
     address = AddressSerializer()
     payment = PaymentSerializer()
     delivery_type = DeliveryTypeSerializer()
     items = serializers.SerializerMethodField()
+    status = OrderStatusSerializer()
 
     class Meta:
         model = Order

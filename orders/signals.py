@@ -1,5 +1,6 @@
-from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from payments.models import Payment
 
 
@@ -15,7 +16,7 @@ def order_payment_signal(sender, instance, update_fields, **kwargs):
         if kwargs['created']:
             created = True
 
-    if created or not (update_fields and 'status' in update_fields and instance.status == 'موفق'):
+    if created or not (update_fields and 'status' in update_fields and instance.status == 'Successful'):
         return
 
     order_obj = instance.order_set.first()
@@ -23,5 +24,5 @@ def order_payment_signal(sender, instance, update_fields, **kwargs):
         item.product_quantity.quantity -= item.quantity
         item.product_quantity.save()
 
-    order_obj.status = 'پرداخت شده'
+    order_obj.status = 'Paid'
     order_obj.save()
