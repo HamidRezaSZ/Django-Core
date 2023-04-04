@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 15:26+0330\n"
-"PO-Revision-Date: 2023-04-04 11:59+0000\n"
+"POT-Creation-Date: 2023-04-04 16:05+0330\n"
+"PO-Revision-Date: 2023-04-04 12:36+0000\n"
 "Last-Translator:   <hr.m.szh@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -42,6 +42,14 @@ msgstr "کاربر یافت نشد"
 #: accounts/authentication.py:137
 msgid "User is inactive"
 msgstr "کاربر غیرفعال است"
+
+#: accounts/models.py:10
+msgid "Female"
+msgstr "زن"
+
+#: accounts/models.py:11
+msgid "Male"
+msgstr "مرد"
 
 #: accounts/models.py:14
 msgid "cell_phone"
@@ -120,6 +128,14 @@ msgstr "آدرس"
 msgid "Addresses"
 msgstr "آدرس ها"
 
+#: accounts/models.py:57
+msgid "Single"
+msgstr "مجرد"
+
+#: accounts/models.py:58
+msgid "Married"
+msgstr "متاهل"
+
 #: accounts/models.py:62
 msgid "day_of_birth"
 msgstr "تاریخ تولد"
@@ -142,7 +158,7 @@ msgstr "پروفایل"
 msgid "%(value)s is not an correct national_id"
 msgstr "فرمت کد ملی داده شده معتبر نیست (%(value)s)"
 
-#: base/admin.py:6 base/admin.py:7
+#: base/admin.py:8 base/admin.py:9
 msgid "Core Admin Panel"
 msgstr "پنل ادمین Core"
 
@@ -523,6 +539,24 @@ msgstr "فارسی"
 msgid "Exam"
 msgstr "آزمون"
 
+#: exam/models.py:10
+#| msgid "Multiple Choice Answer"
+msgid "MultipleChoice"
+msgstr "جواب چند گزینه ای"
+
+#: exam/models.py:11
+msgid "Drop Down"
+msgstr "کشویی"
+
+#: exam/models.py:12 ticketing/models.py:80
+msgid "File"
+msgstr "فایل"
+
+#: exam/models.py:13
+#| msgid "Descriptive Answer"
+msgid "Descriptive"
+msgstr "جواب تشریحی"
+
 #: exam/models.py:20
 msgid "Question"
 msgstr "سوال"
@@ -892,10 +926,6 @@ msgstr "پیام ها"
 #: ticketing/models.py:69
 msgid "Messageses"
 msgstr "پیام ها"
-
-#: ticketing/models.py:80
-msgid "File"
-msgstr "فایل"
 
 #: ticketing/models.py:81
 msgid "Files"

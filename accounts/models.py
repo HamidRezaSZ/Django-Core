@@ -7,8 +7,8 @@ from .validators import cell_phone_validator, validate_national_code
 
 class User(AbstractUser):
     GENDER_CHOICES = (
-        ('Female', 'Female'),
-        ('Male', 'Male')
+        (_('Female'), _('Female')),
+        (_('Male'), _('Male'))
     )
 
     cell_phone = models.CharField(max_length=11, unique=True, verbose_name=_('cell_phone'),
@@ -54,8 +54,8 @@ class Address(models.Model):
 
 class Profile(models.Model):
     MARITAL_STATUS = (
-        ('Single', 'Single'),
-        ('Married', 'Married')
+        (_('Single'), _('Single')),
+        (_('Married'), _('Married'))
     )
 
     user = models.OneToOneField(verbose_name=_('user'), to=User, on_delete=models.CASCADE)

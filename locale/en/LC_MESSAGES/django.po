@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 15:26+0330\n"
+"POT-Creation-Date: 2023-04-04 16:05+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,14 @@ msgstr ""
 
 #: accounts/authentication.py:137
 msgid "User is inactive"
+msgstr ""
+
+#: accounts/models.py:10
+msgid "Female"
+msgstr ""
+
+#: accounts/models.py:11
+msgid "Male"
 msgstr ""
 
 #: accounts/models.py:14
@@ -118,6 +126,14 @@ msgstr ""
 msgid "Addresses"
 msgstr ""
 
+#: accounts/models.py:57
+msgid "Single"
+msgstr ""
+
+#: accounts/models.py:58
+msgid "Married"
+msgstr ""
+
 #: accounts/models.py:62
 msgid "day_of_birth"
 msgstr ""
@@ -140,7 +156,7 @@ msgstr ""
 msgid "%(value)s is not an correct national_id"
 msgstr ""
 
-#: base/admin.py:6 base/admin.py:7
+#: base/admin.py:8 base/admin.py:9
 msgid "Core Admin Panel"
 msgstr ""
 
@@ -520,6 +536,22 @@ msgstr ""
 msgid "Exam"
 msgstr ""
 
+#: exam/models.py:10
+msgid "MultipleChoice"
+msgstr ""
+
+#: exam/models.py:11
+msgid "Drop Down"
+msgstr ""
+
+#: exam/models.py:12 ticketing/models.py:80
+msgid "File"
+msgstr ""
+
+#: exam/models.py:13
+msgid "Descriptive"
+msgstr ""
+
 #: exam/models.py:20
 msgid "Question"
 msgstr ""
@@ -888,10 +920,6 @@ msgstr ""
 
 #: ticketing/models.py:69
 msgid "Messageses"
-msgstr ""
-
-#: ticketing/models.py:80
-msgid "File"
 msgstr ""
 
 #: ticketing/models.py:81

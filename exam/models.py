@@ -7,10 +7,10 @@ from base.models import BaseModel
 
 class Question(BaseModel):
     TYPE = (
-        ('MultipleChoice', 'MultipleChoice'),
-        ('Drop Down', 'Drop Down'),
-        ('File', 'File'),
-        ('Descriptive', 'Descriptive'),
+        (_('MultipleChoice'), _('MultipleChoice')),
+        (_('Drop Down'), _('Drop Down')),
+        (_('File'), _('File')),
+        (_('Descriptive'), _('Descriptive')),
     )
 
     question = models.TextField(verbose_name=_('question'))

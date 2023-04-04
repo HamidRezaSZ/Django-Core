@@ -1,20 +1,17 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
+
 from .models import *
 
 
 @admin.register(User)
 class UserAdmin(DefaultUserAdmin):
-    """
-    Custom UserAdmin
-    """
-
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info',
          {
              'fields':
-             ('email', 'cell_phone', 'avatar', 'gender', 'national_id', 'city')}),
+             ('email', 'cell_phone', 'avatar', 'gender', 'national_id')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'), }),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),)
 
