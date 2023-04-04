@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 15:19+0330\n"
-"PO-Revision-Date: 2023-04-04 11:50+0000\n"
+"POT-Creation-Date: 2023-04-04 15:26+0330\n"
+"PO-Revision-Date: 2023-04-04 11:59+0000\n"
 "Last-Translator:   <hr.m.szh@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -141,6 +141,10 @@ msgstr "پروفایل"
 #, python-format
 msgid "%(value)s is not an correct national_id"
 msgstr "فرمت کد ملی داده شده معتبر نیست (%(value)s)"
+
+#: base/admin.py:6 base/admin.py:7
+msgid "Core Admin Panel"
+msgstr "پنل ادمین Core"
 
 #: base/apps.py:8
 msgid "Base"
@@ -822,7 +826,6 @@ msgid "Coupons"
 msgstr "کد های تخفیف"
 
 #: ticketing/apps.py:8
-#| msgid "Ticket"
 msgid "Ticketing"
 msgstr "تیکت"
 

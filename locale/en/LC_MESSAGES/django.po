@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 15:19+0330\n"
+"POT-Creation-Date: 2023-04-04 15:26+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,6 +138,10 @@ msgstr ""
 #: accounts/validators.py:31
 #, python-format
 msgid "%(value)s is not an correct national_id"
+msgstr ""
+
+#: base/admin.py:6 base/admin.py:7
+msgid "Core Admin Panel"
 msgstr ""
 
 #: base/apps.py:8

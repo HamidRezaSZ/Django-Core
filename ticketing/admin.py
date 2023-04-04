@@ -1,4 +1,6 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
+
 from .models import *
 
 
@@ -21,21 +23,21 @@ class TicketAdmin(admin.ModelAdmin):
 
 
 @admin.register(TicketDepartment)
-class DepartmentAdmin(admin.ModelAdmin):
+class DepartmentAdmin(TranslationAdmin):
     list_display = ('id', 'name', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('name',)
 
 
 @admin.register(TicketPriority)
-class PriorityAdmin(admin.ModelAdmin):
+class PriorityAdmin(TranslationAdmin):
     list_display = ('id', 'title', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('title',)
 
 
 @admin.register(TicketStatus)
-class StatusAdmin(admin.ModelAdmin):
+class StatusAdmin(TranslationAdmin):
     list_display = ('id', 'title', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('title',)

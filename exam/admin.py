@@ -1,22 +1,24 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
+
 from .models import *
 
 
-class ChoiceOfMultipleChoiceQuestionInline(admin.TabularInline):
+class ChoiceOfMultipleChoiceQuestionInline(TranslationTabularInline):
     model = ChoiceOfMultipleChoiceQuestion
     extra = 0
     fields = ('choice', 'icon')
 
 
 @admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
+class QuestionAdmin(TranslationAdmin):
     list_display = ('id', 'question', 'type')
     search_fields = ('question',)
     inlines = (ChoiceOfMultipleChoiceQuestionInline,)
 
 
 @admin.register(ChoiceOfMultipleChoiceQuestion)
-class ChoiceOfMultipleChoiceQuestionAdmin(admin.ModelAdmin):
+class ChoiceOfMultipleChoiceQuestionAdmin(TranslationAdmin):
     list_display = ('id', 'question', 'choice')
 
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportMixin
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 
 from .models import *
 
@@ -20,7 +21,7 @@ class RelatedProductInline(admin.TabularInline):
 
 
 @admin.register(ProductCategory)
-class ProductCategoryAdmin(admin.ModelAdmin):
+class ProductCategoryAdmin(TranslationAdmin):
     list_display = ('id', 'title', 'parent', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('title',)
@@ -28,19 +29,19 @@ class ProductCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProductBrand)
-class ProductBrandAdmin(admin.ModelAdmin):
+class ProductBrandAdmin(TranslationAdmin):
     list_display = ('id', 'title', 'parent', 'is_active')
     list_editable = ('is_active',)
 
 
 @admin.register(ProductAttribute)
-class ProductAttributeAdmin(admin.ModelAdmin):
+class ProductAttributeAdmin(TranslationAdmin):
     list_display = ('id', 'title', 'category')
     search_fields = ('title',)
 
 
 @admin.register(ProductAttributeValue)
-class ProductAttributeValueAdmin(admin.ModelAdmin):
+class ProductAttributeValueAdmin(TranslationAdmin):
     list_display = ('id', 'product_attribute', 'value')
     search_fields = ('value',)
 
@@ -60,7 +61,7 @@ class ProductImageInline(admin.TabularInline):
     extra = 0
 
 
-class ProductTagnline(admin.TabularInline):
+class ProductTagnline(TranslationTabularInline):
     model = ProductTag
     extra = 0
 
@@ -71,7 +72,7 @@ class ProductQuantityInline(admin.TabularInline):
 
 
 @admin.register(Product)
-class ProductAdmin(ImportExportMixin, admin.ModelAdmin):
+class ProductAdmin(ImportExportMixin, TranslationAdmin):
     list_display = ('id', 'category', 'brand', 'name', 'upc', 'parent', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('id', 'description', 'short_description', 'name', 'upc')

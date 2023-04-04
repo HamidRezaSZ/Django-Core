@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 
 from .models import *
 
@@ -8,7 +9,7 @@ class GalleryInline(admin.TabularInline):
     extra = 0
 
 
-class TagInline(admin.TabularInline):
+class TagInline(TranslationTabularInline):
     model = Tag
     extra = 0
 
@@ -24,7 +25,7 @@ class RelatedPostInline(admin.TabularInline):
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(TranslationAdmin):
     list_display = ('id', 'category', 'title', 'created_date', 'show_in_home_page', 'is_active')
     list_filter = ('category',)
     filter_horizontal = ('authors',)
@@ -35,14 +36,14 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(TranslationAdmin):
     list_display = ('id', 'title', 'parent', 'is_active')
     search_fields = ('title',)
     list_editable = ('is_active',)
 
 
 @admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
+class AuthorAdmin(TranslationAdmin):
     list_display = ('id', 'user', 'about', 'is_active')
     search_fields = ('about', 'image', 'image_alt')
     list_editable = ('is_active',)

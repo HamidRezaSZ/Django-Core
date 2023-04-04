@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
 from .models import *
 
@@ -10,5 +11,5 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 @admin.register(PaymentStatus)
-class PaymentStatusAdmin(admin.ModelAdmin):
+class PaymentStatusAdmin(TranslationAdmin):
     list_display = ('id', 'status')

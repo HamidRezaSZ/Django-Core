@@ -1,10 +1,11 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
 from .models import *
 
 
 @admin.register(DeliveryType)
-class DeliveryTypeAdmin(admin.ModelAdmin):
+class DeliveryTypeAdmin(TranslationAdmin):
     list_display = ('id', 'title', 'description', 'delivery_price')
 
 
@@ -25,5 +26,5 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 @admin.register(OrderStatus)
-class OrderStatusAdmin(admin.ModelAdmin):
+class OrderStatusAdmin(TranslationAdmin):
     list_display = ('id', 'status')

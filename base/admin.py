@@ -1,20 +1,22 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportMixin
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 
 from .models import *
 
-admin.site.site_header = "پنل مدیریتی  core"
-admin.site.site_title = "پنل مدیریتی  core"
+admin.site.site_header = _('Core Admin Panel')
+admin.site.site_title = _('Core Admin Panel')
 
 
 @admin.register(FAQ)
-class FAQAdmin(admin.ModelAdmin):
+class FAQAdmin(TranslationAdmin):
     list_display = ('id', 'question')
     search_fields = ('question', 'answer')
 
 
 @admin.register(AboutUs)
-class AboutUsAdmin(admin.ModelAdmin):
+class AboutUsAdmin(TranslationAdmin):
     list_display = ('id',)
     search_fields = ('text',)
 
@@ -39,7 +41,7 @@ class SocialAccountsAdmin(admin.ModelAdmin):
 
 
 @admin.register(ContactUsDetail)
-class ContactUsDetailAdmin(admin.ModelAdmin):
+class ContactUsDetailAdmin(TranslationAdmin):
     list_display = ('id',)
     filter_horizontal = ('social_accounts',)
 
@@ -67,7 +69,7 @@ class FooterAdmin(admin.ModelAdmin):
 
 
 @admin.register(Page)
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(TranslationAdmin):
     '''
         Admin panel for pages
     '''
@@ -77,7 +79,7 @@ class PageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Slider)
-class SliderAdmin(admin.ModelAdmin):
+class SliderAdmin(TranslationAdmin):
     '''
         Admin panel for home page slider
     '''
@@ -94,26 +96,26 @@ class MenuAdmin(admin.ModelAdmin):
     search_fields = ('page',)
 
 
-class CityInline(admin.TabularInline):
+class CityInline(TranslationTabularInline):
     model = City
     extra = 0
 
 
 @admin.register(State)
-class StateAdmin(ImportExportMixin, admin.ModelAdmin):
+class StateAdmin(ImportExportMixin, TranslationAdmin):
     list_display = ('id', 'name')
     inlines = (CityInline,)
     search_fields = ('name',)
 
 
 @admin.register(City)
-class CityAdmin(ImportExportMixin, admin.ModelAdmin):
+class CityAdmin(ImportExportMixin, TranslationAdmin):
     list_display = ('id', 'name', 'state')
     search_fields = ('name',)
 
 
 @admin.register(TermsAndConditions)
-class TermsAndConditionsAdmin(admin.ModelAdmin):
+class TermsAndConditionsAdmin(TranslationAdmin):
     list_display = ('id',)
 
     def has_add_permission(self, request):
