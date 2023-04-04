@@ -1,6 +1,6 @@
 # Django-Core
 
-Complete core project built using django rest framework
+Complete multiple language core project built using django rest framework
 
 ## Installation:
 
