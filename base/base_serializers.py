@@ -34,7 +34,7 @@ class ModelSerializer(BaseModelSerializer):
                     validated_value = validate_method(validated_value)
             except ValidationError as exc:
                 if hasattr(field, 'label'):
-                    errors[field.label] = exc.detail
+                    errors[str(field.label)] = exc.detail
                 else:
                     errors[field.field_name] = exc.detail
             except DjangoValidationError as exc:
