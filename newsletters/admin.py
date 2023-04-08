@@ -1,9 +1,10 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+
 from .models import NewsLetters
-from import_export.admin import ExportActionMixin
 
 
 @admin.register(NewsLetters)
-class NewsLettersAdmin(ExportActionMixin, admin.ModelAdmin):
+class NewsLettersAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('email',)
     search_fields = ('email',)
