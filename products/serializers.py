@@ -49,7 +49,7 @@ class ProductSerializer(ModelSerializer):
         fields = ('id', 'name', 'upc', 'image', 'short_description', 'category', 'brand', 'score')
 
     def get_score(self, obj):
-        return ProductComment.objects.get(product=obj).comment.aggregate(Avg('rate'))['rate__avg']
+        return obj.productcomment_set.filter(is_accepted=True).aggregate(Avg('rate'))['rate__avg'] or 0
 
 
 class SubProductSerializer(ModelSerializer):
@@ -67,7 +67,7 @@ class SubProductSerializer(ModelSerializer):
         exclude = ('parent',)
 
     def get_score(self, obj):
-        return ProductComment.objects.get(product=obj).comment.aggregate(Avg('rate'))['rate__avg']
+        return obj.productcomment_set.filter(is_accepted=True).aggregate(Avg('rate'))['rate__avg'] or 0
 
     def get_attributes(self, obj):
         return ProductAttributeValueSerializer(obj.productattributevalue_set.all(), many=True).data
@@ -101,7 +101,7 @@ class ProductItemSerializer(ModelSerializer):
         exclude = ('parent',)
 
     def get_score(self, obj):
-        return ProductComment.objects.get(product=obj).comment.aggregate(Avg('rate'))['rate__avg']
+        return obj.productcomment_set.filter(is_accepted=True).aggregate(Avg('rate'))['rate__avg'] or 0
 
     def get_attributes(self, obj):
         return ProductAttributeValueSerializer(obj.productattributevalue_set.all(), many=True).data
