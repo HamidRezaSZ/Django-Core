@@ -46,7 +46,7 @@ class Order(models.Model):
         cart_obj = Cart.objects.get(user=self.user)
         for item in cart_obj.cartitem_set.all():
             OrderItem.objects.create(order=self, product_quantity=item.product_quantity, quantity=item.quantity)
-        cart_obj.cartitem_set.delete()
+        cart_obj.cartitem_set.filter().delete()
         self.price = self.get_order_price() + self.delivery_type.delivery_price
         payment_obj = Payment.objects.create(user=self.user, amount=self.price-self.discount_amount)
         self.payment = payment_obj

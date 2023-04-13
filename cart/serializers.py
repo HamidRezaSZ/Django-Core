@@ -6,12 +6,23 @@ from products.serializers import ProductQuantitiesSerializer
 from .models import *
 
 
-class CartItemSerializer(ModelSerializer):
+class CartItemGetSerializer(ModelSerializer):
     product_quantity = ProductQuantitiesSerializer()
 
     class Meta:
         model = CartItem
-        fields = '__all__'
+        exclude = ('cart',)
+
+
+class CartItemSerializer(ModelSerializer):
+    class Meta:
+        model = CartItem
+        exclude = ('cart',)
+
+    def create(self, validated_data):
+        user = self.context['user']
+        cart_obj = Cart.objects.get(user=user)
+        return CartItem.objects.create({'cart': cart_obj, **validated_data})
 
 
 class CartSerializer(ModelSerializer):
@@ -22,4 +33,4 @@ class CartSerializer(ModelSerializer):
         exclude = ('user',)
 
     def get_items(self, obj):
-        return CartItemSerializer(obj.cartitem_set.all(), many=True).data
+        return CartItemSerializer(obj.productscartitem_set.all(), many=True).data
