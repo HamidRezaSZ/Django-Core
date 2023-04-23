@@ -42,14 +42,15 @@ class Order(models.Model):
     status = models.ForeignKey(to=OrderStatus, on_delete=models.CASCADE, verbose_name=_('status'))
 
     def save(self, *args, **kwargs) -> None:
-        super().save()
         cart_obj = Cart.objects.get(user=self.user)
+        self.price = cart_obj.get_cart_price() + self.delivery_type.delivery_price
+        payment_obj = Payment.objects.create(user=self.user, amount=self.price-self.discount_amount)
+        self.payment = payment_obj
+        super().save()
         for item in cart_obj.cartitem_set.all():
             OrderItem.objects.create(order=self, product_quantity=item.product_quantity, quantity=item.quantity)
         cart_obj.cartitem_set.filter().delete()
-        self.price = self.get_order_price() + self.delivery_type.delivery_price
-        payment_obj = Payment.objects.create(user=self.user, amount=self.price-self.discount_amount)
-        self.payment = payment_obj
+
 
     def get_order_price(self):
         return sum([item.get_order_item_price() for item in self.orderitem_set.all()])

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -32,7 +33,7 @@ class CartItem(models.Model):
 
     def save(self, *args, **kwargs):
         if self.product_quantity.quantity < self.quantity:
-            raise ValueError('The item is unavailable')
+            raise ValidationError('The item is unavailable')
         return super().save(*args, **kwargs)
 
     class Meta:
