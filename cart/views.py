@@ -7,7 +7,7 @@ from .models import *
 from .serializers import *
 
 
-class ProductsCartView(ModelViewSet):
+class CartView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAuthenticated],
         "retrieve": [IsAuthenticated],

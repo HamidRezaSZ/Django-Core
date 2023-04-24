@@ -147,7 +147,7 @@ class ComponentGetSerializer(ModelSerializer):
 
 
 class ObjectInstanceSerializer(serializers.Serializer):
-    app_name = serializers.CharField()
     model_name = serializers.CharField()
+    app_name = serializers.CharField()
     quantity = serializers.IntegerField(min_value=1)
     object_id = serializers.IntegerField(min_value=1)

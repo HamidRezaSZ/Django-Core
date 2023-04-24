@@ -1,5 +1,4 @@
 from django.apps import apps
-from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -182,3 +181,9 @@ class ObjectInstanceView(CreateAPIView):
             obj.save()
 
         return Response({"message": "Objects created"}, status=200)
+    
+    def get(self, request, *args, **kwargs):
+        models = {}
+        for model in apps.get_models():
+            models[model.__name__] = model.__module__.split('.')[0]
+        return Response({'models':models},status=200)
