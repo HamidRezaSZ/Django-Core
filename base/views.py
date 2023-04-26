@@ -176,10 +176,14 @@ class ObjectInstanceView(CreateAPIView):
         except LookupError:
             return Response({"message": f"No installed app with label '{app_name}'."}, status=404)
         obj = get_object_or_404(model, id=object_id)
-        for _ in range(quantity):
-            obj.pk = None
-            obj.save()
-
+        
+        try:
+            for _ in range(quantity):
+                obj.pk = None
+                obj.save()
+        except Exception as e:
+            raise e
+        
         return Response({"message": "Objects created"}, status=200)
     
     def get(self, request, *args, **kwargs):

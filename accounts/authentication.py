@@ -1,9 +1,10 @@
-from django.urls import resolve
 from django.contrib.auth import get_user_model
+from django.urls import resolve
 from django.utils.translation import gettext_lazy as _
 from rest_framework import HTTP_HEADER_ENCODING, authentication
 from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.exceptions import AuthenticationFailed, InvalidToken, TokenError
+from rest_framework_simplejwt.exceptions import (AuthenticationFailed,
+                                                 InvalidToken, TokenError)
 from rest_framework_simplejwt.settings import api_settings
 
 AUTH_HEADER_TYPES = api_settings.AUTH_HEADER_TYPES
@@ -91,6 +92,10 @@ class JWTAuthentication(authentication.BaseAuthentication):
                 _("Authorization header must contain two space-delimited values"),
                 code="bad_authorization_header",
             )
+        
+        if parts[1] == b'null':
+            # Empty token sent ('Bearer null')
+            return None
 
         return parts[1]
 
