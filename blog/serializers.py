@@ -67,16 +67,19 @@ class PostCommentSerializer(ModelSerializer):
 
 class PostSerializer(ModelSerializer):
     category = PostCategorySerializer()
+    created_date = serializers.DateTimeField(format="%Y/%m/%d", read_only=True)
 
     class Meta:
         model = Post
-        fields = ('id', 'title', 'category', 'description', 'show_in_home_page', 'thumbnail', 'created_date')
+        fields = ('id', 'title', 'category', 'description',
+                  'show_in_home_page', 'thumbnail', 'created_date')
 
 
 class PostItemSerializer(ModelSerializer):
     category = PostCategorySerializer()
     authors = AuthorSerializer(many=True)
     tags = serializers.SerializerMethodField()
+    created_date = serializers.DateTimeField(format="%Y/%m/%d", read_only=True)
 
     class Meta:
         model = Post

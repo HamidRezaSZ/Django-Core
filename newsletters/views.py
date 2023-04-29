@@ -1,7 +1,9 @@
+from rest_framework.permissions import AllowAny, IsAdminUser
+
 from base.viewsets import ModelViewSet
-from .serializers import NewsLettersSerializer
+
 from .models import NewsLetters
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from .serializers import NewsLettersSerializer
 
 
 class NewsLettersView(ModelViewSet):
@@ -14,7 +16,7 @@ class NewsLettersView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAdminUser],
         "retrieve": [IsAdminUser],
-        "create": [IsAuthenticated],
+        "create": [AllowAny],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],

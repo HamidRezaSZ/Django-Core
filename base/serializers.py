@@ -30,7 +30,7 @@ class SocialAccountSerializer(ModelSerializer):
 
 
 class ContactUsDetailSerializer(ModelSerializer):
-    social_accounts = SocialAccountSerializer()
+    social_accounts = SocialAccountSerializer(many=True)
 
     class Meta:
         model = ContactUsDetail
