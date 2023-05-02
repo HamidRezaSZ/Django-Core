@@ -7,8 +7,10 @@ from accounts.validators import cell_phone_validator
 
 
 class BaseModel(models.Model):
-    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('created_date'))
-    modified_date = models.DateTimeField(auto_now=True, verbose_name=_('modified_date'))
+    created_date = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('created_date'))
+    modified_date = models.DateTimeField(
+        auto_now=True, verbose_name=_('modified_date'))
     is_active = models.BooleanField(default=True, verbose_name=_('is_active'))
 
     class Meta:
@@ -52,7 +54,8 @@ class ContactUsForm(models.Model):
 
 class SocialAccount(BaseModel):
     link = models.CharField(max_length=500, verbose_name=_('link'))
-    logo = models.ImageField(upload_to='social_accounts', verbose_name=_('logo'))
+    logo = models.ImageField(
+        upload_to='social_accounts', verbose_name=_('logo'))
 
     class Meta:
         verbose_name = _('Social Account')
@@ -62,8 +65,10 @@ class SocialAccount(BaseModel):
 class ContactUsDetail(BaseModel):
     image = models.ImageField(verbose_name=_('image'), upload_to='contact_us')
     email = models.EmailField(verbose_name=_('email'))
-    phone_number = models.CharField(verbose_name=_('phone_number'), max_length=20)
-    social_accounts = models.ManyToManyField(verbose_name=_('social_accounts'), to=SocialAccount)
+    phone_number = models.CharField(
+        verbose_name=_('phone_number'), max_length=20)
+    social_accounts = models.ManyToManyField(
+        verbose_name=_('social_accounts'), to=SocialAccount)
 
     class Meta:
         verbose_name = _('Contact Us Detail')
@@ -83,8 +88,10 @@ class Page(BaseModel):
 
 
 class Menu(BaseModel):
-    page = models.ForeignKey(to=Page, on_delete=models.CASCADE, verbose_name=_('page'))
-    icon = models.FileField(null=True, blank=True, upload_to='menus', verbose_name=_('icon'))
+    page = models.ForeignKey(
+        to=Page, on_delete=models.CASCADE, verbose_name=_('page'))
+    icon = models.FileField(null=True, blank=True,
+                            upload_to='menus', verbose_name=_('icon'))
     parent = models.ForeignKey('self', on_delete=models.CASCADE,
                                blank=True, null=True, related_name='children', verbose_name=_('parent'))
     order = models.IntegerField(default=1, verbose_name=_('order'))
@@ -109,10 +116,12 @@ class Menu(BaseModel):
 
 
 class Slider(BaseModel):
-    page = models.ForeignKey(to=Page, on_delete=models.CASCADE, verbose_name=_('page'))
+    page = models.ForeignKey(
+        to=Page, on_delete=models.CASCADE, verbose_name=_('page'))
     title = models.CharField(max_length=200, verbose_name=_('title'))
     text = models.TextField(verbose_name=_('text'))
-    link = models.CharField(max_length=500, null=True, blank=True, verbose_name=_('link'))
+    link = models.CharField(max_length=500, null=True,
+                            blank=True, verbose_name=_('link'))
     image = models.FileField(upload_to='slider', verbose_name=_('image'))
     order = models.IntegerField(default=1, verbose_name=_('order'))
 
@@ -129,8 +138,10 @@ class Footer(BaseModel):
     logo = models.FileField(upload_to='footer', verbose_name=_('logo'))
     content = models.TextField(verbose_name=_('content'))
     useful_link = models.ManyToManyField(Page, verbose_name=_('useful_link'))
-    social_accounts = models.ManyToManyField(SocialAccount, verbose_name=_('social_accounts'))
-    contact_us = models.ForeignKey(ContactUsDetail, on_delete=models.CASCADE, verbose_name=_('contact_us'))
+    social_accounts = models.ManyToManyField(
+        SocialAccount, verbose_name=_('social_accounts'))
+    contact_us = models.ForeignKey(
+        ContactUsDetail, on_delete=models.CASCADE, verbose_name=_('contact_us'))
 
     class Meta:
         verbose_name = _('Footer')
@@ -150,7 +161,8 @@ class State(BaseModel):
 
 
 class City(BaseModel):
-    state = models.ForeignKey(State, on_delete=models.CASCADE, verbose_name=_('state'))
+    state = models.ForeignKey(
+        State, on_delete=models.CASCADE, verbose_name=_('state'))
     name = models.CharField(max_length=256, verbose_name=_('name'))
 
     def __str__(self):
@@ -170,44 +182,13 @@ class TermsAndConditions(BaseModel):
         verbose_name_plural = _('Terms And Conditions')
 
 
-class Component(BaseModel):
-    name = models.CharField(verbose_name=_('name'), max_length=200)
-    page = models.ManyToManyField(to=Page, verbose_name=_('page'))
-    parent = models.ForeignKey('self', on_delete=models.CASCADE,
-                               blank=True, null=True, related_name='children', verbose_name=_('parent'))
-    order = models.IntegerField(default=1, verbose_name=_('order'))
+class DynamicText(BaseModel):
+    key = models.CharField(max_length=200, unique=True, verbose_name=_('key'))
+    value = models.TextField(verbose_name=_('value'))
 
-    def clean(self) -> None:
-        if self.parent == self:
-            raise ValidationError('parent must be different')
-        return super().clean()
+    class Meta:
+        verbose_name = _('Dynamic Text')
+        verbose_name_plural = _('Dynamic Texts')
 
     def __str__(self) -> str:
-        return self.name
-
-    class Meta:
-        verbose_name = _('Component')
-        verbose_name_plural = _('Components')
-        ordering = ['order']
-
-
-class ComponentItem(BaseModel):
-    class Type(models.TextChoices):
-        FILE = 'File', 'File'
-        TEXT = 'Text', 'Text'
-
-    component = models.ForeignKey(to=Component, on_delete=models.CASCADE, verbose_name=_('component'))
-    type = models.CharField(verbose_name=_('type'), max_length=20, choices=Type.choices)
-    file = models.FileField(verbose_name=_('file'), upload_to='component', null=True, blank=True)
-    content = RichTextUploadingField(verbose_name=_('content'), null=True, blank=True)
-
-    def clean(self) -> None:
-        if self.type == 'File' and (not self.file or self.content):
-            raise ValidationError('component type is file!')
-        elif self.type == 'Text' and (self.file or not self.content):
-            raise ValidationError('component type is text!')
-        return super().clean()
-
-    class Meta:
-        verbose_name = _('Component Item')
-        verbose_name_plural = _('Component Items')
+        return self.key

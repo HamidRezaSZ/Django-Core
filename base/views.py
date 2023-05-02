@@ -146,7 +146,7 @@ class TermsAndConditionsView(ModelViewSet):
     queryset = TermsAndConditions.objects.filter(is_active=True)
 
 
-class ComponentView(ModelViewSet):
+class DynamicTextView(ModelViewSet):
     permission_classes_by_action = {
         "list": [AllowAny],
         "retrieve": [AllowAny],
@@ -155,9 +155,8 @@ class ComponentView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    serializer_class = ComponentGetSerializer
-    queryset = Component.objects.filter(is_active=True, parent=None)
-    filterset_fields = ['page__link', 'order', 'parent']
+    serializer_class = DynamicTextSerializer
+    queryset = DynamicText.objects.filter(is_active=True)
 
 
 class ObjectInstanceView(CreateAPIView):
@@ -176,18 +175,18 @@ class ObjectInstanceView(CreateAPIView):
         except LookupError:
             return Response({"message": f"No installed app with label '{app_name}'."}, status=404)
         obj = get_object_or_404(model, id=object_id)
-        
+
         try:
             for _ in range(quantity):
                 obj.pk = None
                 obj.save()
         except Exception as e:
             raise e
-        
+
         return Response({"message": "Objects created"}, status=200)
-    
+
     def get(self, request, *args, **kwargs):
         models = {}
         for model in apps.get_models():
             models[model.__name__] = model.__module__.split('.')[0]
-        return Response({'models':models},status=200)
+        return Response({'models': models}, status=200)

@@ -39,6 +39,10 @@ class TermsAndConditionsTranslationOptions(TranslationOptions):
     fields = ('text',)
 
 
+class DynamicTextTranslationOptions(TranslationOptions):
+    fields = ('value',)
+
+
 translator.register(FAQ, FAQTranslationOptions)
 translator.register(AboutUs, AboutUsTranslationOptions)
 translator.register(ContactUsDetail, ContactUsDetailTranslationOptions)
@@ -48,3 +52,4 @@ translator.register(Footer, FooterTranslationOptions)
 translator.register(State, StateTranslationOptions)
 translator.register(City, CityTranslationOptions)
 translator.register(TermsAndConditions, TermsAndConditionsTranslationOptions)
+translator.register(DynamicText, DynamicTextTranslationOptions)

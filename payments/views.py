@@ -23,11 +23,11 @@ class PaymentView(ModelViewSet):
     filterset_fields = ['authority']
 
     def get_queryset(self):
-        return Payment.objects.filter(related_user=self.request.user)
+        return Payment.objects.filter(user=self.request.user)
 
     def get_object(self):
         pk = self.kwargs['pk']
-        return get_object_or_404(Payment, pk=pk, related_user=self.request.user)
+        return get_object_or_404(Payment, pk=pk, user=self.request.user)
 
 
 class VerifyPayment(ListAPIView):

@@ -125,14 +125,7 @@ class TermsAndConditionsAdmin(TranslationAdmin):
         return super().has_add_permission(request)
 
 
-class ComponentItemInline(admin.TabularInline):
-    model = ComponentItem
-    extra = 0
-
-
-@admin.register(Component)
-class ComponentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'parent', 'order')
-    list_editable = ('order',)
-    search_fields = ('name', 'page', 'parent')
-    inlines = (ComponentItemInline,)
+@admin.register(DynamicText)
+class DynamicTextAdmin(TranslationAdmin):
+    list_display = ('id', 'key')
+    search_fields = ('key', 'value')

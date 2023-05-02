@@ -112,38 +112,10 @@ class TermsAndConditionsSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class ComponentItemSerializer(ModelSerializer):
+class DynamicTextSerializer(ModelSerializer):
     class Meta:
-        model = ComponentItem
+        model = DynamicText
         fields = '__all__'
-
-
-class ComponentSerializer(ModelSerializer):
-    page = PageSerializer(many=True)
-    items = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Component
-        exclude = ('parent',)
-
-    def get_items(self, obj):
-        return ComponentItemSerializer(obj.componentitem_set.filter(is_active=True), many=True).data
-
-
-class ComponentGetSerializer(ModelSerializer):
-    page = PageSerializer(many=True)
-    sub_component = serializers.SerializerMethodField()
-    items = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Component
-        exclude = ('parent',)
-
-    def get_sub_component(self, obj):
-        return ComponentSerializer(obj.children.all(), many=True, read_only=True).data
-
-    def get_items(self, obj):
-        return ComponentItemSerializer(obj.componentitem_set.filter(is_active=True), many=True).data
 
 
 class ObjectInstanceSerializer(serializers.Serializer):
