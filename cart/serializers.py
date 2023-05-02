@@ -25,11 +25,13 @@ class CartItemSerializer(ModelSerializer):
         item = CartItem.objects.filter(
             cart=cart_obj, product_quantity=validated_data['product_quantity'])
         if item.exists():
-            item.first().quantity += validated_data['quantity']
-            item.first().save()
-            return item.first()
+            item = item.first()
+            item.quantity += validated_data['quantity']
+            item.save()
+            return item
 
-        return CartItem.objects.create({'cart': cart_obj, **validated_data})
+        validated_data['cart'] = cart_obj
+        return CartItem.objects.create(**validated_data)
 
 
 class CartSerializer(ModelSerializer):
