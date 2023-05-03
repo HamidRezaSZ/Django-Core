@@ -36,6 +36,7 @@ class CartItemSerializer(ModelSerializer):
 
 class CartSerializer(ModelSerializer):
     items = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
@@ -43,3 +44,6 @@ class CartSerializer(ModelSerializer):
 
     def get_items(self, obj):
         return CartItemSerializer(obj.productscartitem_set.all(), many=True).data
+
+    def get_price(self, obj):
+        return obj.get_cart_price()
