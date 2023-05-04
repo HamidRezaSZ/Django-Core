@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.models import LogEntry
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportMixin
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
@@ -129,3 +130,8 @@ class TermsAndConditionsAdmin(TranslationAdmin):
 class DynamicTextAdmin(TranslationAdmin):
     list_display = ('id', 'key')
     search_fields = ('key', 'value')
+
+
+@admin.register(LogEntry)
+class LogEntryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'content_type', 'action_flag', 'action_time')
