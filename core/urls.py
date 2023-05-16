@@ -33,6 +33,7 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
 )
+
 urlpatterns = i18n_patterns(
     path('api/blog/', include('blog.urls')),  # blog app
     path('api/accounts/', include('accounts.urls')),  # accounts app
@@ -40,18 +41,24 @@ urlpatterns = i18n_patterns(
     path('api/products/', include('products.urls')),  # products app
     path('api/payments/', include('payments.urls')),  # payments app
     path('api/cart/', include('cart.urls')),  # cart app
-    path('api/exam/', include('exam.urls')),  # exam app
+    path('api/exams/', include('exams.urls')),  # exams app
     path('api/newsletters/', include('newsletters.urls')),  # newsletters app
     path('api/orders/', include('orders.urls')),  # orders app
     path('api/ticketing/', include('ticketing.urls')),  # ticketing app
 
+
+    # multiple language package
     re_path(r'^rosetta/', include('rosetta.urls')),
+
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),  # Text editor
 
     # swgger
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$',
+            schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger',
+            cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc',
+            cache_timeout=0), name='schema-redoc'),
 
     path('', admin.site.urls),  # admin panel
 )

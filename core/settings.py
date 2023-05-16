@@ -46,6 +46,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'import_export',
     'rosetta',
+    'django_celery_beat',
 
     'accounts',
     'base',
@@ -72,7 +74,7 @@ INSTALLED_APPS = [
     'orders',
     'newsletters',
     'payments',
-    'exam',
+    'exams',
     'ticketing',
 ]
 
@@ -132,6 +134,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+ASGI_APPLICATION = "core.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
