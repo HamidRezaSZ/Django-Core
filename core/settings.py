@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'payments',
     'exams',
     'ticketing',
+    'courses',
 ]
 
 # Djagno Rest Framework

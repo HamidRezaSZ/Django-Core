@@ -45,6 +45,7 @@ urlpatterns = i18n_patterns(
     path('api/newsletters/', include('newsletters.urls')),  # newsletters app
     path('api/orders/', include('orders.urls')),  # orders app
     path('api/ticketing/', include('ticketing.urls')),  # ticketing app
+    path('api/courses/', include('courses.urls')),  # courses app
 
 
     # multiple language package
