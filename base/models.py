@@ -54,7 +54,7 @@ class ContactUsForm(models.Model):
 
 class SocialAccount(BaseModel):
     link = models.CharField(max_length=500, verbose_name=_('link'))
-    logo = models.ImageField(
+    logo = models.FileField(
         upload_to='social_accounts', verbose_name=_('logo'))
 
     class Meta:
@@ -63,7 +63,7 @@ class SocialAccount(BaseModel):
 
 
 class ContactUsDetail(BaseModel):
-    image = models.ImageField(verbose_name=_('image'), upload_to='contact_us')
+    image = models.FileField(verbose_name=_('image'), upload_to='contact_us')
     email = models.EmailField(verbose_name=_('email'))
     phone_number = models.CharField(
         verbose_name=_('phone_number'), max_length=20)

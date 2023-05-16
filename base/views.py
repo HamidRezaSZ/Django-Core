@@ -113,6 +113,7 @@ class CityView(ModelViewSet):
     }
     queryset = City.objects.filter(is_active=True)
     serializer_class = CitySerializer
+    filterset_fields = ['state']
 
 
 class StateView(ModelViewSet):
