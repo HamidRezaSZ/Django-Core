@@ -13,3 +13,8 @@ class PaymentAdmin(admin.ModelAdmin):
 @admin.register(PaymentStatus)
 class PaymentStatusAdmin(TranslationAdmin):
     list_display = ('id', 'status')
+
+
+@admin.register(PaymentGateWay)
+class PaymentGateWayAdmin(TranslationAdmin):
+    list_display = ('id', 'title')

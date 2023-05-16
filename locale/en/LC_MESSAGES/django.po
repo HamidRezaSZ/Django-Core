@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 08:49+0330\n"
+"POT-Creation-Date: 2023-05-16 19:27+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "cell_phone"
 msgstr ""
 
-#: accounts/models.py:16 blog/models.py:36
+#: accounts/models.py:16 blog/models.py:37
 msgid "avatar"
 msgstr ""
 
@@ -74,9 +74,11 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: accounts/models.py:34 accounts/models.py:61 blog/models.py:34
-#: cart/models.py:9 exam/models.py:71 orders/models.py:34 payments/models.py:24
-#: products/models.py:169 products/models.py:194 ticketing/models.py:60
+#: accounts/models.py:34 accounts/models.py:61 blog/models.py:35
+#: cart/models.py:9 courses/models.py:32 courses/models.py:166
+#: exams/models.py:48 exams/models.py:100 exams/models.py:116
+#: orders/models.py:34 payments/models.py:43 products/models.py:169
+#: products/models.py:194 ticketing/models.py:60
 msgid "user"
 msgstr ""
 
@@ -96,7 +98,7 @@ msgstr ""
 msgid "telephone_number"
 msgstr ""
 
-#: accounts/models.py:41 base/models.py:67 blog/models.py:97
+#: accounts/models.py:41 base/models.py:67 blog/models.py:105
 #: newsletters/models.py:10 products/models.py:107
 msgid "email"
 msgstr ""
@@ -113,8 +115,9 @@ msgstr ""
 msgid "city"
 msgstr ""
 
-#: accounts/models.py:45 blog/models.py:53 orders/models.py:11
-#: products/models.py:17 products/models.py:64
+#: accounts/models.py:45 blog/models.py:56 courses/models.py:14
+#: courses/models.py:56 courses/models.py:85 courses/models.py:112
+#: orders/models.py:11 products/models.py:17 products/models.py:64
 msgid "description"
 msgstr ""
 
@@ -156,7 +159,7 @@ msgstr ""
 msgid "%(value)s is not an correct national_id"
 msgstr ""
 
-#: base/admin.py:8 base/admin.py:9
+#: base/admin.py:9 base/admin.py:10
 msgid "Core Admin Panel"
 msgstr ""
 
@@ -164,7 +167,7 @@ msgstr ""
 msgid "Base"
 msgstr ""
 
-#: base/models.py:11 blog/models.py:104 payments/models.py:30
+#: base/models.py:11 blog/models.py:114 payments/models.py:55
 #: products/models.py:115 ticketing/models.py:46
 msgid "created_date"
 msgstr ""
@@ -177,12 +180,11 @@ msgstr ""
 msgid "is_active"
 msgstr ""
 
-#: base/models.py:21 exam/models.py:16 exam/models.py:25 exam/models.py:36
-#: exam/models.py:45 exam/models.py:54
+#: base/models.py:21 exams/models.py:67
 msgid "question"
 msgstr ""
 
-#: base/models.py:22 exam/models.py:37 exam/models.py:46 exam/models.py:55
+#: base/models.py:22 exams/models.py:104
 msgid "answer"
 msgstr ""
 
@@ -202,7 +204,7 @@ msgstr ""
 msgid "About Us"
 msgstr ""
 
-#: base/models.py:41 blog/models.py:98 products/models.py:108
+#: base/models.py:41 blog/models.py:106 products/models.py:108
 msgid "full_name"
 msgstr ""
 
@@ -222,7 +224,7 @@ msgstr ""
 msgid "Contact Us Forms"
 msgstr ""
 
-#: base/models.py:56 base/models.py:80 base/models.py:124 payments/models.py:29
+#: base/models.py:56 base/models.py:80 base/models.py:124 payments/models.py:51
 msgid "link"
 msgstr ""
 
@@ -238,8 +240,8 @@ msgstr ""
 msgid "Social Accounts"
 msgstr ""
 
-#: base/models.py:66 base/models.py:125 blog/models.py:71 products/models.py:57
-#: products/models.py:138
+#: base/models.py:66 base/models.py:125 blog/models.py:78 courses/models.py:50
+#: products/models.py:57 products/models.py:138
 msgid "image"
 msgstr ""
 
@@ -251,10 +253,13 @@ msgstr ""
 msgid "Contact Us Detail"
 msgstr ""
 
-#: base/models.py:79 base/models.py:121 blog/models.py:11 blog/models.py:48
-#: blog/models.py:83 orders/models.py:10 products/models.py:11
-#: products/models.py:12 products/models.py:35 products/models.py:78
-#: ticketing/models.py:20 ticketing/models.py:31
+#: base/models.py:79 base/models.py:121 blog/models.py:11 blog/models.py:49
+#: blog/models.py:90 courses/models.py:9 courses/models.py:43
+#: courses/models.py:82 courses/models.py:109 courses/models.py:132
+#: exams/models.py:13 exams/models.py:66 orders/models.py:10
+#: payments/models.py:24 products/models.py:11 products/models.py:12
+#: products/models.py:35 products/models.py:78 ticketing/models.py:20
+#: ticketing/models.py:31
 msgid "title"
 msgstr ""
 
@@ -270,13 +275,14 @@ msgstr ""
 msgid "page"
 msgstr ""
 
-#: base/models.py:94 exam/models.py:26 products/models.py:15
-#: products/models.py:38
+#: base/models.py:94 courses/models.py:11 payments/models.py:25
+#: products/models.py:15 products/models.py:38
 msgid "icon"
 msgstr ""
 
-#: base/models.py:96 blog/models.py:13 blog/models.py:103 products/models.py:14
-#: products/models.py:37 products/models.py:65 products/models.py:114
+#: base/models.py:96 blog/models.py:13 blog/models.py:112 exams/models.py:21
+#: exams/models.py:120 products/models.py:14 products/models.py:37
+#: products/models.py:65 products/models.py:114
 msgid "parent"
 msgstr ""
 
@@ -300,7 +306,8 @@ msgstr ""
 msgid "Sliders"
 msgstr ""
 
-#: base/models.py:139 blog/models.py:54 blog/models.py:100
+#: base/models.py:139 blog/models.py:57 blog/models.py:109
+#: courses/models.py:136 courses/models.py:167 exams/models.py:86
 #: products/models.py:109 ticketing/models.py:62
 msgid "content"
 msgstr ""
@@ -370,116 +377,119 @@ msgstr ""
 msgid "Blog"
 msgstr ""
 
-#: blog/models.py:29 products/models.py:27
+#: blog/models.py:29 courses/models.py:26 products/models.py:27
 msgid "Category"
 msgstr ""
 
-#: blog/models.py:30 products/models.py:28
+#: blog/models.py:30 courses/models.py:27 products/models.py:28
 msgid "Categories"
 msgstr ""
 
-#: blog/models.py:35
+#: blog/models.py:36
 msgid "about"
 msgstr ""
 
-#: blog/models.py:37
+#: blog/models.py:38
 msgid "avatar_alt"
 msgstr ""
 
-#: blog/models.py:43
+#: blog/models.py:44
 msgid "Author"
 msgstr ""
 
-#: blog/models.py:44
+#: blog/models.py:45
 msgid "Authors"
 msgstr ""
 
-#: blog/models.py:49 products/models.py:55
+#: blog/models.py:50 products/models.py:55
 msgid "slug"
 msgstr ""
 
-#: blog/models.py:50 products/models.py:61 products/models.py:79
+#: blog/models.py:52 courses/models.py:48 products/models.py:61
+#: products/models.py:79
 msgid "category"
 msgstr ""
 
-#: blog/models.py:51
+#: blog/models.py:54
 msgid "thumbnail"
 msgstr ""
 
-#: blog/models.py:52 blog/models.py:72 products/models.py:16
+#: blog/models.py:55 blog/models.py:79 products/models.py:16
 #: products/models.py:58
 msgid "image_alt"
 msgstr ""
 
-#: blog/models.py:55
+#: blog/models.py:58
 msgid "authors"
 msgstr ""
 
-#: blog/models.py:56
+#: blog/models.py:60
 msgid "show_in_home_page"
 msgstr ""
 
-#: blog/models.py:57 products/models.py:18 products/models.py:66
+#: blog/models.py:62 courses/models.py:18 products/models.py:18
+#: products/models.py:66
 msgid "meta_title"
 msgstr ""
 
-#: blog/models.py:58 products/models.py:19 products/models.py:67
+#: blog/models.py:64 courses/models.py:20 products/models.py:19
+#: products/models.py:67
 msgid "meta_description"
 msgstr ""
 
-#: blog/models.py:64
+#: blog/models.py:70
 msgid "Post"
 msgstr ""
 
-#: blog/models.py:65
+#: blog/models.py:71
 msgid "Posts"
 msgstr ""
 
-#: blog/models.py:70 blog/models.py:84 blog/models.py:99 blog/models.py:118
+#: blog/models.py:77 blog/models.py:92 blog/models.py:108 blog/models.py:129
 msgid "post"
 msgstr ""
 
-#: blog/models.py:78
+#: blog/models.py:85
 msgid "Gallery"
 msgstr ""
 
-#: blog/models.py:79
+#: blog/models.py:86
 msgid "Galleries"
 msgstr ""
 
-#: blog/models.py:90 products/models.py:150
+#: blog/models.py:98 products/models.py:150
 msgid "Tag"
 msgstr ""
 
-#: blog/models.py:91 products/models.py:151
+#: blog/models.py:99 products/models.py:151
 msgid "Tags"
 msgstr ""
 
-#: blog/models.py:101 products/models.py:110
+#: blog/models.py:110 products/models.py:110
 msgid "rate"
 msgstr ""
 
-#: blog/models.py:105 products/models.py:116
+#: blog/models.py:116 products/models.py:116
 msgid "is_accepted"
 msgstr ""
 
-#: blog/models.py:111 products/models.py:122
+#: blog/models.py:122 products/models.py:122
 msgid "Comment"
 msgstr ""
 
-#: blog/models.py:112 products/models.py:123
+#: blog/models.py:123 products/models.py:123
 msgid "Comments"
 msgstr ""
 
-#: blog/models.py:120
+#: blog/models.py:132
 msgid "related_posts"
 msgstr ""
 
-#: blog/models.py:126
+#: blog/models.py:138
 msgid "Related Post"
 msgstr ""
 
-#: blog/models.py:127
+#: blog/models.py:139
 msgid "Related Posts"
 msgstr ""
 
@@ -511,104 +521,219 @@ msgstr ""
 msgid "Cart Items"
 msgstr ""
 
-#: core/settings.py:177
+#: core/settings.py:180
 msgid "English"
 msgstr ""
 
-#: core/settings.py:178
+#: core/settings.py:181
 msgid "Farsi"
 msgstr ""
 
-#: exam/apps.py:8 exam/models.py:66
-msgid "Exam"
+#: courses/apps.py:8 courses/models.py:76
+msgid "Courses"
 msgstr ""
 
-#: exam/models.py:10
-msgid "MultipleChoice"
+#: courses/models.py:16 courses/models.py:141
+msgid "show_on_home_page"
 msgstr ""
 
-#: exam/models.py:11
-msgid "Drop Down"
+#: courses/models.py:38
+msgid "Teacher"
 msgstr ""
 
-#: exam/models.py:12 ticketing/models.py:80
-msgid "File"
+#: courses/models.py:39
+msgid "Teachers"
 msgstr ""
 
-#: exam/models.py:13
-msgid "Descriptive"
+#: courses/models.py:46
+msgid "teacher"
 msgstr ""
 
-#: exam/models.py:17
-msgid "type"
+#: courses/models.py:53
+msgid "video"
 msgstr ""
 
-#: exam/models.py:20
-msgid "Question"
+#: courses/models.py:55
+msgid "cover"
 msgstr ""
 
-#: exam/models.py:21
-msgid "Questions"
+#: courses/models.py:57 courses/models.py:86 courses/models.py:113
+#: courses/models.py:133 orders/models.py:40 products/models.py:182
+msgid "price"
 msgstr ""
 
-#: exam/models.py:27
-msgid "choice"
+#: courses/models.py:58 courses/models.py:87 courses/models.py:114
+#: courses/models.py:137
+msgid "for_sale"
 msgstr ""
 
-#: exam/models.py:28
-msgid "is_true"
+#: courses/models.py:75
+msgid "Course"
 msgstr ""
 
-#: exam/models.py:31
-msgid "Choice Of MultipleChoice Question"
+#: courses/models.py:81
+msgid "course"
 msgstr ""
 
-#: exam/models.py:32
-msgid "Choices Of MultipleChoice Question"
+#: courses/models.py:102
+msgid "Lesson"
 msgstr ""
 
-#: exam/models.py:40
-msgid "Descriptive Answer"
+#: courses/models.py:103
+msgid "Lessons"
 msgstr ""
 
-#: exam/models.py:41
-msgid "Descriptive Answers"
+#: courses/models.py:108
+msgid "lesson"
 msgstr ""
 
-#: exam/models.py:49
-msgid "Multiple Choice Answer"
+#: courses/models.py:125
+msgid "Chapter"
 msgstr ""
 
-#: exam/models.py:50
-msgid "Multiple Choice Answers"
+#: courses/models.py:126
+msgid "Chapters"
 msgstr ""
 
-#: exam/models.py:58
-msgid "File Answer"
+#: courses/models.py:131
+msgid "chapter"
 msgstr ""
 
-#: exam/models.py:59
-msgid "File Answers"
+#: courses/models.py:139
+msgid "participants"
 msgstr ""
 
-#: exam/models.py:63
-msgid "questions"
+#: courses/models.py:158
+msgid "Note"
 msgstr ""
 
-#: exam/models.py:67
+#: courses/models.py:159
+msgid "Notes"
+msgstr ""
+
+#: courses/models.py:164
+msgid "note"
+msgstr ""
+
+#: courses/models.py:173 courses/models.py:174
+msgid "Note Taking"
+msgstr ""
+
+#: exams/apps.py:8 exams/models.py:42
 msgid "Exams"
 msgstr ""
 
-#: exam/models.py:72
+#: exams/models.py:23
+msgid "minimum_score"
+msgstr ""
+
+#: exams/models.py:24
+msgid "duration"
+msgstr ""
+
+#: exams/models.py:26
+msgid "wrong_questions_weight"
+msgstr ""
+
+#: exams/models.py:28
+msgid "correct_questions_weight"
+msgstr ""
+
+#: exams/models.py:41
+msgid "Exam"
+msgstr ""
+
+#: exams/models.py:50 exams/models.py:64 exams/models.py:85 exams/models.py:102
+#: exams/models.py:118
 msgid "exam"
 msgstr ""
 
-#: exam/models.py:75
+#: exams/models.py:56
 msgid "User Exam"
 msgstr ""
 
-#: exam/models.py:76
+#: exams/models.py:57
 msgid "User Exams"
+msgstr ""
+
+#: exams/models.py:68
+msgid "choice_one"
+msgstr ""
+
+#: exams/models.py:69
+msgid "choice_two"
+msgstr ""
+
+#: exams/models.py:70
+msgid "choice_three"
+msgstr ""
+
+#: exams/models.py:71
+msgid "choice_four"
+msgstr ""
+
+#: exams/models.py:73
+msgid "correct_answer"
+msgstr ""
+
+#: exams/models.py:79
+msgid "Question"
+msgstr ""
+
+#: exams/models.py:80
+msgid "Questions"
+msgstr ""
+
+#: exams/models.py:92
+msgid "Descriptive Answer"
+msgstr ""
+
+#: exams/models.py:93
+msgid "Descriptive Answers"
+msgstr ""
+
+#: exams/models.py:110
+msgid "User Question"
+msgstr ""
+
+#: exams/models.py:111
+msgid "User Questions"
+msgstr ""
+
+#: exams/models.py:122
+msgid "no_all_questions"
+msgstr ""
+
+#: exams/models.py:124
+msgid "no_wrong_questions"
+msgstr ""
+
+#: exams/models.py:126
+msgid "no_correct_questions"
+msgstr ""
+
+#: exams/models.py:127
+msgid "max_score"
+msgstr ""
+
+#: exams/models.py:128
+msgid "score"
+msgstr ""
+
+#: exams/models.py:134
+msgid "Result"
+msgstr ""
+
+#: exams/models.py:135
+msgid "Results"
+msgstr ""
+
+#: exams/serializers.py:86
+msgid "You dont permission to start this exam"
+msgstr ""
+
+#: exams/serializers.py:98
+msgid "Exam has finished"
 msgstr ""
 
 #: newsletters/apps.py:8
@@ -636,7 +761,7 @@ msgid "Delivery Types"
 msgstr ""
 
 #: orders/models.py:23 orders/models.py:42 payments/models.py:13
-#: payments/models.py:27 ticketing/models.py:49
+#: payments/models.py:48 ticketing/models.py:49
 msgid "status"
 msgstr ""
 
@@ -660,10 +785,6 @@ msgstr ""
 msgid "coupon_code"
 msgstr ""
 
-#: orders/models.py:40 products/models.py:182
-msgid "price"
-msgstr ""
-
 #: orders/models.py:41 products/models.py:196
 msgid "discount_amount"
 msgstr ""
@@ -680,7 +801,7 @@ msgstr ""
 msgid "Order Items"
 msgstr ""
 
-#: payments/apps.py:8 payments/models.py:37
+#: payments/apps.py:8 payments/models.py:62
 msgid "Payments"
 msgstr ""
 
@@ -692,19 +813,47 @@ msgstr ""
 msgid "Payment Statuses"
 msgstr ""
 
-#: payments/models.py:25
-msgid "amount"
-msgstr ""
-
-#: payments/models.py:26
-msgid "ref_id"
+#: payments/models.py:27
+msgid "request_url"
 msgstr ""
 
 #: payments/models.py:28
+msgid "verify_url"
+msgstr ""
+
+#: payments/models.py:30
+msgid "startpay_url"
+msgstr ""
+
+#: payments/models.py:31
+msgid "merchant"
+msgstr ""
+
+#: payments/models.py:37
+msgid "Payment GateWay"
+msgstr ""
+
+#: payments/models.py:38
+msgid "Payment GateWays"
+msgstr ""
+
+#: payments/models.py:44
+msgid "amount"
+msgstr ""
+
+#: payments/models.py:46
+msgid "ref_id"
+msgstr ""
+
+#: payments/models.py:50
 msgid "authority"
 msgstr ""
 
-#: payments/models.py:36
+#: payments/models.py:53
+msgid "payment_gateway"
+msgstr ""
+
+#: payments/models.py:61
 msgid "Payment"
 msgstr ""
 
@@ -911,6 +1060,10 @@ msgstr ""
 
 #: ticketing/models.py:74
 msgid "file"
+msgstr ""
+
+#: ticketing/models.py:80
+msgid "File"
 msgstr ""
 
 #: ticketing/models.py:81

@@ -1,6 +1,6 @@
 from base.base_serializers import ModelSerializer
 
-from .models import Payment, PaymentStatus
+from .models import *
 
 
 class PaymentStatusSerializer(ModelSerializer):
@@ -8,6 +8,13 @@ class PaymentStatusSerializer(ModelSerializer):
     class Meta:
         model = PaymentStatus
         fields = '__all__'
+
+
+class PaymentGateWaySerializer(ModelSerializer):
+
+    class Meta:
+        model = PaymentGateWay
+        fields = ('id', 'title', 'icon')
 
 
 class PaymentSerializer(ModelSerializer):

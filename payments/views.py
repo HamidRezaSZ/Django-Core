@@ -1,13 +1,16 @@
-from rest_framework.views import Response
-from rest_framework.generics import ListAPIView
-import requests
 import json
+
+import requests
 from django.conf import settings
-from .models import Payment
-from base.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .serializers import PaymentSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.views import Response
+
+from base.viewsets import ModelViewSet
+
+from .models import *
+from .serializers import *
 
 
 class PaymentView(ModelViewSet):
@@ -30,6 +33,25 @@ class PaymentView(ModelViewSet):
         return get_object_or_404(Payment, pk=pk, user=self.request.user)
 
 
+class PaymentGateWayView(ModelViewSet):
+    permission_classes_by_action = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "create": [IsAdminUser],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }
+    serializer_class = PaymentGateWaySerializer
+
+    def get_queryset(self):
+        return PaymentGateWay.objects.all()
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return get_object_or_404(PaymentGateWay, pk=pk)
+
+
 class VerifyPayment(ListAPIView):
 
     def get(self, request, authority, status):
@@ -43,7 +65,8 @@ class VerifyPayment(ListAPIView):
                 "amount": payment_obj.amount,
                 "authority": authority
             }
-            req = requests.post(url=settings.ZP_API_VERIFY, data=json.dumps(req_data), headers=req_header)
+            req = requests.post(url=settings.ZP_API_VERIFY,
+                                data=json.dumps(req_data), headers=req_header)
             if len(req.json()['errors']) == 0:
                 t_status = req.json()['data']['code']
                 if t_status == 100:
