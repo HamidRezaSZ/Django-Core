@@ -8,15 +8,15 @@ from accounts.models import User
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('user'))
 
-    def __str__(self):
-        return self.user.username
-
-    def get_cart_price(self):
-        return sum([item.get_cart_item_price() for item in self.cartitem_set.all()])
-
     class Meta:
         verbose_name = _('Cart')
         verbose_name_plural = _('Carts')
+
+    def __str__(self) -> str:
+        return self.user.username
+
+    def get_cart_price(self) -> int:
+        return sum([item.get_cart_item_price() for item in self.cartitem_set.all()])
 
 
 class CartItem(models.Model):
@@ -25,17 +25,17 @@ class CartItem(models.Model):
         'products.ProductQuantity', on_delete=models.PROTECT, verbose_name=_('product_quantity'))
     quantity = models.PositiveIntegerField(default=1, verbose_name=_('quantity'))
 
-    def __str__(self):
+    class Meta:
+        verbose_name = _('Cart Item')
+        verbose_name_plural = _('Cart Items')
+
+    def __str__(self) -> str:
         return f'{self.product_quantity}'
 
-    def get_cart_item_price(self):
-        return self.product_quantity.price * self.quantity
-
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if self.product_quantity.quantity < self.quantity:
             raise ValidationError('The item is unavailable')
         return super().save(*args, **kwargs)
 
-    class Meta:
-        verbose_name = _('Cart Item')
-        verbose_name_plural = _('Cart Items')
+    def get_cart_item_price(self) -> int:
+        return self.product_quantity.price * self.quantity

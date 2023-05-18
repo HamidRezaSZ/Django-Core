@@ -21,12 +21,12 @@ class FAQ(BaseModel):
     question = models.CharField(verbose_name=_('question'), max_length=500)
     answer = models.TextField(verbose_name=_('answer'))
 
-    def __str__(self) -> str:
-        return self.question
-
     class Meta:
         verbose_name = _('FAQ')
         verbose_name_plural = _('FAQs')
+
+    def __str__(self) -> str:
+        return self.question
 
 
 class AboutUs(BaseModel):
@@ -44,12 +44,12 @@ class ContactUsForm(models.Model):
         max_length=11, validators=[cell_phone_validator])
     message = models.TextField(verbose_name=_('message'))
 
-    def __str__(self) -> str:
-        return self.full_name
-
     class Meta:
         verbose_name = _('Contact Us Form')
         verbose_name_plural = _('Contact Us Forms')
+
+    def __str__(self) -> str:
+        return self.full_name
 
 
 class SocialAccount(BaseModel):
@@ -96,12 +96,12 @@ class Menu(BaseModel):
                                blank=True, null=True, related_name='children', verbose_name=_('parent'))
     order = models.IntegerField(default=1, verbose_name=_('order'))
 
-    def clean(self) -> None:
-        if self.parent == self:
-            raise ValidationError('parent must be different')
-        return super().clean()
+    class Meta:
+        verbose_name = _('Menu')
+        verbose_name_plural = _('Menus')
+        ordering = ('order',)
 
-    def __str__(self):
+    def __str__(self) -> str:
         full_path = [self.page.title]
         k = self.parent
         while k is not None:
@@ -109,10 +109,10 @@ class Menu(BaseModel):
             k = k.parent
         return ' -> '.join(full_path[::-1])
 
-    class Meta:
-        verbose_name = _('Menu')
-        verbose_name_plural = _('Menus')
-        ordering = ('order',)
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('parent must be different')
+        return super().clean()
 
 
 class Slider(BaseModel):
@@ -151,13 +151,13 @@ class Footer(BaseModel):
 class State(BaseModel):
     name = models.CharField(max_length=200, verbose_name=_('name'))
 
-    def __str__(self) -> str:
-        return self.name
-
     class Meta:
         verbose_name = _('State')
         verbose_name_plural = _('States')
         ordering = ['name']
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class City(BaseModel):
@@ -165,13 +165,13 @@ class City(BaseModel):
         State, on_delete=models.CASCADE, verbose_name=_('state'))
     name = models.CharField(max_length=256, verbose_name=_('name'))
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = _('City')
         verbose_name_plural = _('Cities')
         ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class TermsAndConditions(BaseModel):

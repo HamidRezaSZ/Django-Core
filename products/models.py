@@ -18,17 +18,17 @@ class ProductCategory(BaseModel):
     meta_title = models.CharField(max_length=128, verbose_name=_('meta_title'), null=True, blank=True)
     meta_description = models.TextField(verbose_name=_('meta_description'), null=True, blank=True)
 
-    def clean(self) -> None:
-        if self.parent == self:
-            raise ValidationError('parent must be different')
-        return super().clean()
-
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
     def __str__(self) -> str:
         return self.title
+
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('parent must be different')
+        return super().clean()
 
 
 class ProductBrand(BaseModel):
@@ -37,17 +37,17 @@ class ProductBrand(BaseModel):
                                null=True, blank=True, verbose_name=_('parent'))
     icon = models.FileField(upload_to='product-brand-icon', verbose_name=_('icon'), null=True, blank=True)
 
-    def clean(self) -> None:
-        if self.parent == self:
-            raise ValidationError('parent must be different')
-        return super().clean()
-
     class Meta:
         verbose_name = _('Brand')
         verbose_name_plural = _('Brands')
 
     def __str__(self) -> str:
         return self.title
+
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('parent must be different')
+        return super().clean()
 
 
 class Product(BaseModel):
@@ -115,13 +115,13 @@ class ProductComment(models.Model):
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('created_date'))
     is_accepted = models.BooleanField(default=False, verbose_name=_('is_accepted'))
 
-    def __str__(self):
-        return self.email
-
     class Meta:
         verbose_name = _('Comment')
         verbose_name_plural = _('Comments')
         ordering = ('created_date',)
+
+    def __str__(self) -> str:
+        return self.email
 
 
 class ProductCatalog(BaseModel):
@@ -157,23 +157,23 @@ class RelatedProduct(BaseModel):
         to=Product, verbose_name=_('related_products'),
         related_name='related_products')
 
-    def __str__(self):
-        return f'{self.product.name}'
-
     class Meta:
         verbose_name = _('Related Product')
         verbose_name_plural = _('Related Products')
+
+    def __str__(self) -> str:
+        return f'{self.product.name}'
 
 
 class Seller(BaseModel):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, verbose_name=_('user'))
 
-    def __str__(self):
-        return f'{self.user.username}'
-
     class Meta:
         verbose_name = _('Seller')
         verbose_name_plural = _('Sellers')
+
+    def __str__(self) -> str:
+        return f'{self.user.username}'
 
 
 class ProductQuantity(BaseModel):
@@ -182,12 +182,12 @@ class ProductQuantity(BaseModel):
     price = models.PositiveIntegerField(default=0, verbose_name=_('price'))
     quantity = models.PositiveIntegerField(default=0, verbose_name=_('quantity'))
 
-    def __str__(self):
-        return f'{self.product} - ' + "{:,}".format(self.price)
-
     class Meta:
         verbose_name = _('Product Quantity')
         verbose_name_plural = _('Product Quantities')
+
+    def __str__(self) -> str:
+        return f'{self.product} - ' + "{:,}".format(self.price)
 
 
 class Coupon(BaseModel):
@@ -197,11 +197,11 @@ class Coupon(BaseModel):
     discount_code = models.CharField(max_length=200, verbose_name=_('discount_code'))
     expired_date = models.DateField(null=True, verbose_name=_('expired_date'))
 
+    class Meta:
+        verbose_name = _('Coupon')
+        verbose_name_plural = _('Coupons')
+
     def check_user(self, user) -> bool:
         if user != self.user:
             return False
         return True
-
-    class Meta:
-        verbose_name = _('Coupon')
-        verbose_name_plural = _('Coupons')

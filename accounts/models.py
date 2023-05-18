@@ -19,14 +19,14 @@ class User(AbstractUser):
     national_id = models.CharField(max_length=10, blank=True, null=True,
                                    verbose_name=_('national_id'), validators=[validate_national_code])
 
-    def __str__(self):
-        return self.username
-
     class Meta:
         verbose_name = _('User')
         verbose_name_plural = _('Users')
 
-    def full_name(self):
+    def __str__(self):
+        return self.username
+
+    def full_name(self) -> str:
         return '{0} {1}'.format(self.first_name, self.last_name)
 
 
@@ -44,12 +44,12 @@ class Address(models.Model):
     city = models.ForeignKey(to='base.City', on_delete=models.PROTECT, verbose_name=_('city'))
     description = models.TextField(verbose_name=_('description'))
 
-    def __str__(self) -> str:
-        return self.user.username
-
     class Meta:
         verbose_name = _('Address')
         verbose_name_plural = _('Addresses')
+
+    def __str__(self) -> str:
+        return self.user.username
 
 
 class Profile(models.Model):
@@ -65,9 +65,9 @@ class Profile(models.Model):
     city = models.ForeignKey(to='base.City', on_delete=models.SET_NULL,
                              blank=True, null=True, verbose_name=_('city'))
 
-    def __str__(self) -> str:
-        return self.user.cell_phone
-
     class Meta:
         verbose_name = _('Profile')
         verbose_name_plural = _('Profiles')
+
+    def __str__(self) -> str:
+        return self.user.cell_phone

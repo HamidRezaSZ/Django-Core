@@ -27,20 +27,20 @@ class Exam(BaseModel):
     correct_questions_weight = models.PositiveIntegerField(
         default=1, verbose_name=_('correct_questions_weight'))
 
+    class Meta:
+        verbose_name = _('Exam')
+        verbose_name_plural = _('Exams')
+        ordering = ('created_date', 'title')
+
     def __str__(self) -> str:
         return self.title
 
-    def remaining_time(self, user):
+    def remaining_time(self, user) -> int:
         date = UserExam.objects.get(user__id=user, exam=self).created_date
         remaning = date + self.duration - timezone.now()
         if remaning.total_seconds() > 0:
             return remaning.total_seconds()
         return 0
-
-    class Meta:
-        verbose_name = _('Exam')
-        verbose_name_plural = _('Exams')
-        ordering = ('created_date', 'title')
 
 
 class UserExam(BaseModel):
@@ -49,12 +49,12 @@ class UserExam(BaseModel):
     exam = models.ForeignKey(to=Exam, verbose_name=_(
         'exam'), on_delete=models.PROTECT)
 
-    def __str__(self) -> str:
-        return f'{self.exam}'
-
     class Meta:
         verbose_name = _('User Exam')
         verbose_name_plural = _('User Exams')
+
+    def __str__(self) -> str:
+        return f'{self.exam}'
 
 
 class Question(BaseModel):
@@ -72,12 +72,12 @@ class Question(BaseModel):
     correct_answer = models.IntegerField(
         choices=CORRECT_ANSWER, verbose_name=_('correct_answer'))
 
-    def __str__(self) -> str:
-        return f'{self.question}'
-
     class Meta:
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
+
+    def __str__(self) -> str:
+        return f'{self.question}'
 
 
 class DescriptiveAnswer(BaseModel):
@@ -85,12 +85,12 @@ class DescriptiveAnswer(BaseModel):
         'exam'), on_delete=models.CASCADE)
     content = RichTextUploadingField(verbose_name=_('content'))
 
-    def __str__(self) -> str:
-        return f'{self.exam}'
-
     class Meta:
         verbose_name = _('Descriptive Answer')
         verbose_name_plural = _('Descriptive Answers')
+
+    def __str__(self) -> str:
+        return f'{self.exam}'
 
 
 class UserQuestion(BaseModel):
@@ -103,12 +103,12 @@ class UserQuestion(BaseModel):
     question = models.ForeignKey(to=Question, on_delete=models.PROTECT)
     answer = models.IntegerField(choices=ANSWER, verbose_name=_('answer'))
 
-    def __str__(self) -> str:
-        return f'{self.user} - {self.question} - {self.answer}'
-
     class Meta:
         verbose_name = _('User Question')
         verbose_name_plural = _('User Questions')
+
+    def __str__(self) -> str:
+        return f'{self.user} - {self.question} - {self.answer}'
 
 
 class Result(BaseModel):
@@ -127,9 +127,9 @@ class Result(BaseModel):
     max_score = models.FloatField(default=0, verbose_name=_('max_score'))
     score = models.FloatField(default=0, verbose_name=_('score'))
 
-    def __str__(self) -> str:
-        return f'{self.user} - {self.exam}'
-
     class Meta:
         verbose_name = _('Result')
         verbose_name_plural = _('Results')
+
+    def __str__(self) -> str:
+        return f'{self.user} - {self.exam}'

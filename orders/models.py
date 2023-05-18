@@ -11,23 +11,23 @@ class DeliveryType(BaseModel):
     description = models.TextField(verbose_name=_('description'))
     delivery_price = models.PositiveIntegerField(default=0, verbose_name=_('delivery_price'))
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = _('Delivery Type')
         verbose_name_plural = _('Delivery Types')
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class OrderStatus(BaseModel):
     status = models.CharField(max_length=200, verbose_name=_('status'))
 
-    def __str__(self):
-        return self.status
-
     class Meta:
         verbose_name = _('Order Status')
         verbose_name_plural = _('Order Statuses')
+
+    def __str__(self) -> str:
+        return self.status
 
 
 class Order(models.Model):
@@ -41,6 +41,10 @@ class Order(models.Model):
     discount_amount = models.PositiveIntegerField(default=0, verbose_name=_('discount_amount'))
     status = models.ForeignKey(to=OrderStatus, on_delete=models.CASCADE, verbose_name=_('status'))
 
+    class Meta:
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')
+
     def save(self, *args, **kwargs) -> None:
         cart_obj = Cart.objects.get(user=self.user)
         self.price = cart_obj.get_cart_price() + self.delivery_type.delivery_price
@@ -51,13 +55,8 @@ class Order(models.Model):
             OrderItem.objects.create(order=self, product_quantity=item.product_quantity, quantity=item.quantity)
         cart_obj.cartitem_set.filter().delete()
 
-
-    def get_order_price(self):
+    def get_order_price(self) -> int:
         return sum([item.get_order_item_price() for item in self.orderitem_set.all()])
-
-    class Meta:
-        verbose_name = _('Order')
-        verbose_name_plural = _('Orders')
 
 
 class OrderItem(models.Model):
@@ -66,12 +65,12 @@ class OrderItem(models.Model):
         'products.ProductQuantity', on_delete=models.PROTECT, verbose_name=_('product_quantity'))
     quantity = models.PositiveIntegerField(default=1, verbose_name=_('quantity'))
 
-    def __str__(self):
-        return f'{self.product_quantity}'
-
-    def get_order_item_price(self):
-        return self.product_quantity.price * self.quantity
-
     class Meta:
         verbose_name = _('Order Item')
         verbose_name_plural = _('Order Items')
+
+    def __str__(self) -> str:
+        return f'{self.product_quantity}'
+
+    def get_order_item_price(self) -> int:
+        return self.product_quantity.price * self.quantity

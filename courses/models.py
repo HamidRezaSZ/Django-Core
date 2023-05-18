@@ -19,24 +19,24 @@ class CourseCategory(BaseModel):
     meta_description = models.TextField(verbose_name=_(
         'meta_description'), null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.title
-
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Teacher(BaseModel):
     user = models.ForeignKey(
         to='accounts.User', on_delete=models.CASCADE, verbose_name=_('user'))
 
-    def __str__(self) -> str:
-        return self.user.username
-
     class Meta:
         verbose_name = _('Teacher')
         verbose_name_plural = _('Teachers')
+
+    def __str__(self) -> str:
+        return self.user.username
 
 
 class Course(BaseModel):
@@ -57,6 +57,10 @@ class Course(BaseModel):
     price = models.PositiveIntegerField(verbose_name=_('price'))
     for_sale = models.BooleanField(default=True, verbose_name=_('for_sale'))
 
+    class Meta:
+        verbose_name = _('Course')
+        verbose_name_plural = _('Courses')
+
     def __str__(self) -> str:
         return self.title
 
@@ -71,10 +75,6 @@ class Course(BaseModel):
             return True
         return False
 
-    class Meta:
-        verbose_name = _('Course')
-        verbose_name_plural = _('Courses')
-
 
 class Lesson(BaseModel):
     course = models.ForeignKey(to=Course, verbose_name=_(
@@ -85,6 +85,10 @@ class Lesson(BaseModel):
     description = RichTextUploadingField(verbose_name=_('description'))
     price = models.PositiveIntegerField(verbose_name=_('price'))
     for_sale = models.BooleanField(default=True, verbose_name=_('for_sale'))
+
+    class Meta:
+        verbose_name = _('Lesson')
+        verbose_name_plural = _('Lessons')
 
     def __str__(self) -> str:
         return f'{self.title} - {self.course.title}'
@@ -98,10 +102,6 @@ class Lesson(BaseModel):
             return True
         return False
 
-    class Meta:
-        verbose_name = _('Lesson')
-        verbose_name_plural = _('Lessons')
-
 
 class Chapter(BaseModel):
     lesson = models.ForeignKey(to=Lesson, verbose_name=_(
@@ -113,17 +113,18 @@ class Chapter(BaseModel):
     price = models.PositiveIntegerField(verbose_name=_('price'))
     for_sale = models.BooleanField(default=True, verbose_name=_('for_sale'))
 
+    class Meta:
+        verbose_name = _('Chapter')
+        verbose_name_plural = _('Chapters')
+
     def __str__(self) -> str:
         return f'{self.title} - {self.lesson.title} - {self.lesson.course.title}'
 
     def full_access_user(self, user) -> bool:
-        if set(self.note_set.all().values_list('id', flat=True)) == set(Note.objects.filter(participants=user, chapter=self).values_list('id', flat=True)):
+        if set(self.note_set.all().values_list('id', flat=True)) == set(Note.objects.filter(
+                participants=user, chapter=self).values_list('id', flat=True)):
             return True
         return False
-
-    class Meta:
-        verbose_name = _('Chapter')
-        verbose_name_plural = _('Chapters')
 
 
 class Note(BaseModel):
@@ -140,23 +141,23 @@ class Note(BaseModel):
     show_on_home_page = models.BooleanField(
         default=False, verbose_name=_('show_on_home_page'))
 
+    class Meta:
+        verbose_name = _('Note')
+        verbose_name_plural = _('Notes')
+
     def __str__(self) -> str:
         return f'{self.title} - {self.chapter.title} - {self.chapter.lesson.title} - {self.chapter.lesson.course.title}'
 
-    def add_to_participants(self, user):
+    def add_to_participants(self, user) -> None:
         self.participants.add(user)
+
+    def remove_from_participants(self, user) -> None:
+        self.participants.remove(user)
 
     def full_access_user(self, user) -> bool:
         if user in self.participants.all():
             return True
         return False
-
-    def remove_from_participants(self, user):
-        self.participants.remove(user)
-
-    class Meta:
-        verbose_name = _('Note')
-        verbose_name_plural = _('Notes')
 
 
 class NoteTaking(models.Model):
@@ -166,9 +167,9 @@ class NoteTaking(models.Model):
         to='accounts.User', on_delete=models.CASCADE, verbose_name=_('user'))
     content = RichTextUploadingField(verbose_name=_('content'))
 
-    def __str__(self) -> str:
-        return f'{self.user - self.note}'
-
     class Meta:
         verbose_name = _('Note Taking')
         verbose_name_plural = _('Note Taking')
+
+    def __str__(self) -> str:
+        return f'{self.user - self.note}'

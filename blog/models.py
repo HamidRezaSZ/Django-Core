@@ -12,12 +12,11 @@ class Category(BaseModel):
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('parent'), related_name='children')
 
-    def clean(self) -> None:
-        if self.parent == self:
-            raise ValidationError('parent must be different')
-        return super().clean()
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
-    def __str__(self):
+    def __str__(self) -> str:
         full_path = [self.title]
         k = self.parent
         while k is not None:
@@ -25,9 +24,10 @@ class Category(BaseModel):
             k = k.parent
         return ' -> '.join(full_path[::-1])
 
-    class Meta:
-        verbose_name = _('Category')
-        verbose_name_plural = _('Categories')
+    def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError('parent must be different')
+        return super().clean()
 
 
 class Author(BaseModel):
@@ -37,12 +37,12 @@ class Author(BaseModel):
     avatar = models.FileField(verbose_name=_('avatar'))
     avatar_alt = models.CharField(max_length=200, verbose_name=_('avatar_alt'))
 
-    def __str__(self):
-        return f'{self.user.username}'
-
     class Meta:
         verbose_name = _('Author')
         verbose_name_plural = _('Authors')
+
+    def __str__(self) -> str:
+        return f'{self.user.username}'
 
 
 class Post(BaseModel):
@@ -63,13 +63,13 @@ class Post(BaseModel):
     meta_description = models.TextField(verbose_name=_(
         'meta_description'), null=True, blank=True)
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = _('Post')
         verbose_name_plural = _('Posts')
         ordering = ('-created_date',)
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Gallery(BaseModel):
@@ -78,12 +78,12 @@ class Gallery(BaseModel):
     image = models.FileField(verbose_name=_('image'))
     image_alt = models.CharField(verbose_name=_('image_alt'), max_length=200)
 
-    def __str__(self):
-        return f'{self.image.url}'
-
     class Meta:
         verbose_name = _('Gallery')
         verbose_name_plural = _('Galleries')
+
+    def __str__(self) -> str:
+        return f'{self.image.url}'
 
 
 class Tag(BaseModel):
@@ -91,12 +91,12 @@ class Tag(BaseModel):
     post = models.ForeignKey(
         to=Post, on_delete=models.CASCADE, verbose_name=_('post'))
 
-    def __str__(self):
-        return f'{self.title}'
-
     class Meta:
         verbose_name = _('Tag')
         verbose_name_plural = _('Tags')
+
+    def __str__(self) -> str:
+        return f'{self.title}'
 
 
 class Comment(models.Model):
@@ -115,13 +115,13 @@ class Comment(models.Model):
     is_accepted = models.BooleanField(
         default=False, verbose_name=_('is_accepted'))
 
-    def __str__(self):
-        return self.email
-
     class Meta:
         verbose_name = _('Comment')
         verbose_name_plural = _('Comments')
         ordering = ('created_date',)
+
+    def __str__(self) -> str:
+        return self.email
 
 
 class RelatedPost(models.Model):
@@ -131,9 +131,9 @@ class RelatedPost(models.Model):
     related_posts = models.ManyToManyField(
         to=Post, verbose_name=_('related_posts'), null=True)
 
-    def __str__(self):
-        return f'{self.post.title}'
-
     class Meta:
         verbose_name = _('Related Post')
         verbose_name_plural = _('Related Posts')
+
+    def __str__(self) -> str:
+        return f'{self.post.title}'

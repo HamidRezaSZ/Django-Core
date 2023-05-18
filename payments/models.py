@@ -12,12 +12,12 @@ from base.models import BaseModel
 class PaymentStatus(BaseModel):
     status = models.CharField(max_length=200, verbose_name=_('status'))
 
-    def __str__(self):
-        return self.status
-
     class Meta:
         verbose_name = _('Payment Status')
         verbose_name_plural = _('Payment Statuses')
+
+    def __str__(self) -> str:
+        return self.status
 
 
 class PaymentGateWay(BaseModel):
@@ -30,12 +30,12 @@ class PaymentGateWay(BaseModel):
         max_length=500, verbose_name=_('startpay_url'))
     merchant = models.CharField(max_length=200, verbose_name=_('merchant'))
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = _('Payment GateWay')
         verbose_name_plural = _('Payment GateWays')
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Payment(models.Model):
@@ -54,15 +54,15 @@ class Payment(models.Model):
     created_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_('created_date'))
 
-    def __str__(self):
-        return f'{self.user} - {self.amount} : {self.status}'
-
     class Meta:
         verbose_name = _('Payment')
         verbose_name_plural = _('Payments')
         ordering = ('created_date',)
 
-    def save(self, *args, **kwargs):
+    def __str__(self) -> str:
+        return f'{self.user} - {self.amount} : {self.status}'
+
+    def save(self, *args, **kwargs) -> None:
         if not self.pk:
             status, created = PaymentStatus.objects.get_or_create(
                 status='Pending')
