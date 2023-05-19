@@ -42,7 +42,7 @@ class Address(models.Model):
     address = models.TextField(verbose_name=_('address'))
     zip_code = models.CharField(max_length=30, verbose_name=_('zip_code'))
     city = models.ForeignKey(to='base.City', on_delete=models.PROTECT, verbose_name=_('city'))
-    description = models.TextField(verbose_name=_('description'))
+    description = models.TextField(verbose_name=_('description'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Address')
