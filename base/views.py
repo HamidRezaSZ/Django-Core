@@ -164,6 +164,34 @@ class ObjectInstanceView(CreateAPIView):
     serializer_class = ObjectInstanceSerializer
     permission_classes = (IsAdminUser,)
 
+    def clone_object(self, obj, attrs={}):
+        clone = obj._meta.model.objects.get(pk=obj.pk)
+        clone.pk = None
+
+        for key, value in attrs.items():
+            setattr(clone, key, value)
+
+        clone.save()
+
+        fields = clone._meta.get_fields()
+        for field in fields:
+            if not field.auto_created and field.many_to_many:
+                for row in getattr(obj, field.name).all():
+                    getattr(clone, field.name).add(row)
+
+            if field.auto_created and field.is_relation:
+                if field.many_to_many:
+                    pass
+                else:
+                    attrs = {
+                        field.remote_field.name: clone
+                    }
+                    children = field.related_model.objects.filter(**{field.remote_field.name: obj})
+                    for child in children:
+                        self.clone_object(child, attrs)
+
+        return clone
+
     def post(self, request, *args, **kwargs):
         serializer = ObjectInstanceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -179,8 +207,8 @@ class ObjectInstanceView(CreateAPIView):
 
         try:
             for _ in range(quantity):
-                obj.pk = None
-                obj.save()
+                self.clone_object(obj)
+
         except Exception as e:
             raise e
 
