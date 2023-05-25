@@ -58,6 +58,7 @@ class Post(BaseModel):
     authors = models.ManyToManyField(to=Author, verbose_name=_('authors'))
     show_in_home_page = models.BooleanField(
         default=False, verbose_name=_('show_in_home_page'))
+    schema = RichTextUploadingField(verbose_name=_('schema'))
     meta_title = models.CharField(max_length=128, verbose_name=_(
         'meta_title'), null=True, blank=True)
     meta_description = models.TextField(verbose_name=_(
