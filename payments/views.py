@@ -70,7 +70,9 @@ class VerifyPayment(ListAPIView):
             if len(req.json()['errors']) == 0:
                 t_status = req.json()['data']['code']
                 if t_status == 100:
-                    payment_obj.status = 'موفق'
+                    status, created = PaymentStatus.objects.get_or_create(
+                        status='موفق')
+                    payment_obj.status = status
                     payment_obj.save(update_fields=['status'])
 
                     return Response('Transaction success.\nRefID: ' + str(
@@ -81,7 +83,9 @@ class VerifyPayment(ListAPIView):
                         req.json()['data']['message']
                     ))
                 else:
-                    payment_obj.status = 'ناموفق'
+                    status, created = PaymentStatus.objects.get_or_create(
+                        status='ناموفق')
+                    payment_obj.status = status
                     payment_obj.save(update_fields=['status'])
 
                     return Response('Transaction failed.\nStatus: ' + str(
@@ -92,7 +96,9 @@ class VerifyPayment(ListAPIView):
                 e_message = req.json()['errors']['message']
                 return Response(f"Error code: {e_code}, Error Message: {e_message}")
         else:
-            payment_obj.status = 'لغو شده'
+            status, created = PaymentStatus.objects.get_or_create(
+                status='لغو شده')
+            payment_obj.status = status
             payment_obj.save(update_fields=['status'])
 
             return Response('Transaction failed or canceled by user')
