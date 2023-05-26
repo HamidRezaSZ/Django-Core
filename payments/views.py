@@ -32,6 +32,11 @@ class PaymentView(ModelViewSet):
         pk = self.kwargs['pk']
         return get_object_or_404(Payment, pk=pk, user=self.request.user)
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"user": self.request.user})
+        return context
+
 
 class PaymentGateWayView(ModelViewSet):
     permission_classes_by_action = {
