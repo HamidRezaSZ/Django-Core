@@ -26,8 +26,8 @@ class QuestionAdmin(TranslationAdmin):
     list_editable = ('is_active',)
 
 
-@admin.register(UserQuestion)
-class UserQuestionAdmin(admin.ModelAdmin):
+@admin.register(UserAnswer)
+class UserAnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'exam', 'question')
 
 

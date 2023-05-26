@@ -93,7 +93,7 @@ class DescriptiveAnswer(BaseModel):
         return f'{self.exam}'
 
 
-class UserQuestion(BaseModel):
+class UserAnswer(BaseModel):
     ANSWER = [(int(x), str(x)) for x in range(1, 5)]
 
     user = models.ForeignKey(
@@ -104,8 +104,8 @@ class UserQuestion(BaseModel):
     answer = models.IntegerField(choices=ANSWER, verbose_name=_('answer'))
 
     class Meta:
-        verbose_name = _('User Question')
-        verbose_name_plural = _('User Questions')
+        verbose_name = _('User Answer')
+        verbose_name_plural = _('User Answers')
 
     def __str__(self) -> str:
         return f'{self.user} - {self.question} - {self.answer}'

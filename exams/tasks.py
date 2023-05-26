@@ -11,11 +11,10 @@ def calculate_score(no_correct_questions, no_wrong_questions, no_all_questions, 
 
 @shared_task
 def create_result(user_pk, exam_pk):
-    from courses.models import Note
 
     from accounts.models import User
 
-    from .models import Exam, Result, UserQuestion
+    from .models import Exam, Result, UserAnswer
 
     exam = Exam.objects.get(id=exam_pk)
     user = User.objects.get(id=user_pk)
@@ -26,32 +25,34 @@ def create_result(user_pk, exam_pk):
     if exam_childs.exists():
         for child in exam_childs:
             no_all_questions = child.question_set.filter().count()
-            no_correct_questions = UserQuestion.objects.filter(
+            no_correct_questions = UserAnswer.objects.filter(
                 user=user, exam=child, answer=F('question__correct_answer')).count()
-            no_answered_questions = UserQuestion.objects.filter(
+            no_answered_questions = UserAnswer.objects.filter(
                 user=user, exam=child).count()
             no_not_answered = no_all_questions - no_answered_questions
             no_wrong_questions = no_all_questions - no_correct_questions - no_not_answered
             score = calculate_score(no_correct_questions,
                                     no_wrong_questions, no_all_questions, child)
-            result_child.append(Result.objects.create(user=user, exam=child,
-                                                      no_all_questions=no_all_questions, no_wrong_questions=no_wrong_questions, no_correct_questions=no_correct_questions, score=score))
+            result_child.append(
+                Result.objects.create(
+                    user=user, exam=child, no_all_questions=no_all_questions, no_wrong_questions=no_wrong_questions,
+                    no_correct_questions=no_correct_questions, score=score))
             all_score += score
             all_questions += no_all_questions
         childs_count = exam_childs.count()
         max_score = calculate_score(all_questions,
                                     0, all_questions, exam)
         score = all_score/childs_count
-        parent = Result.objects.create(user=user, exam=exam,
-                                       no_all_questions=0, no_wrong_questions=0, no_correct_questions=0, score=score, max_score=max_score)
+        parent = Result.objects.create(user=user, exam=exam, no_all_questions=0,
+                                       no_wrong_questions=0, no_correct_questions=0, score=score, max_score=max_score)
         for child in result_child:
             child.parent = parent
             child.save()
     else:
         no_all_questions = exam.question_set.filter().count()
-        no_correct_questions = UserQuestion.objects.filter(
+        no_correct_questions = UserAnswer.objects.filter(
             user=user, exam=exam, answer=F('question__correct_answer')).count()
-        no_answered_questions = UserQuestion.objects.filter(
+        no_answered_questions = UserAnswer.objects.filter(
             user=user, exam=exam).count()
         no_not_answered = no_all_questions - no_answered_questions
         no_wrong_questions = no_all_questions - no_correct_questions - no_not_answered
@@ -59,5 +60,6 @@ def create_result(user_pk, exam_pk):
                                 no_wrong_questions, no_all_questions, exam)
         max_score = calculate_score(no_all_questions,
                                     0, no_all_questions, exam)
-        Result.objects.create(user=user, exam=exam,
-                              no_all_questions=no_all_questions, no_wrong_questions=no_wrong_questions, no_correct_questions=no_correct_questions, score=score, max_score=max_score)
+        Result.objects.create(user=user, exam=exam, no_all_questions=no_all_questions,
+                              no_wrong_questions=no_wrong_questions, no_correct_questions=no_correct_questions,
+                              score=score, max_score=max_score)

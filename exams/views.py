@@ -18,8 +18,8 @@ class ExamView(ModelViewSet):
     }
 
     def get_queryset(self):
-        query = [exam for exam in Exam.objects.filter(
-            is_active=True) if exam.content_type.get_object_for_this_type(id=exam.object_id).full_access_user(self.request.user)]
+        query = [exam for exam in Exam.objects.filter(is_active=True) if exam.content_type.get_object_for_this_type(
+            id=exam.object_id).full_access_user(self.request.user)]
         [UserExam.objects.get_or_create(
             exam=exam, user=self.request.user) for exam in query]
 
@@ -39,7 +39,7 @@ class ExamView(ModelViewSet):
         return context
 
 
-class UserQuestionView(ModelViewSet):
+class UserAnswerView(ModelViewSet):
     permission_classes_by_action = {
         "list": [IsAdminUser],
         "retrieve": [IsAdminUser],
@@ -50,7 +50,7 @@ class UserQuestionView(ModelViewSet):
     }
 
     def get_queryset(self):
-        return UserQuestion.objects.filter(user=self.request.user)
+        return UserAnswer.objects.filter(user=self.request.user)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -58,7 +58,7 @@ class UserQuestionView(ModelViewSet):
         return context
 
     filterset_fields = ['exam', 'question']
-    serializer_class = UserQuestionSerializer
+    serializer_class = UserAnswerSerializer
 
 
 class ResultView(ModelViewSet):

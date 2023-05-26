@@ -22,7 +22,7 @@ class SubExamSerializer(ModelSerializer):
 
     def get_no_done_questions(self, obj):
         user = self.context['user']
-        return UserQuestion.objects.filter(exam=obj, user=user).count()
+        return UserAnswer.objects.filter(exam=obj, user=user).count()
 
 
 class QuestionSerializer(ModelSerializer):
@@ -54,7 +54,7 @@ class ExamItemSerializer(ModelSerializer):
 
     def get_no_done_questions(self, obj):
         user = self.context['user']
-        return UserQuestion.objects.filter(exam=obj, user=user).count()
+        return UserAnswer.objects.filter(exam=obj, user=user).count()
 
 
 class ExamSerializer(ModelSerializer):
@@ -73,9 +73,9 @@ class ExamSerializer(ModelSerializer):
         return QuestionSerializer(obj.question_set.filter(is_active=True), many=True).data
 
 
-class UserQuestionSerializer(ModelSerializer):
+class UserAnswerSerializer(ModelSerializer):
     class Meta:
-        model = UserQuestion
+        model = UserAnswer
         exclude = ('user',)
 
     def validate(self, attrs):
@@ -85,14 +85,11 @@ class UserQuestionSerializer(ModelSerializer):
             raise serializers.ValidationError(
                 _('You dont permission to start this exam'))
 
-        duration = exam.duration
-        user_exam_obj = get_object_or_404(
-            UserExam, user=user, exam=exam)
-
-        if exam.parent:
+        while exam:
             user_exam_obj = get_object_or_404(
-                UserExam, user=user, exam=exam.parent)
-            duration = exam.parent.duration
+                UserExam, user=user, exam=exam)
+            duration = exam.duration
+            exam = exam.parent
 
         if timezone.now() > user_exam_obj.created_date + duration:
             raise serializers.ValidationError(_('Exam has finished'))
@@ -102,7 +99,7 @@ class UserQuestionSerializer(ModelSerializer):
     def create(self, validated_data):
         user = self.context['user']
         validated_data['user'] = user
-        item = UserQuestion.objects.filter(
+        item = UserAnswer.objects.filter(
             user=user, exam=validated_data['exam'], question=validated_data['question'])
         if item.exists():
             item = item.first()
