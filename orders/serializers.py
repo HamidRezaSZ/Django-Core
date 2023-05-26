@@ -67,7 +67,7 @@ class OrderSerializer(ModelSerializer):
                     if coupon_obj.user and coupon_obj.discount_amount != 0:
                         validated_data['discount_amount'] = coupon_obj.discount_amount
                     elif coupon_obj.user and coupon_obj.discount_percent != 0:
-                        cart_obj = Cart.objects.get(user=user)
+                        cart_obj = Cart.objects.get_or_create(user=user)
                         price = cart_obj.get_cart_price()
                         validated_data['discount_amount'] = price * (coupon_obj.discount_percent/100)
             else:

@@ -21,7 +21,7 @@ class CartItemSerializer(ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['user']
-        cart_obj = Cart.objects.get(user=user)
+        cart_obj = Cart.objects.get_or_create(user=user)
         item = CartItem.objects.filter(
             cart=cart_obj, product_quantity=validated_data['product_quantity'])
         if item.exists():

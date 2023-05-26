@@ -195,7 +195,7 @@ class ProductCommentSerializer(ModelSerializer):
 
     class Meta:
         model = ProductComment
-        exclude = ('product', 'is_accepted')
+        exclude = ('is_accepted',)
         extra_kwargs = {
             'email': {'write_only': True},
         }

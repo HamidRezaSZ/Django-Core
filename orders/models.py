@@ -46,7 +46,7 @@ class Order(models.Model):
         verbose_name_plural = _('Orders')
 
     def save(self, *args, **kwargs) -> None:
-        cart_obj = Cart.objects.get(user=self.user)
+        cart_obj = Cart.objects.get_or_create(user=self.user)
         self.price = cart_obj.get_cart_price() + self.delivery_type.delivery_price
         payment_obj = Payment.objects.create(user=self.user, amount=self.price-self.discount_amount)
         self.payment = payment_obj
