@@ -1,7 +1,6 @@
 import json
 
 import requests
-from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -59,51 +58,36 @@ class PaymentGateWayView(ModelViewSet):
 
 class VerifyPayment(ListAPIView):
 
-    def get(self, request, authority, status):
+    def get(self, request):
+        authority = request.query_params.get('Authority')
         payment_obj = Payment.objects.get(authority=authority)
+        data = {
+            "MerchantID":  payment_obj.payment_gateway.merchant,
+            "Amount": payment_obj.amount,
+            "Authority": authority,
+        }
+        data = json.dumps(data)
 
-        if status == 'OK':
-            req_header = {"accept": "application/json",
-                          "content-type": "application/json'"}
-            req_data = {
-                "merchant_id": settings.MERCHANT,
-                "amount": payment_obj.amount,
-                "authority": authority
-            }
-            req = requests.post(url=settings.ZP_API_VERIFY,
-                                data=json.dumps(req_data), headers=req_header)
-            if len(req.json()['errors']) == 0:
-                t_status = req.json()['data']['code']
-                if t_status == 100:
-                    status, created = PaymentStatus.objects.get_or_create(
-                        status='موفق')
-                    payment_obj.status = status
-                    payment_obj.save(update_fields=['status'])
+        headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+        response = requests.post(payment_obj.payment_gateway.verify_url, data=data, headers=headers)
 
-                    return Response('Transaction success.\nRefID: ' + str(
-                        req.json()['data']['ref_id']
-                    ))
-                elif t_status == 101:
-                    return Response('Transaction submitted : ' + str(
-                        req.json()['data']['message']
-                    ))
-                else:
-                    status, created = PaymentStatus.objects.get_or_create(
-                        status='ناموفق')
-                    payment_obj.status = status
-                    payment_obj.save(update_fields=['status'])
-
-                    return Response('Transaction failed.\nStatus: ' + str(
-                        req.json()['data']['message']
-                    ))
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+                status, created = PaymentStatus.objects.get_or_create(
+                    status='موفق')
+                payment_obj.status = status
+                payment_obj.save(update_fields=['status'])
+                return Response({'status': True, 'RefID': response['RefID']})
             else:
-                e_code = req.json()['errors']['code']
-                e_message = req.json()['errors']['message']
-                return Response(f"Error code: {e_code}, Error Message: {e_message}")
-        else:
-            status, created = PaymentStatus.objects.get_or_create(
-                status='لغو شده')
-            payment_obj.status = status
-            payment_obj.save(update_fields=['status'])
+                status, created = PaymentStatus.objects.get_or_create(
+                    status='ناموفق')
+                payment_obj.status = status
+                payment_obj.save(update_fields=['status'])
+                return Response({'status': False, 'code': str(response['Status'])})
 
-            return Response('Transaction failed or canceled by user')
+        status, created = PaymentStatus.objects.get_or_create(
+            status='لغو شده')
+        payment_obj.status = status
+        payment_obj.save(update_fields=['status'])
+        return Response(response)

@@ -9,6 +9,5 @@ router.register(r'payment-gateways', PaymentGateWayView,
                 basename='payment-gateway')
 
 urlpatterns = [
-    path('verify/<str:authority>/<str:status>/',
-         VerifyPayment.as_view(), name='verify'),
+    path('verify/', VerifyPayment.as_view(), name='verify'),
 ] + router.urls

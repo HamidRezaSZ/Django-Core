@@ -64,28 +64,36 @@ class Payment(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         if not self.pk:
+            data = {
+                "MerchantID": self.payment_gateway.merchant,
+                "Amount": self.amount,
+                "Description": "Core",
+                "CallbackURL": settings.CALLBACKURL,
+            }
+            data = json.dumps(data)
+            headers = {'content-type': 'application/json', 'content-length': str(len(data))}
             status, created = PaymentStatus.objects.get_or_create(
                 status='Pending')
             self.status = status
-            req_data = {
-                "merchant_id": settings.MERCHANT,
-                "amount": self.amount,
-                "callback_url": settings.CALLBACKURL,
-                "description": "Core"
-            }
-            req_header = {"accept": "application/json",
-                          "content-type": "application/json'"}
-            req = requests.post(url=settings.ZP_API_REQUEST,
-                                data=json.dumps(req_data), headers=req_header)
-            authority = req.json()['data']['authority']
+            try:
+                response = requests.post(self.payment_gateway.request_url, data=data, headers=headers, timeout=10)
+                if response.status_code == 200:
+                    response = response.json()
+                    if response['Status'] == 100:
+                        self.authority = response['Authority']
+                        self.link = self.payment_gateway.startpay_url + str(response['Authority'])
+                        self.status = status
+                    else:
+                        status, created = PaymentStatus.objects.get_or_create(
+                            status=response['Status'])
+                        self.status = status
 
-            if len(req.json()['errors']) == 0:
-                self.authority = authority
-                self.link = settings.ZP_API_STARTPAY.format(
-                    authority=authority)
-            else:
-                e_code = req.json()['errors']['code']
-                e_message = req.json()['errors']['message']
-                self.error = f"Error code: {e_code}, Error Message: {e_message}"
+                status, created = PaymentStatus.objects.get_or_create(
+                    status='Error')
+                self.status = status
+            except Exception:
+                status, created = PaymentStatus.objects.get_or_create(
+                    status='Error')
+                self.status = status
 
         super(Payment, self).save(*args, **kwargs)
