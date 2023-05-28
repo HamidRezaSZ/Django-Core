@@ -19,6 +19,4 @@ router.register(r'cities', CityView)
 router.register(r'terms-and-conditions', TermsAndConditionsView)
 router.register(r'dynamic-texts', DynamicTextView)
 
-urlpatterns = [
-    path('object-instance/', ObjectInstanceView.as_view()),
-] + router.urls
+urlpatterns = router.urls

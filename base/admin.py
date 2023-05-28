@@ -135,3 +135,8 @@ class DynamicTextAdmin(TranslationAdmin):
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'content_type', 'action_flag', 'action_time')
+
+
+@admin.register(ObjectInstance)
+class ObjectInstanceAdmin(admin.ModelAdmin):
+    pass

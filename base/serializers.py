@@ -116,10 +116,3 @@ class DynamicTextSerializer(ModelSerializer):
     class Meta:
         model = DynamicText
         fields = '__all__'
-
-
-class ObjectInstanceSerializer(serializers.Serializer):
-    model_name = serializers.CharField()
-    app_name = serializers.CharField()
-    quantity = serializers.IntegerField(min_value=1)
-    object_id = serializers.IntegerField(min_value=1)
