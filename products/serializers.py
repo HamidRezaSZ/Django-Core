@@ -1,44 +1,25 @@
 from django.db.models import Avg
 from rest_framework import serializers
 
-from base.base_serializers import ModelSerializer
+from base.base_serializers import *
 
 from .models import *
 
 
-class SubProductBrandSerializer(ModelSerializer):
-
-    class Meta:
-        model = ProductBrand
-        fields = '__all__'
-
-
 class ProductBrandSerializer(ModelSerializer):
-    sub_brands = serializers.SerializerMethodField()
+    children = RecursiveField(many=True)
 
     class Meta:
         model = ProductBrand
-        fields = '__all__'
-
-    def get_sub_brands(self, obj):
-        return SubProductBrandSerializer(obj.children.filter(is_active=True), many=True).data
-
-
-class SubProductCategorySerializer(ModelSerializer):
-    class Meta:
-        model = ProductCategory
         fields = '__all__'
 
 
 class ProductCategorySerializer(ModelSerializer):
-    sub_categories = serializers.SerializerMethodField()
+    children = RecursiveField(many=True)
 
     class Meta:
         model = ProductCategory
         fields = '__all__'
-
-    def get_sub_categories(self, obj):
-        return SubProductCategorySerializer(obj.children.filter(is_active=True), many=True).data
 
 
 class ProductSerializer(ModelSerializer):
@@ -180,18 +161,8 @@ class ProductQuantitiesSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class SubProductCommentSerializer(ModelSerializer):
-
-    class Meta:
-        model = ProductComment
-        exclude = ('product', 'is_accepted')
-        extra_kwargs = {
-            'email': {'write_only': True},
-        }
-
-
 class ProductCommentSerializer(ModelSerializer):
-    sub_comments = serializers.SerializerMethodField()
+    children = RecursiveField(many=True)
 
     class Meta:
         model = ProductComment
@@ -204,6 +175,3 @@ class ProductCommentSerializer(ModelSerializer):
         user = self.context.get('user')
         validated_data['user'] = user
         return super().create(validated_data)
-
-    def get_sub_comments(self, obj):
-        return SubProductCommentSerializer(obj.children.filter(is_accepted=True), many=True, read_only=True).data

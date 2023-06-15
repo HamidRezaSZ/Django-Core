@@ -1,24 +1,15 @@
 from rest_framework import serializers
 
-from base.base_serializers import ModelSerializer
+from base.base_serializers import *
 from blog.models import *
 
 
-class SubCategorySerializer(ModelSerializer):
-    class Meta:
-        model = Category
-        exclude = ('is_active', 'created_date', 'modified_date', 'parent')
-
-
 class PostCategorySerializer(ModelSerializer):
-    sub_categories = serializers.SerializerMethodField()
+    children = RecursiveField(many=True)
 
     class Meta:
         model = Category
         exclude = ('is_active', 'created_date', 'modified_date', 'parent')
-
-    def get_sub_categories(self, obj):
-        return SubCategorySerializer(obj.children.all(), many=True).data
 
 
 class GallerySerializer(ModelSerializer):
@@ -44,14 +35,8 @@ class AuthorSerializer(ModelSerializer):
         return f'{obj.user.first_name} {obj.user.last_name}'
 
 
-class SubCommentSerializer(ModelSerializer):
-    class Meta:
-        model = Comment
-        exclude = ('parent', 'user')
-
-
 class PostCommentSerializer(ModelSerializer):
-    sub_comments = serializers.SerializerMethodField()
+    children = RecursiveField(many=True)
 
     class Meta:
         model = Comment
@@ -60,9 +45,6 @@ class PostCommentSerializer(ModelSerializer):
         extra_kwargs = {
             'email': {'write_only': True},
         }
-
-    def get_sub_comments(self, obj):
-        return SubCommentSerializer(obj.child.all(), many=True).data
 
 
 class PostSerializer(ModelSerializer):

@@ -72,7 +72,7 @@ class MenuView(ModelViewSet):
         "destroy": [IsAdminUser],
     }
     queryset = Menu.objects.filter(is_active=True, parent=None)
-    serializer_class = MenuGetSerializer
+    serializer_class = MenuSerializer
 
 
 class SliderView(ModelViewSet):

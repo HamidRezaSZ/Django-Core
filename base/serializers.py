@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from .base_serializers import ModelSerializer
+from .base_serializers import *
 from .models import *
 
 
@@ -45,22 +45,11 @@ class PageSerializer(ModelSerializer):
 
 class MenuSerializer(ModelSerializer):
     page = PageSerializer()
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
-class MenuGetSerializer(ModelSerializer):
-    page = PageSerializer()
-    sub_menus = serializers.SerializerMethodField()
+    children = RecursiveField(many=True)
 
     class Meta:
         model = Menu
         exclude = ('parent',)
-
-    def get_sub_menus(self, obj):
-        return MenuSerializer(obj.children.all(), many=True, read_only=True).data
 
 
 class SliderSerializer(ModelSerializer):
