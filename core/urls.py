@@ -35,22 +35,24 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = i18n_patterns(
-    path('api/blog/', include('blog.urls')),  # blog app
-    path('api/accounts/', include('accounts.urls')),  # accounts app
-    path('api/base/', include('base.urls')),  # base app
-    path('api/products/', include('products.urls')),  # products app
-    path('api/payments/', include('payments.urls')),  # payments app
-    path('api/cart/', include('cart.urls')),  # cart app
-    path('api/exams/', include('exams.urls')),  # exams app
-    path('api/newsletters/', include('newsletters.urls')),  # newsletters app
-    path('api/orders/', include('orders.urls')),  # orders app
-    path('api/ticketing/', include('ticketing.urls')),  # ticketing app
-    path('api/courses/', include('courses.urls')),  # courses app
+    # apps
+    path('api/blog/', include('blog.urls')),
+    path('api/accounts/', include('accounts.urls')),
+    path('api/base/', include('base.urls')),
+    path('api/products/', include('products.urls')),
+    path('api/payments/', include('payments.urls')),
+    path('api/cart/', include('cart.urls')),
+    path('api/exams/', include('exams.urls')),
+    path('api/newsletters/', include('newsletters.urls')),
+    path('api/orders/', include('orders.urls')),
+    path('api/ticketing/', include('ticketing.urls')),
+    path('api/courses/', include('courses.urls')),
 
 
-    # multiple language package
+    # rosetta (multiple language package)
     re_path(r'^rosetta/', include('rosetta.urls')),
 
+    # ckeditor (Text Editor)
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),  # Text editor
 
     # swgger
@@ -61,5 +63,6 @@ urlpatterns = i18n_patterns(
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
             cache_timeout=0), name='schema-redoc'),
 
-    path('', admin.site.urls),  # admin panel
+    # admin panel
+    path('', admin.site.urls),
 )

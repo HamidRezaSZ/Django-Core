@@ -2,6 +2,7 @@ from collections import OrderedDict
 from collections.abc import Mapping
 
 from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SkipField, get_error_detail, set_value
 from rest_framework.serializers import ModelSerializer as BaseModelSerializer
@@ -48,3 +49,9 @@ class ModelSerializer(BaseModelSerializer):
             raise ValidationError(errors)
 
         return ret
+
+
+class RecursiveField(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data

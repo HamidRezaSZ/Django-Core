@@ -1,11 +1,14 @@
-from .serializers import *
-from base.viewsets import ModelViewSet
-from rest_framework.generics import UpdateAPIView, GenericAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .utils import create_OTP, send_otp_sms
-from rest_framework.views import Response
-from .models import Profile
 from django.shortcuts import get_object_or_404
+from rest_framework.generics import (CreateAPIView, GenericAPIView,
+                                     UpdateAPIView)
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.views import Response
+
+from base.viewsets import ModelViewSet
+
+from .models import Profile
+from .serializers import *
+from .utils import create_OTP, send_otp_sms
 
 
 class Register(CreateAPIView):
