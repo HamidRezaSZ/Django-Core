@@ -158,3 +158,4 @@ class DynamicTextView(ModelViewSet):
     }
     serializer_class = DynamicTextSerializer
     queryset = DynamicText.objects.filter(is_active=True)
+    filterset_fields = ['key']
