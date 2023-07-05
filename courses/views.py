@@ -1,5 +1,3 @@
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from base.viewsets import ModelViewSet
@@ -35,7 +33,8 @@ class CourseView(ModelViewSet):
         "destroy": [IsAdminUser],
     }
 
-    queryset = Course.objects.filter(is_active=True)
+    queryset = Course.objects.filter(
+        is_active=True).select_related('teacher', 'category')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -100,10 +99,6 @@ class NoteView(ModelViewSet):
     def get_queryset(self):
         return Note.objects.filter(is_active=True, participants=self.request.user)
 
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return get_object_or_404(Note, pk=pk, participants=self.request.user, is_active=True)
-
     serializer_class = NoteSerializer
 
     def get_serializer_context(self):
@@ -119,10 +114,6 @@ class NoteTakingView(ModelViewSet):
 
     def get_queryset(self):
         return NoteTaking.objects.filter(user=self.request.user)
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return get_object_or_404(NoteTaking, user=self.request.user, pk=pk)
 
     serializer_class = NoteTakingSerializer
 

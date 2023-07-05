@@ -1,6 +1,3 @@
-import re
-
-from django.db.models import Q
 from rest_framework import serializers
 
 from base.base_serializers import ModelSerializer

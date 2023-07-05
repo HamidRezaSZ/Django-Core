@@ -1,7 +1,9 @@
+from rest_framework.permissions import AllowAny, IsAdminUser
+
+from base.viewsets import ModelViewSet
+
 from .models import *
 from .serializers import *
-from base.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny, IsAdminUser
 
 
 class PostView(ModelViewSet):
@@ -13,7 +15,7 @@ class PostView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Post.objects.filter(is_active=True)
+    queryset = Post.objects.filter(is_active=True).select_related('category')
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

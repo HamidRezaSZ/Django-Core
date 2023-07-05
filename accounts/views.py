@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import (CreateAPIView, GenericAPIView,
-                                     UpdateAPIView)
+from rest_framework.generics import CreateAPIView, GenericAPIView, UpdateAPIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import Response
 
@@ -78,11 +77,7 @@ class AddressesView(ModelViewSet):
         return AddressSerializer
 
     def get_queryset(self):
-        return Address.objects.filter(user=self.request.user)
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return get_object_or_404(Address, user=self.request.user, pk=pk)
+        return Address.objects.filter(user=self.request.user).select_related('city')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

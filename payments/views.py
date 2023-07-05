@@ -25,11 +25,7 @@ class PaymentView(ModelViewSet):
     filterset_fields = ['authority']
 
     def get_queryset(self):
-        return Payment.objects.filter(user=self.request.user)
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return get_object_or_404(Payment, pk=pk, user=self.request.user)
+        return Payment.objects.filter(user=self.request.user).select_related('payment_gateway', 'status')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -51,10 +47,6 @@ class PaymentGateWayView(ModelViewSet):
     def get_queryset(self):
         return PaymentGateWay.objects.all()
 
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return get_object_or_404(PaymentGateWay, pk=pk)
-
 
 class VerifyPayment(ListAPIView):
 
@@ -68,8 +60,10 @@ class VerifyPayment(ListAPIView):
         }
         data = json.dumps(data)
 
-        headers = {'content-type': 'application/json', 'content-length': str(len(data))}
-        response = requests.post(payment_obj.payment_gateway.verify_url, data=data, headers=headers)
+        headers = {'content-type': 'application/json',
+                   'content-length': str(len(data))}
+        response = requests.post(
+            payment_obj.payment_gateway.verify_url, data=data, headers=headers)
 
         if response.status_code == 200:
             response = response.json()

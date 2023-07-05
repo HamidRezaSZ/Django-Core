@@ -71,7 +71,8 @@ class MenuView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Menu.objects.filter(is_active=True, parent=None)
+    queryset = Menu.objects.filter(
+        is_active=True, parent=None).select_related('page')
     serializer_class = MenuSerializer
 
 
@@ -84,7 +85,7 @@ class SliderView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Slider.objects.filter(is_active=True)
+    queryset = Slider.objects.filter(is_active=True).select_related('page')
     serializer_class = SliderSerializer
     filterset_fields = ['page__link', 'page']
 
@@ -98,7 +99,8 @@ class FooterView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Footer.objects.filter(is_active=True)
+    queryset = Footer.objects.filter(
+        is_active=True).select_related('contact_us')
     serializer_class = FooterSerializer
 
 
@@ -111,7 +113,7 @@ class CityView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = City.objects.filter(is_active=True)
+    queryset = City.objects.filter(is_active=True).select_related('state')
     serializer_class = CitySerializer
     filterset_fields = ['state']
 

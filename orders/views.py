@@ -1,8 +1,10 @@
-from base.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .serializers import *
-from .models import *
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+
+from base.viewsets import ModelViewSet
+
+from .models import *
+from .serializers import *
 
 
 class DeliveryTypeViewSet(ModelViewSet):
@@ -35,11 +37,7 @@ class OrderViewSet(ModelViewSet):
         return OrderSerializer
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return get_object_or_404(Order, pk=pk, user=self.request.user)
+        return Order.objects.filter(user=self.request.user).select_related('status', 'payment', 'delivery_type', 'address')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

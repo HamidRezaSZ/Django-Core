@@ -1,7 +1,9 @@
+from rest_framework.permissions import AllowAny, IsAdminUser
+
 from base.viewsets import ModelViewSet
-from .serializers import *
+
 from .models import *
-from rest_framework.permissions import IsAdminUser, AllowAny
+from .serializers import *
 
 
 class ProductsView(ModelViewSet):
@@ -13,7 +15,8 @@ class ProductsView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = Product.objects.filter(is_active=True, parent=None)
+    queryset = Product.objects.filter(
+        is_active=True, parent=None).select_related('category', 'brand')
     filterset_fields = ['category', 'brand', 'parent']
 
     def get_serializer_class(self):

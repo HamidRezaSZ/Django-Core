@@ -72,7 +72,7 @@ class ResultView(ModelViewSet):
     }
 
     def get_queryset(self):
-        return Result.objects.filter(user=self.request.user)
+        return Result.objects.filter(user=self.request.user).select_related('exam')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
