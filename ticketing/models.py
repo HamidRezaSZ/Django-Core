@@ -58,7 +58,7 @@ class Ticket(models.Model):
 
 class TicketMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('user'))
-    ticket = models.OneToOneField(to=Ticket, verbose_name=_('ticket'), on_delete=models.CASCADE)
+    ticket = models.ForeignKey(to=Ticket, verbose_name=_('ticket'), on_delete=models.CASCADE)
     content = models.TextField(verbose_name=_('content'))
 
     class Meta:
@@ -70,7 +70,7 @@ class TicketMessage(models.Model):
 
 
 class MessageFile(models.Model):
-    message = models.OneToOneField(to=TicketMessage, verbose_name=_('message'), on_delete=models.CASCADE)
+    message = models.ForeignKey(to=TicketMessage, verbose_name=_('message'), on_delete=models.CASCADE)
     file = models.FileField(verbose_name=_('file'))
 
     class Meta:
