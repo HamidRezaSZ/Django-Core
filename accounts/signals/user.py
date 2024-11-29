@@ -1,19 +1,20 @@
-from django.dispatch import receiver
 from django.db.models.signals import post_save
-from .models import User, Profile
+from django.dispatch import receiver
+
+from accounts.models import Profile, User
 from cart.models import Cart
 
 
 @receiver(post_save, sender=User)
 def initial_acccount_signal(sender, instance, *args, **kwargs):
     """
-        Create profile object after user created
+    Create profile object after user created
     """
 
     created = False
 
-    if 'created' in kwargs:
-        if kwargs['created']:
+    if "created" in kwargs:
+        if kwargs["created"]:
             created = True
 
     if not created:

@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from accounts.validators import cell_phone_validator
+from accounts.utils.validators import cell_phone_validator
 
 
 class BaseModel(models.Model):

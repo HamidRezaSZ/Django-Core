@@ -1,21 +1,26 @@
-import os
-import pyotp
 import base64
+import os
 from datetime import datetime
-from kavenegar import KavenegarAPI, APIException, HTTPException
+
+import pyotp
+from kavenegar import APIException, HTTPException, KavenegarAPI
 
 # Time after which OTP will expire
 EXPIRY_TIME = 300  # seconds
 
 
 class generateKey:
-    '''
-        This class returns the string needed to generate the key
-    '''
+    """
+    This class returns the string needed to generate the key
+    """
 
     @staticmethod
     def returnValue(phone) -> str:
-        return str(phone) + str(datetime.date(datetime.now())) + os.getenv('OTP_SECRET_KEY')
+        return (
+            str(phone)
+            + str(datetime.date(datetime.now()))
+            + os.getenv("OTP_SECRET_KEY")
+        )
 
 
 def create_OTP(phone):
@@ -26,12 +31,12 @@ def create_OTP(phone):
 
 def send_otp_sms(OTP, phone) -> bool:
     try:
-        api = KavenegarAPI(os.getenv('SMS_API_KEY'))
+        api = KavenegarAPI(os.getenv("SMS_API_KEY"))
         params = {
-            'receptor': f"{phone}",
-            'template': f"{os.getenv('SMS_TEMPLATE')}",
-            'token': f"{OTP.now()}",
-            'type': 'sms',
+            "receptor": f"{phone}",
+            "template": f"{os.getenv('SMS_TEMPLATE')}",
+            "token": f"{OTP.now()}",
+            "type": "sms",
         }
         response = api.verify_lookup(params)
 
