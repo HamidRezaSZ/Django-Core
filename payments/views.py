@@ -6,7 +6,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import Response
 
-from base.viewsets import ModelViewSet
+from base.views.viewsets import ModelViewSet
 
 from .models import *
 from .serializers import *

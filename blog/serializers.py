@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from base.base_serializers import *
+from base.serializers.base_serializers import *
 from blog.models import *
 
 

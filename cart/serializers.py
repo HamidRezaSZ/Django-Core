@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from base.base_serializers import ModelSerializer
+from base.serializers.base_serializers import ModelSerializer
 from products.serializers import ProductQuantitiesSerializer
 
 from .models import *

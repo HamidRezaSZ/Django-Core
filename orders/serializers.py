@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.serializers.address import AddressSerializer
-from base.base_serializers import ModelSerializer
+from base.serializers.base_serializers import ModelSerializer
 from payments.serializers import PaymentSerializer
 from products.models import Coupon
 from products.serializers import ProductQuantitiesSerializer

@@ -1,46 +1,57 @@
 from modeltranslation.translator import TranslationOptions, translator
 
-from .models import *
+from base.models import (
+    FAQ,
+    AboutUs,
+    City,
+    ContactUsDetail,
+    DynamicText,
+    Footer,
+    Page,
+    Slider,
+    State,
+    TermsAndConditions,
+)
 
 
 class FAQTranslationOptions(TranslationOptions):
-    fields = ('question', 'answer')
+    fields = ("question", "answer")
 
 
 class AboutUsTranslationOptions(TranslationOptions):
-    fields = ('text',)
+    fields = ("text",)
 
 
 class ContactUsDetailTranslationOptions(TranslationOptions):
-    fields = ('email', 'phone_number')
+    fields = ("email", "phone_number")
 
 
 class PageTranslationOptions(TranslationOptions):
-    fields = ('title',)
+    fields = ("title",)
 
 
 class SliderTranslationOptions(TranslationOptions):
-    fields = ('title', 'text')
+    fields = ("title", "text")
 
 
 class FooterTranslationOptions(TranslationOptions):
-    fields = ('content',)
+    fields = ("content",)
 
 
 class StateTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ("name",)
 
 
 class CityTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ("name",)
 
 
 class TermsAndConditionsTranslationOptions(TranslationOptions):
-    fields = ('text',)
+    fields = ("text",)
 
 
 class DynamicTextTranslationOptions(TranslationOptions):
-    fields = ('value',)
+    fields = ("value",)
 
 
 translator.register(FAQ, FAQTranslationOptions)

@@ -1,6 +1,6 @@
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
-from base.viewsets import ModelViewSet
+from base.views.viewsets import ModelViewSet
 
 from .filters import CourseFilter
 from .models import *

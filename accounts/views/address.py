@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from accounts.models import Address
 from accounts.serializers.address import AddressGetSerializer, AddressSerializer
-from base.viewsets import ModelViewSet
+from base.views.viewsets import ModelViewSet
 
 
 class AddressesView(ModelViewSet):

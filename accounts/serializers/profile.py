@@ -1,6 +1,6 @@
 from accounts.models import Profile
-from base.base_serializers import ModelSerializer
-from base.serializers import CitySerializer
+from base.serializers.base_serializers import ModelSerializer
+from base.serializers.state import CitySerializer
 
 
 class ProfileSerializer(ModelSerializer):

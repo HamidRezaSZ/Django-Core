@@ -1,6 +1,6 @@
 from rest_framework.permissions import AllowAny, IsAdminUser
 
-from base.viewsets import ModelViewSet
+from base.views.viewsets import ModelViewSet
 
 from .models import *
 from .serializers import *

@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.serializers import Serializer
 
 from accounts.models import User
-from base.base_serializers import ModelSerializer
+from base.serializers.base_serializers import ModelSerializer
 
 
 class UserSerializer(ModelSerializer):

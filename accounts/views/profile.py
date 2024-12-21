@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from accounts.models import Profile
 from accounts.serializers.profile import ProfileGetSerializer, ProfileSerializer
-from base.viewsets import ModelViewSet
+from base.views.viewsets import ModelViewSet
 
 
 class ProfileView(ModelViewSet):

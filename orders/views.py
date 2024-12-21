@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from base.viewsets import ModelViewSet
+from base.views.viewsets import ModelViewSet
 
 from .models import *
 from .serializers import *
