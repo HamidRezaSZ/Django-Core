@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -23,46 +24,44 @@ from rest_framework import permissions
 schema_view = get_schema_view(
     openapi.Info(
         title="Core API",
-        default_version='v1',
+        default_version="v1",
         description="",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contact@snippets.local"),
         license=openapi.License(name="BSD License"),
     ),
-    url='',
+    url="",
     public=True,
-    permission_classes=[permissions.AllowAny],
+    permission_classes=[permissions.IsAuthenticated],
 )
 
 urlpatterns = i18n_patterns(
     # apps
-    path('api/blog/', include('blog.urls')),
-    path('api/accounts/', include('accounts.urls')),
-    path('api/base/', include('base.urls')),
-    path('api/products/', include('products.urls')),
-    path('api/payments/', include('payments.urls')),
-    path('api/cart/', include('cart.urls')),
-    path('api/exams/', include('exams.urls')),
-    path('api/newsletters/', include('newsletters.urls')),
-    path('api/orders/', include('orders.urls')),
-    path('api/ticketing/', include('ticketing.urls')),
-    path('api/courses/', include('courses.urls')),
-
-
+    path("api/v1/blog/", include("blog.urls")),
+    path("api/v1/accounts/", include("accounts.urls")),
+    path("api/v1/api/base/", include("base.urls")),
+    path("api/v1/api/products/", include("products.urls")),
+    path("api/v1/api/payments/", include("payments.urls")),
+    path("api/v1/api/cart/", include("cart.urls")),
+    path("api/v1/api/exams/", include("exams.urls")),
+    path("api/v1/api/newsletters/", include("newsletters.urls")),
+    path("api/v1/api/orders/", include("orders.urls")),
+    path("api/v1/api/ticketing/", include("ticketing.urls")),
+    path("api/v1/api/courses/", include("courses.urls")),
     # rosetta (multiple language package)
-    re_path(r'^rosetta/', include('rosetta.urls')),
-
+    re_path(r"^rosetta/", include("rosetta.urls")),
     # ckeditor (Text Editor)
-    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),  # Text editor
-
+    re_path(r"^ckeditor/", include("ckeditor_uploader.urls")),  # Text editor
     # swgger
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$',
-            schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger',
-            cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc',
-            cache_timeout=0), name='schema-redoc'),
-
+    path(
+        "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
+    ),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     # admin panel
-    path('', admin.site.urls),
+    path("", admin.site.urls),
 )
