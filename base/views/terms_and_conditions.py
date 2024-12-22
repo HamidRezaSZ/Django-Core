@@ -15,4 +15,4 @@ class TermsAndConditionsView(ModelViewSet):
         "destroy": [IsAdminUser],
     }
     serializer_class = TermsAndConditionsSerializer
-    queryset = TermsAndConditions.objects.filter(is_active=True)
+    queryset = TermsAndConditions.objects.all()

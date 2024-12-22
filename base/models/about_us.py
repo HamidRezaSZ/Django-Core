@@ -1,10 +1,10 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.translation import gettext_lazy as _
 
-from base.models.base_model import BaseModel
+from base.models.singleton import SingletonModel
 
 
-class AboutUs(BaseModel):
+class AboutUs(SingletonModel):
     text = RichTextUploadingField(verbose_name=_("text"))
 
     class Meta:

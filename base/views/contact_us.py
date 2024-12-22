@@ -30,5 +30,5 @@ class ContactUsDetailView(ModelViewSet):
         "partial_update": [IsAdminUser],
         "destroy": [IsAdminUser],
     }
-    queryset = ContactUsDetail.objects.filter(is_active=True)
+    queryset = ContactUsDetail.objects.all()
     serializer_class = ContactUsDetailSerializer

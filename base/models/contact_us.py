@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from accounts.utils.validators import cell_phone_validator
-from base.models.base_model import BaseModel
+from base.models.singleton import SingletonModel
 from base.models.social_account import SocialAccount
 
 
@@ -21,7 +21,7 @@ class ContactUsForm(models.Model):
         return self.full_name
 
 
-class ContactUsDetail(BaseModel):
+class ContactUsDetail(SingletonModel):
     image = models.FileField(verbose_name=_("image"), upload_to="contact_us")
     email = models.EmailField(verbose_name=_("email"))
     phone_number = models.CharField(verbose_name=_("phone_number"), max_length=20)

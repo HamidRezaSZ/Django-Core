@@ -12,6 +12,7 @@ from base.models import (
     State,
     TermsAndConditions,
 )
+from base.models.footer import FooterColumn, FooterImage, FooterRow
 
 
 class FAQTranslationOptions(TranslationOptions):
@@ -35,7 +36,19 @@ class SliderTranslationOptions(TranslationOptions):
 
 
 class FooterTranslationOptions(TranslationOptions):
-    fields = ("content",)
+    fields = ("text",)
+
+
+class FooterRowTranslationOptions(TranslationOptions):
+    fields = ("link", "title")
+
+
+class FooterColumnTranslationOptions(TranslationOptions):
+    fields = ("link", "title")
+
+
+class FooterImageTranslationOptions(TranslationOptions):
+    fields = ("link",)
 
 
 class StateTranslationOptions(TranslationOptions):
@@ -60,6 +73,9 @@ translator.register(ContactUsDetail, ContactUsDetailTranslationOptions)
 translator.register(Page, PageTranslationOptions)
 translator.register(Slider, SliderTranslationOptions)
 translator.register(Footer, FooterTranslationOptions)
+translator.register(FooterRow, FooterRowTranslationOptions)
+translator.register(FooterImage, FooterImageTranslationOptions)
+translator.register(FooterColumn, FooterColumnTranslationOptions)
 translator.register(State, StateTranslationOptions)
 translator.register(City, CityTranslationOptions)
 translator.register(TermsAndConditions, TermsAndConditionsTranslationOptions)

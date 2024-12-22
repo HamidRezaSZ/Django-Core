@@ -1,15 +1,44 @@
-from base.models import Footer
-from base.serializers.base_serializers import ModelSerializer
-from base.serializers.contact_us import ContactUsDetailSerializer
-from base.serializers.page import PageSerializer
-from base.serializers.social_account import SocialAccountSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
+
+from base.models import Footer, FooterColumn, FooterImage, FooterRow, SocialAccount
+
+
+class SocialAccountSerializer(ModelSerializer):
+    class Meta:
+        model = SocialAccount
+        exclude = ("order",)
+
+
+class FooterRowSerializer(ModelSerializer):
+    class Meta:
+        model = FooterRow
+        exclude = ("order",)
+
+
+class FooterColumnSerializer(ModelSerializer):
+    rows = FooterRowSerializer(many=True)
+
+    class Meta:
+        model = FooterColumn
+        exclude = ("order",)
+
+
+class FooterImageSerializer(ModelSerializer):
+    class Meta:
+        model = FooterImage
+        exclude = ("order",)
 
 
 class FooterSerializer(ModelSerializer):
-    useful_link = PageSerializer(many=True)
-    social_accounts = SocialAccountSerializer(many=True)
-    contact_us = ContactUsDetailSerializer()
+    images = SerializerMethodField()
+    columns = SerializerMethodField()
 
     class Meta:
         model = Footer
         fields = "__all__"
+
+    def get_images(self, footer: Footer):
+        return FooterImageSerializer(FooterImage.active_objects.all(), many=True).data
+
+    def get_columns(self, footer: Footer):
+        return FooterColumnSerializer(FooterColumn.active_objects.all(), many=True).data

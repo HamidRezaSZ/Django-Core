@@ -15,4 +15,4 @@ class AboutUsView(ModelViewSet):
         "destroy": [IsAdminUser],
     }
     serializer_class = AboutUsSerializer
-    queryset = AboutUs.objects.filter(is_active=True)
+    queryset = AboutUs.objects.all()

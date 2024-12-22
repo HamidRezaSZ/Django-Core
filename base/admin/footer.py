@@ -1,19 +1,29 @@
 from django.contrib import admin
 
-from base.models import Footer
+from base.admin.singleton import SingletonModelAdmin
+from base.models import Footer, FooterColumn, FooterImage, FooterRow
+
+
+class FooterRowInline(admin.TabularInline):
+    model = FooterRow
+    extra = 0
 
 
 @admin.register(Footer)
-class FooterAdmin(admin.ModelAdmin):
-    """
-    Admin panel for footer
-    """
+class FooterAdmin(SingletonModelAdmin):
+    list_display = ("id", "text", "logo")
 
-    list_display = ("id",)
-    filter_horizontal = ("social_accounts", "useful_link")
 
-    def has_add_permission(self, request):
-        if self.model.objects.exists():
-            return False
+@admin.register(FooterColumn)
+class FooterColumnAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "link", "order")
+    list_editable = ("order",)
+    search_fields = ("title", "link")
+    inlines = (FooterRowInline,)
 
-        return super().has_add_permission(request)
+
+@admin.register(FooterImage)
+class FooterImageAdmin(admin.ModelAdmin):
+    list_display = ("id", "image", "link", "order")
+    list_editable = ("order",)
+    search_fields = ("link",)
